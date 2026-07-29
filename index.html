@@ -139,6 +139,12 @@
       neither brings <code>STATUS=FAIL</code> back. If you need a byte-exact record of what a program emitted,
       capture its output with <a href="https://output-lies.github.io/terminal/" rel="noopener"><code>stcat</code></a>
       or pipe it to a file -- there the erase is neutralized to a visible placeholder instead of being applied.</p>
+    <p><b>Or turn it off.</b> <b>View -&gt; Line editing</b> (config key <code>line_edits</code>, default on)
+      drops the four ops entirely, so output becomes append-only against escapes and nothing can redraw a line
+      at all. The trade is real: tab completion and progress bars then append a line per update instead of
+      redrawing in place. An administrator can lock the key either way. Carriage return and backspace are raw
+      control bytes rather than escapes, so they stay honoured regardless -- this is append-only against
+      escapes, not against every byte.</p>
   </article>
 
   <article class="issue">
