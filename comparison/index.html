@@ -332,7 +332,7 @@ cat make-hostile-log.sh</div>
     <thead><tr><th>Behaviour</th><th>Traditional terminal</th><th>secure-terminal</th></tr></thead>
     <tbody>
       <tr><td>Escape sequences in program output</td><td class="trad">Interpreted: output can move the cursor, erase and repaint lines, hide or fake text.</td><td><span class="yes">Not parsed</span>, apart from safe colour and four line-local edits clamped to the line being written. Any stray control byte shows as an inert box (coloured by risk class), so nothing a program prints can repaint the screen or reach a line already scrolled past.</td></tr>
-      <tr><td>Merely viewing a file (<code>cat</code>, a log, a diff)</td><td class="trad">Can trigger every escape trick above, just by being displayed.</td><td><span class="yes">Safe</span> to <code>cat</code> anything: output is reduced to printable ASCII first.</td></tr>
+      <tr><td>Merely viewing a file (<code>cat</code>, a log, a diff)</td><td class="trad">Can trigger every escape trick above, just by being displayed.</td><td><span class="yes">Safe</span> to <code>cat</code> anything: output is sanitized first - printable ASCII in the default mode, and in every mode no invisible, bidi or control character reaches you unmarked.</td></tr>
       <tr><td>Invisible, bidi and homoglyph characters (Trojan Source)</td><td class="trad">Rendered as-is; text can read as something other than its bytes.</td><td><span class="yes">Neutralized</span> and named inline as <code>&lt;U+XXXX NAME&gt;</code> by default, or shown as an inert risk-coloured box on demand.</td></tr>
       <tr><td>Pasted command with a hidden second line or control bytes</td><td class="trad">Historically auto-ran. Modern shells mitigate with bracketed paste, but it is opt-in and not universal.</td><td>Paste is sanitized to ASCII; any hidden control or unicode is stripped and <span class="yes">warned on</span> before it reaches the shell.</td></tr>
       <tr><td>Clipboard read/write from program output (OSC&nbsp;52)</td><td class="trad">Some terminals allow it, so a remote program can read or poison your clipboard.</td><td><span class="yes">Off by default.</span> Opt-in toggles exist for write and for read; clipboard read, if enabled, is asked once per tab before any reply, so untrusted output cannot exfiltrate it.</td></tr>
@@ -358,6 +358,11 @@ cat make-hostile-log.sh</div>
   <div class="issue">
     <p>A normal terminal <em>interprets</em> program output as commands - move the cursor, set the
       title, change the palette, shift the charset, write the clipboard. secure-terminal's default
+      Read the table as "these need a feature secure-terminal does not implement", not as a scoreboard:
+      most rows are <b>not applicable</b> rather than defended. That cuts both ways -- a terminal with no
+      OSC&nbsp;52 parser cannot have an OSC&nbsp;52 bug, but it can still have its own, and a short list of
+      known CVEs in other terminals says nothing about undiscovered defects here. What the small surface buys
+      is fewer places for one to hide, not a proof there are none.
       CLI mode interprets none of it: output is reduced to printable ASCII (plus safe,
       contrast-guarded colour), so a hostile stream has nothing to act on. See the
       <a href="/compatibility/">compatibility page</a> for exactly which sequences are neutralised,

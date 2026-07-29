@@ -49,7 +49,7 @@
 </header>
 
 <div class="notice"><div class="wrap">
-  <b>Unreviewed draft, work in progress.</b> This site is AI-generated and pending human review. The terminal itself works: strict ASCII by default, with an opt-in mode that runs ssh, vim, htop and other full-screen programs. Build it from source below.
+  <b>Unreviewed draft, work in progress.</b> This site is AI-generated and pending human review. The terminal itself works: printable ASCII in the default mode, with an opt-in mode that runs ssh, vim, htop and other full-screen programs. Build it from source below.
 </div></div>
 
 <main>
@@ -58,9 +58,10 @@
   <h1>Safe to paste. Safe to <span class="u">read</span>.</h1>
   <p class="sub">Pasted commands are sanitized and program output is neutralized, so neither what you copy in
     nor what a program prints out can hide invisible characters, bidi overrides or escape sequences. secure-terminal
-    accepts and shows plain printable ASCII by default and nothing else, so a disguised byte - an invisible
+    shows plain printable ASCII in its default mode, so a disguised byte - an invisible
     character, a bidi override, a look-alike letter - has nowhere to hide, whether it arrives by paste or by
-    <code>cat</code>.</p>
+    <code>cat</code>. Other modes trade some of that back on purpose:
+    <a href="#display-modes">see all four side by side</a>.</p>
   <div class="cta">
     <a class="btn primary" href="#install">Get it</a>
     <a class="btn ghost" href="#features">What makes it different</a>
@@ -69,7 +70,7 @@
 </div></section>
 
 <div class="whatis"><div class="wrap">
-  <p><b>What is this?</b> A terminal whose display shows only printable ASCII by default (everything else is
+  <p><b>What is this?</b> A terminal whose display shows printable ASCII in its default mode (everything else is
     neutralized to a visible, inert placeholder) and which runs no escape-sequence parser on program output
     beyond safe colour and four edits clamped to <a href="#current-line">the line being written</a>.
     Paste a command you copied from the web, or read text a program printed, and trust that what you see
@@ -83,7 +84,7 @@
 
   <div class="fg">
   <article class="issue">
-    <h3 id="ascii-output"><a class="h-anchor" href="#ascii-output">Output is ASCII by default</a></h3>
+    <h3 id="ascii-output"><a class="h-anchor" href="#ascii-output">Output is printable ASCII by default</a></h3>
     <p>Program output is rendered as printable ASCII plus newline and tab. Bidi overrides, zero-width characters,
       homoglyphs, ANSI escapes and control bytes never reach the screen as anything but their neutralized form.
       A <a href="https://output-lies.github.io/terminal/" rel="noopener">hostile filename in <code>ls</code></a>, a
@@ -111,9 +112,13 @@
     <h3 id="current-line"><a class="h-anchor" href="#current-line">What a program can still do to its own line</a></h3>
     <p>Being precise about the one thing CLI mode does <b>not</b> prevent, because a guarantee you have to guess
       at is worth less than a narrow one you can rely on.</p>
-    <p>A shell's line editor redraws as you type, so CLI mode honors four line-local escapes: cursor
-      forward, cursor back, cursor-to-column, and erase-in-line. All four are clamped to <b>the line currently
-      being written</b>. Vertical and absolute movement (cursor-up, row;column addressing) is stripped, so nothing
+    <p><b>Why they are honored at all.</b> These are the escapes a shell's line editor emits to redraw the
+      line you are typing. Without them, <b>tab completion</b> prints a mangled duplicate instead of updating the
+      line, <code>Ctrl+R</code> history search and <code>Ctrl+A</code>/<code>Ctrl+E</code> editing leave debris,
+      and a <code>\r</code> progress bar stacks one line per update. They are the price of a usable shell, kept as
+      small as it can be.</p>
+    <p>So CLI mode honors four line-local escapes: cursor forward, cursor back, cursor-to-column, and
+      erase-in-line. All four are clamped to <b>the line currently being written</b>. Vertical and absolute movement (cursor-up, row;column addressing) is stripped, so nothing
       can reach a line you have already scrolled past, and a whole-screen <code>clear</code> is a deliberate
       no-op.</p>
     <p>The consequence, stated plainly: a program <b>can</b> overwrite what it itself just printed on the current
@@ -194,6 +199,19 @@
         four line-local edits described under <a href="#current-line">the current line</a>. A bare escape or
         control byte is still neutralized to a coloured placeholder in Show; the mode only changes how the
         remaining, already-safe characters are drawn, never whether escapes are interpreted.</p>
+
+      <figure class="shot" style="max-width:900px;margin:24px auto 0">
+        <figcaption class="shotname"><b>The same <code>ls</code> listing, all four modes</b> - three of the
+          filenames are lying (a right-to-left override, a Cyrillic look-alike, a zero-width space) and two are
+          honest non-ASCII (<code>r&#233;sum&#233;.pdf</code>, a CJK name).</figcaption>
+        <a href="/shots/display-modes.png" target="_blank" rel="noopener"><img src="/shots/display-modes.png" width="792" height="606" loading="lazy" alt="One ls listing rendered four times by secure-terminal. Box: every non-ASCII byte, hostile or honest, becomes a single coloured placeholder box, so the accented and CJK names are boxed too. Show: the honest resume.pdf and the CJK name are readable as themselves, while the Cyrillic look-alike 'a' is kept but tinted red and the bidi override and zero-width space still collapse to placeholders. Reveal: each hidden character is named inline as a badge, U+202E, U+0430, U+200B, U+00E9, U+4E2D, U+6587. Detail: the same badges expanded to full Unicode names, RIGHT-TO-LEFT OVERRIDE, CYRILLIC SMALL LETTER A, ZERO WIDTH SPACE, LATIN SMALL LETTER E WITH ACUTE, CJK UNIFIED IDEOGRAPH."></a>
+        <figcaption>This is also the honest answer to <b>&quot;is it ASCII only?&quot;</b> - it is not, and the
+          panels show why. <b>Box</b> is ASCII in text but draws a non-ASCII placeholder glyph, and it boxes
+          <em>honest</em> non-ASCII too. <b>Show</b> deliberately keeps real printable non-ASCII, tinting a
+          look-alike rather than removing it. <b>Reveal</b> and <b>Detail</b> are pure ASCII, naming what was
+          hidden. What holds in every mode is narrower and more useful: no invisible, bidi or control character
+          reaches you unmarked.</figcaption>
+      </figure>
     </article>
     <article class="issue">
       <h3 id="transcripts"><a class="h-anchor" href="#transcripts">Transcripts safe to open anywhere</a></h3>
