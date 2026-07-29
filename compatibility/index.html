@@ -51,10 +51,14 @@
   <p class="eyebrow">COMPATIBILITY: WHAT RUNS IN IT</p>
   <h1>Everything you read runs.<br>Nothing you read can act.</h1>
   <p class="lede">secure-terminal has two modes. <b>CLI mode</b> (the default, line-oriented)
-    interprets no cursor or screen escapes: a program's output is reduced to printable ASCII
-    plus safe, contrast-guarded colour, and is <b>append-only and tamper-evident</b> (output can
-    only be added, never moved or erased), so ordinary command output looks right yet a hostile
-    log cannot redraw your screen or rewrite what you already saw. <b>TUI mode</b> (opt-in, per tab)
+    interprets no screen escapes and no vertical or absolute cursor movement: a program's output is
+    reduced to printable ASCII plus safe, contrast-guarded colour, and the <b>scrollback is
+    append-only and tamper-evident</b> -- once a line has scrolled past it can no longer be moved
+    or erased, so a hostile log cannot repaint your screen or rewrite what you have already read.
+    The four line-local edits a shell's line editor needs (cursor forward/back, cursor-to-column,
+    erase-in-line) are honoured within the line being written, so a program can redraw its own
+    current line exactly as a <code>\r</code> progress bar does -- see
+    <a href="/#current-line">what a program can still do to its own line</a>. <b>TUI mode</b> (opt-in, per tab)
     interprets escapes inside
     an isolated in-memory screen so full-screen programs render, while every cell is still
     character-filtered and the terminal still answers no query and touches no clipboard. The tables below are backed by real tests,
@@ -478,7 +482,7 @@
       <tr><td><code>0x0D</code></td><td>Carriage return (CR)</td><td><span class="yes">Honoured</span> - moves to column 0 (line-local).</td></tr>
       <tr><td><code>0x08</code></td><td>Backspace (BS)</td><td><span class="yes">Honoured</span> - one cell left; never crosses a line, so it cannot rewrite earlier output.</td></tr>
       <tr><td><code>0x07</code></td><td>Bell (BEL)</td><td>Honored per the bell setting (default: silent; options: audible / visual / tray). Not shown on screen.</td></tr>
-      <tr><td><code>0x1B</code></td><td>Escape (ESC) + any sequence</td><td><span class="yes">Removed entirely.</span> No ANSI/OSC/APC/DCS parser exists.</td></tr>
+      <tr><td><code>0x1B</code></td><td>Escape (ESC) + any sequence</td><td><span class="yes">Removed</span>, with two deliberate exceptions: safe colour (SGR) and the four line-local edits <code>CSI C/D/G/K</code>, clamped to the line being written. No OSC/APC/DCS parser exists, and no vertical or absolute movement is honoured.</td></tr>
       <tr><td><code>0x20</code>-<code>0x7E</code></td><td>Printable ASCII</td><td><span class="yes">Shown verbatim.</span></td></tr>
       <tr><td><code>0x00</code>-<code>0x06</code>, <code>0x0B</code>, <code>0x0C</code>, <code>0x0E</code>-<code>0x1F</code></td><td>Other C0 controls</td><td>Neutralised; shown per the unicode mode (see above).</td></tr>
       <tr><td><code>0x7F</code></td><td>Delete (DEL)</td><td>Neutralised.</td></tr>
@@ -609,6 +613,9 @@
     <div class="fbrand">
       <span class="ftag"><img src="/logo-wide.png" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
       <p>Paste in, read out. Nothing hides.</p>
+      <p class="fscope">"Nothing hides" is about characters: no invisible, bidi or look-alike byte
+        reaches you unmarked. A program can still redraw <a href="/#current-line">its own current
+        line</a>.</p>
     </div>
     <nav class="fcols">
       <div class="fcol">

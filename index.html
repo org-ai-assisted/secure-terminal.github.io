@@ -70,8 +70,9 @@
 
 <div class="whatis"><div class="wrap">
   <p><b>What is this?</b> A terminal whose display shows only printable ASCII by default (everything else is
-    neutralized to a visible, inert placeholder) and which interprets no escape sequences from program
-    output. Paste a command you copied from the web, or read text a program printed, and trust that what you see
+    neutralized to a visible, inert placeholder) and which runs no escape-sequence parser on program output
+    beyond safe colour and four edits clamped to <a href="#current-line">the line being written</a>.
+    Paste a command you copied from the web, or read text a program printed, and trust that what you see
     is what is there. When you need more, an <b>opt-in TUI mode</b> runs full-screen programs, ssh, vim, htop,
     through a restricted screen model that still filters every character.</p>
 </div></div>
@@ -88,17 +89,45 @@
       A <a href="https://output-lies.github.io/terminal/" rel="noopener">hostile filename in <code>ls</code></a>, a
       <a href="https://output-lies.github.io/terminal/#log-injection" rel="noopener">forged <code>[ OK ]</code> in a log</a>, a
       <a href="https://output-lies.github.io/analyze/" rel="noopener">Trojan-Source comment</a>:
-      none of them can redraw or reorder what you read.</p>
+      none of them can reorder what you read or repaint a line you have already scrolled past.
+      One honest caveat: a program can still redraw <b>the line it is currently writing</b> -- see
+      <a href="#current-line">what a program can still do to its own line</a>.</p>
   </article>
 
   <article class="issue">
     <h3 id="no-escape-parser"><a class="h-anchor" href="#no-escape-parser">No escape parser in CLI mode</a></h3>
-    <p>By default there is no ANSI parser to attack. The terminal honors no cursor moves, alternate screens or OSC
-      hyperlinks from the child process. Parsing attacker-influenced escapes is the entire vulnerability class; a
+    <p>By default there is no general ANSI parser to attack. The terminal honors no vertical or absolute cursor
+      movement, no alternate screens and no OSC hyperlinks from the child process. Two narrow exceptions are
+      honored on purpose: safe, contrast-guarded colour, and the four line-local edits a shell's line editor
+      emits (cursor forward/back, cursor-to-column, erase-in-line), which cannot leave
+      <a href="#current-line">the line being written</a>. Parsing attacker-influenced escapes is the entire vulnerability class; a
       terminal that will not parse them cannot fall for them. Out of the box it has no terminal side-effects at
       all: no window-title control, no clipboard-write escape (OSC&nbsp;52), no hyperlinks. Each of those OSC
       features is a separate, off-by-default toggle you may enable at your own risk, and turning one on dims a
       security indicator so the extra surface is never invisible.</p>
+  </article>
+
+  <article class="issue">
+    <h3 id="current-line"><a class="h-anchor" href="#current-line">What a program can still do to its own line</a></h3>
+    <p>Being precise about the one thing CLI mode does <b>not</b> prevent, because a guarantee you have to guess
+      at is worth less than a narrow one you can rely on.</p>
+    <p>A shell's line editor redraws as you type, so CLI mode honors four line-local escapes: cursor
+      forward, cursor back, cursor-to-column, and erase-in-line. All four are clamped to <b>the line currently
+      being written</b>. Vertical and absolute movement (cursor-up, row;column addressing) is stripped, so nothing
+      can reach a line you have already scrolled past, and a whole-screen <code>clear</code> is a deliberate
+      no-op.</p>
+    <p>The consequence, stated plainly: a program <b>can</b> overwrite what it itself just printed on the current
+      line, exactly as a <code>\r</code> progress bar does. Feed a terminal
+      <code>STATUS=FAIL</code>, then an erase-line, then <code>STATUS=PASS</code>, and the line reads
+      <code>STATUS=PASS</code> -- here as anywhere else. That is not an escape being "interpreted" in the
+      dangerous sense: no escape byte reaches the display, the cursor cannot leave the line, and the scrollback
+      above is untouched. But it does mean <b>transcript integrity is per-line</b>: everything already scrolled
+      past is append-only, while the line still being written is the program's to redraw.</p>
+    <p>To be equally plain about the limit: the overwritten text is <b>gone</b>. Switching display mode replays
+      the retained output through the same line editor, and a saved transcript records the rendered document, so
+      neither brings <code>STATUS=FAIL</code> back. If you need a byte-exact record of what a program emitted,
+      capture its output with <a href="https://output-lies.github.io/terminal/" rel="noopener"><code>stcat</code></a>
+      or pipe it to a file -- there the erase is neutralized to a visible placeholder instead of being applied.</p>
   </article>
 
   <article class="issue">
@@ -159,8 +188,10 @@
         confusable with ASCII wears a louder colour than honest foreign text - while the invisible, bidi and
         control classes, which have no visible glyph, still show as a coloured placeholder).</p>
       <p class="modenote"><b>Show does not mean run.</b> All four modes remove escape sequences first
-        (there is no escape parser in CLI mode), so nothing a program prints - a title change, a clipboard write,
-        a cursor move - is ever interpreted, in <b>any</b> mode, Show included. A bare escape or
+        (there is no general escape parser in CLI mode), so nothing a program prints - a title change, a clipboard
+        write, an alternate screen, a jump to another line - is ever interpreted, in <b>any</b> mode, Show
+        included. The mode never changes that; the only escapes honored in every mode are safe colour and the
+        four line-local edits described under <a href="#current-line">the current line</a>. A bare escape or
         control byte is still neutralized to a coloured placeholder in Show; the mode only changes how the
         remaining, already-safe characters are drawn, never whether escapes are interpreted.</p>
     </article>
@@ -397,6 +428,9 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
     <div class="fbrand">
       <span class="ftag"><img src="/logo-wide.png" width="755" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
       <p>Paste in, read out. Nothing hides.</p>
+      <p class="fscope">"Nothing hides" is about characters: no invisible, bidi or look-alike byte
+        reaches you unmarked. A program can still redraw <a href="/#current-line">its own current
+        line</a>.</p>
     </div>
     <nav class="fcols">
       <div class="fcol">

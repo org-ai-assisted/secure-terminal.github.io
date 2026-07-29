@@ -120,8 +120,9 @@
       must write <em>zero</em> bytes back, for every query. This is the whole "output becomes
       input" attack class, closed and asserted.</p>
     <p><b>ii. Nothing non-ASCII is smuggled to the screen.</b> The rendered text may contain only
-      printable ASCII plus tab, newline, and the two documented line-local cursor controls
-      (backspace, carriage return). Any other control byte, or any codepoint above <code>0x7e</code>
+      printable ASCII plus tab, newline, and the documented line-local cursor controls
+      (backspace and carriage return, plus the effect of <code>CSI C/D/G/K</code>, all clamped to the
+      line being written). Any other control byte, or any codepoint above <code>0x7e</code>
       (the invisible / bidi / homoglyph classes), is a violation.</p>
     <p><b>iii. Nothing crashes.</b> Every sequence must render in bounded time without an exception,
       including deliberately malformed and over-long ones.</p>
@@ -229,6 +230,9 @@
     <div class="fbrand">
       <span class="ftag"><img src="/logo-wide.png" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
       <p>Paste in, read out. Nothing hides.</p>
+      <p class="fscope">"Nothing hides" is about characters: no invisible, bidi or look-alike byte
+        reaches you unmarked. A program can still redraw <a href="/#current-line">its own current
+        line</a>.</p>
     </div>
     <nav class="fcols">
       <div class="fcol">

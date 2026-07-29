@@ -331,7 +331,7 @@ cat make-hostile-log.sh</div>
   <table class="cmp">
     <thead><tr><th>Behaviour</th><th>Traditional terminal</th><th>secure-terminal</th></tr></thead>
     <tbody>
-      <tr><td>Escape sequences in program output</td><td class="trad">Interpreted: output can move the cursor, erase and repaint lines, hide or fake text.</td><td><span class="yes">Never parsed.</span> Removed; any stray control byte shows as an inert box (coloured by risk class), so nothing a program prints can redraw the screen.</td></tr>
+      <tr><td>Escape sequences in program output</td><td class="trad">Interpreted: output can move the cursor, erase and repaint lines, hide or fake text.</td><td><span class="yes">Not parsed</span>, apart from safe colour and four line-local edits clamped to the line being written. Any stray control byte shows as an inert box (coloured by risk class), so nothing a program prints can repaint the screen or reach a line already scrolled past.</td></tr>
       <tr><td>Merely viewing a file (<code>cat</code>, a log, a diff)</td><td class="trad">Can trigger every escape trick above, just by being displayed.</td><td><span class="yes">Safe</span> to <code>cat</code> anything: output is reduced to printable ASCII first.</td></tr>
       <tr><td>Invisible, bidi and homoglyph characters (Trojan Source)</td><td class="trad">Rendered as-is; text can read as something other than its bytes.</td><td><span class="yes">Neutralized</span> and named inline as <code>&lt;U+XXXX NAME&gt;</code> by default, or shown as an inert risk-coloured box on demand.</td></tr>
       <tr><td>Pasted command with a hidden second line or control bytes</td><td class="trad">Historically auto-ran. Modern shells mitigate with bracketed paste, but it is opt-in and not universal.</td><td>Paste is sanitized to ASCII; any hidden control or unicode is stripped and <span class="yes">warned on</span> before it reaches the shell.</td></tr>
@@ -375,6 +375,9 @@ cat make-hostile-log.sh</div>
     <div class="fbrand">
       <span class="ftag"><img src="/logo-wide.png" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
       <p>Paste in, read out. Nothing hides.</p>
+      <p class="fscope">"Nothing hides" is about characters: no invisible, bidi or look-alike byte
+        reaches you unmarked. A program can still redraw <a href="/#current-line">its own current
+        line</a>.</p>
     </div>
     <nav class="fcols">
       <div class="fcol">

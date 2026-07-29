@@ -119,6 +119,8 @@
   footer .fbrand .ftag{font-family:var(--mono);font-weight:700;font-size:1.05rem;color:var(--ink);letter-spacing:-.02em;display:inline-flex;align-items:center;gap:8px}
   footer .fbrand .ftag b{color:var(--accent)}
   footer .fbrand p{margin:8px 0 0;max-width:30ch;color:var(--muted)}
+  footer .fbrand p.fscope{margin:10px 0 0;max-width:34ch;font-size:.82rem;opacity:.85}
+  footer .fbrand p.fscope a{color:var(--ink)}
   footer .fcols{display:flex;gap:52px;flex-wrap:wrap}
   footer .fcol{display:flex;flex-direction:column;gap:9px}
   footer .fcol h3{margin:0 0 3px;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
@@ -174,6 +176,10 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
   /* jump-to-anchor highlight: a red ring around the element you navigated to
      (the sticky header needs the scroll-margin so the target is not hidden). */
   :target{scroll-margin-top:76px}
+  /* Narrow viewports wrap the nav onto three rows, so the sticky header is far
+     taller than 76px and an anchor landed UNDER it -- the heading you navigated
+     to was hidden. Scale the offset with the header instead of pinning it. */
+  @media(max-width:640px){ html{scroll-padding-top:200px} :target{scroll-margin-top:206px} }
   /* Contained targets ring themselves; a full-bleed section rings its inner
      .wrap instead, so the vertical ring edges stay on-screen (a ring on the
      edge-to-edge section would sit at the viewport edges). */
