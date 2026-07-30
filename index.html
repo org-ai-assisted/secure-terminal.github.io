@@ -49,7 +49,7 @@
 </header>
 
 <div class="notice"><div class="wrap">
-  <b>Unreviewed draft, work in progress.</b> This site is AI-generated and pending human review. The terminal itself works: printable ASCII in the default mode, with an opt-in mode that runs ssh, vim, htop and other full-screen programs. Build it from source below.
+  <b>Unreviewed draft, work in progress.</b> This site is AI-generated and pending human review. The terminal itself works: printable ASCII in the default display mode, with an opt-in mode that runs ssh, vim, htop and other full-screen programs. Build it from source below.
 </div></div>
 
 <main>
@@ -58,7 +58,7 @@
   <h1>Safe to paste. Safe to <span class="u">read</span>.</h1>
   <p class="sub">Pasted commands are sanitized and program output is neutralized, so neither what you copy in
     nor what a program prints out can hide invisible characters, bidi overrides or escape sequences. secure-terminal
-    shows plain printable ASCII in its default mode, so a disguised byte - an invisible
+    shows plain printable ASCII in its default display mode, so a disguised byte - an invisible
     character, a bidi override, a look-alike letter - has nowhere to hide, whether it arrives by paste or by
     <code>cat</code>. Other modes trade some of that back on purpose:
     <a href="#display-modes">see all four side by side</a>.</p>
@@ -78,7 +78,7 @@
 </div></section>
 
 <div class="whatis"><div class="wrap">
-  <p><b>What is this?</b> A terminal whose display shows printable ASCII in its default mode (everything else is
+  <p><b>What is this?</b> A terminal whose display shows printable ASCII in its default display mode (everything else is
     neutralized to a visible, inert placeholder) and which runs no escape-sequence parser on program output
     beyond safe colour and four edits clamped to <a href="#current-line">the line being written</a>.
     Paste a command you copied from the web, or read text a program printed, and trust that what you see

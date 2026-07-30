@@ -574,7 +574,7 @@
     shell-integration profile; almost nothing outside the iTerm2 ecosystem emits them.
     <b>Why secure-terminal implements none of it:</b> each one is the terminal acting on program
     output - rendering arbitrary image bytes, writing files to your disk, or reporting state back
-    onto the input channel - which is exactly the surface the default mode removes by design.
+    onto the input channel - which is exactly the surface CLI mode (the default) removes by design.
     The escape is recognised only so it can be stripped; there is deliberately no toggle for it, so it
     is always neutralized - a program gets no file-transfer, no image, and no variable channel. If you
     need those, that is a reason to open iTerm2 (or a dedicated graphical terminal) for that task.</p>
@@ -589,8 +589,8 @@
   <p class="catdesc">Some modern terminals can draw pictures in the grid - a chart from a CLI tool,
     a thumbnail, a plot. secure-terminal does not, and that is a design choice, not a gap: every
     one of these protocols works by having the terminal parse an escape sequence and render
-    arbitrary attacker-supplied bytes, which is exactly the parser and the attack surface the
-    default mode removes by design.</p>
+    arbitrary attacker-supplied bytes, which is exactly the parser and the attack surface
+    CLI mode (the default) removes by design.</p>
   <div class="cmp-wrap">
   <table class="cmp">
     <thead><tr><th>Feature</th><th>How it works</th><th>Used by</th><th>secure-terminal</th></tr></thead>
