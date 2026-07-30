@@ -358,16 +358,17 @@ cat make-hostile-log.sh</div>
   <div class="issue">
     <p>A normal terminal <em>interprets</em> program output as commands - move the cursor, set the
       title, change the palette, shift the charset, write the clipboard. secure-terminal's default
-      Read the table as "these need a feature secure-terminal does not implement", not as a scoreboard:
-      most rows are <b>not applicable</b> rather than defended. That cuts both ways -- a terminal with no
-      OSC&nbsp;52 parser cannot have an OSC&nbsp;52 bug, but it can still have its own, and a short list of
-      known CVEs in other terminals says nothing about undiscovered defects here. What the small surface buys
-      is fewer places for one to hide, not a proof there are none.
       CLI mode interprets none of it: output is reduced to printable ASCII (plus safe,
       contrast-guarded colour), so a hostile stream has nothing to act on. See the
       <a href="/compatibility/">compatibility page</a> for exactly which sequences are neutralised,
       and the <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>
       for the automated proofs.</p>
+    <p>Read the table as "these need a feature secure-terminal does not implement", not as a scoreboard:
+      most rows are <b>not applicable</b> rather than defended. That cuts both ways: a terminal with no
+      OSC&nbsp;52 parser cannot have an OSC&nbsp;52 bug, but it can still have its own, and a short list of
+      known CVEs in other terminals says nothing about undiscovered defects here. What the small surface buys
+      is fewer places for one to hide, not a proof there are none - spelled out under
+      <a href="/human-review/#inapplicable">what does not apply, and what still might</a>.</p>
   </div>
   <div class="cta">
     <a class="btn primary" href="/#install">Install secure-terminal</a>

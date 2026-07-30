@@ -128,6 +128,29 @@
   </div>
 </div></section>
 
+<section class="cat" id="inapplicable"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#inapplicable">What does not apply here - and what still might</a></h2>
+  <p class="catdesc">A shorter list of <em>known</em> attacks is not a shorter list of attacks. Read the
+    previous section with this one attached.</p>
+  <div class="issue">
+    <p><b>Inapplicable by construction.</b> The published CVEs and the "out of scope, different threat
+      model" issues that afflict traditional terminals are not attacks secure-terminal defends against;
+      they are attacks it has no machinery to suffer. There is no OSC&nbsp;52 parser to have an
+      OSC&nbsp;52 bug, no answerback string to reflect, no alternate screen to hijack, no C parser of
+      hostile bytes to overflow. A feature that does not exist cannot be exploited - that, and only
+      that, is what <a href="/comparison/">the comparison</a> shows.</p>
+    <p><b>What that does not buy.</b> secure-terminal may well have <b>unknown vulnerabilities of its
+      own</b>, including ones no other terminal has, precisely because no other terminal has this code:
+      the sanitiser, the four display modes, the paste and copy review, the restricted TUI screen model
+      are all new, none of it human-audited, none of it with years of field exposure behind it. A short
+      CVE list here is the absence of a search, not the result of one.</p>
+    <p><b>So state it plainly:</b> a narrower attack surface, not a proven-safe one. Fewer places for a
+      defect to hide is a real and deliberate property; "therefore there are none" does not follow, and
+      nothing on these pages should be read as claiming it. If you want the stronger claim, that is what
+      levels 2 and 3 above are for - and neither is done yet.</p>
+  </div>
+</div></section>
+
 <section class="cat" id="slop"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#slop">"But AI code is slop, insecure, you shouldn't use it"</a></h2>
   <p class="catdesc">A fair objection, and one we take seriously rather than wave away.</p>
@@ -200,7 +223,8 @@
       confidence that there is no
       <a href="https://www.kicksecure.com/wiki/Backdoor" rel="noopener">backdoor</a>. That is a
       different, and for many people better, risk profile than the status quo - offered without
-      overstating it.</p>
+      overstating it: it is a
+      <a href="#inapplicable">narrower attack surface, not a proven-safe one</a>.</p>
   </div>
   <div class="cta">
     <a class="btn primary" href="/ai-review/">See the AI Review</a>
