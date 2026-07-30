@@ -68,10 +68,12 @@
     <a class="btn ghost" href="https://output-lies.github.io">See the problem it removes</a>
   </div>
   <figure class="shot" style="max-width:620px;margin:30px auto 0">
-    <a href="/shots/hero.png" target="_blank" rel="noopener"><img src="/shots/hero.png" width="560" height="160" alt="A short secure-terminal session in the default display mode. An ls of ~/Downloads lists installer.sh, invoice.pdf, report.txt and notes.md, but two of the names contain a single risk-coloured placeholder box where a hidden character was: a Cyrillic look-alike letter in one, a right-to-left override in the other. The following head -2 deploy.log output, deploy: starting and deploy: OK, is rendered as plain unremarkable text."></a>
-    <figcaption>The default display. Ordinary output stays ordinary - a terminal that mangled normal text would
-      not be usable - while two of those filenames carry a hidden character each and cannot pretend otherwise.
-      This is the text area, not a window capture: no title bar, tabs or toolbar.</figcaption>
+    <a href="/shots/hero.png" target="_blank" rel="noopener"><img src="/shots/hero.png" width="560" height="160" alt="A short secure-terminal session in Detail, the default display mode. An ls of ~/Downloads lists installer.sh, invoice.pdf, report.txt and notes.md, but two of the names carry a hidden character named inline in red: invoice contains U+0430 CYRILLIC SMALL LETTER A, a look-alike for ASCII a, and report contains U+202E RIGHT-TO-LEFT OVERRIDE. The following head -2 deploy.log output, deploy: starting and deploy: OK, is rendered as plain unremarkable text."></a>
+    <figcaption><b>Detail</b>, the default display mode. Ordinary output stays ordinary - a terminal that
+      mangled normal text would not be usable - while two of those filenames carry a hidden character each,
+      named inline so it cannot pretend otherwise. Three other modes trade verbosity for brevity:
+      <a href="#display-modes">see all four</a>. This is the text area, not a window capture: no title bar,
+      tabs or toolbar.</figcaption>
   </figure>
 </div></section>
 
@@ -216,7 +218,7 @@
         <figcaption class="shotname"><b>The same <code>ls</code> listing, all four modes</b> - three of the
           filenames are lying (a right-to-left override, a Cyrillic look-alike, a zero-width space) and two are
           honest non-ASCII (<code>r&#233;sum&#233;.pdf</code>, a CJK name).</figcaption>
-        <a href="/shots/display-modes.png" target="_blank" rel="noopener"><img src="/shots/display-modes.png" width="792" height="606" loading="lazy" alt="One ls listing rendered four times by secure-terminal. Box: every non-ASCII byte, hostile or honest, becomes a single coloured placeholder box, so the accented and CJK names are boxed too. Show: the honest resume.pdf and the CJK name are readable as themselves, while the Cyrillic look-alike 'a' is kept but tinted red and the bidi override and zero-width space still collapse to placeholders. Reveal: each hidden character is named inline as a badge, U+202E, U+0430, U+200B, U+00E9, U+4E2D, U+6587. Detail: the same badges expanded to full Unicode names, RIGHT-TO-LEFT OVERRIDE, CYRILLIC SMALL LETTER A, ZERO WIDTH SPACE, LATIN SMALL LETTER E WITH ACUTE, CJK UNIFIED IDEOGRAPH."></a>
+        <a href="/shots/display-modes.png" target="_blank" rel="noopener"><img src="/shots/display-modes.png" width="792" height="606" loading="lazy" alt="One ls listing rendered four times by secure-terminal, ending with Detail, the default. Box: every non-ASCII byte, hostile or honest, becomes a single coloured placeholder box, so the accented and CJK names are boxed too. Show: the honest resume.pdf and the CJK name are readable as themselves, while the Cyrillic look-alike 'a' is kept but tinted red and the bidi override and zero-width space still collapse to placeholders. Reveal: each hidden character is named inline as a badge, U+202E, U+0430, U+200B, U+00E9, U+4E2D, U+6587. Detail: the same badges expanded to full Unicode names, RIGHT-TO-LEFT OVERRIDE, CYRILLIC SMALL LETTER A, ZERO WIDTH SPACE, LATIN SMALL LETTER E WITH ACUTE, CJK UNIFIED IDEOGRAPH."></a>
         <figcaption>This is also the honest answer to <b>&quot;is it ASCII only?&quot;</b> - it is not, and the
           panels show why. <b>Box</b> is ASCII in text but draws a non-ASCII placeholder glyph, and it boxes
           <em>honest</em> non-ASCII too. <b>Show</b> deliberately keeps real printable non-ASCII, tinting a
