@@ -129,8 +129,6 @@
   footer .fbrand .ftag{font-family:var(--mono);font-weight:700;font-size:1.05rem;color:var(--ink);letter-spacing:-.02em;display:inline-flex;align-items:center;gap:8px}
   footer .fbrand .ftag b{color:var(--accent)}
   footer .fbrand p{margin:8px 0 0;max-width:30ch;color:var(--muted)}
-  footer .fbrand p.fscope{margin:10px 0 0;max-width:34ch;font-size:.82rem;opacity:.85}
-  footer .fbrand p.fscope a{color:var(--ink)}
   footer .fcols{display:flex;gap:52px;flex-wrap:wrap}
   footer .fcol{display:flex;flex-direction:column;gap:9px}
   footer .fcol h3{margin:0 0 3px;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
