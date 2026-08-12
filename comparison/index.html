@@ -107,10 +107,10 @@
   <div class="cmp-wrap"><table class="cmp">
     <thead><tr><th>Still-applicable issue</th><th>What it does</th><th>Reach</th></tr></thead>
     <tbody>
-      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener"><b>Trojan Source</b> (bidi override)</a> - <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a></td><td>Bidirectional control characters reorder how a line renders, so the code you read is not the code that runs.</td><td>Any bidi-aware renderer - code hosts, editors, and terminals that implement bidi.</td></tr>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener"><b>Trojan Source</b> (bidi override)</a> - <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a></td><td>Bidirectional control characters reorder how a line renders, so the code you read is not the code that runs. Shown live in the <a href="#combined">combined board (Case D)</a>.</td><td>Any bidi-aware renderer - code hosts, editors, and terminals that implement bidi.</td></tr>
       <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/homoglyph-2021" rel="noopener"><b>Homoglyph</b> look-alikes</a></td><td>Non-ASCII characters identical in shape to ASCII (Cyrillic a, Greek o) make a fake command or URL read as legitimate.</td><td>Universal.</td></tr>
-      <tr><td><a href="#paste-demo"><b>Invisible / zero-width</b> characters</a></td><td>Zero-width and other invisibles draw nothing, so a command or a paste can carry hidden bytes you never see (the demo above).</td><td>Universal.</td></tr>
-      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/osc52-clipboard-write" rel="noopener"><b>Clipboard hijack</b> (OSC 52)</a></td><td>A viewed file or a program's output silently overwrites your clipboard, so your next paste inserts attacker text.</td><td>Terminal-dependent - kitty and alacritty write it by default; xterm is one flag away; mainline VTE (xfce4/mate/gnome) ships no OSC 52 write at all.</td></tr>
+      <tr><td><a href="#paste-demo"><b>Invisible / zero-width</b> characters</a></td><td>Zero-width and other invisibles draw nothing, so a command or a paste can carry hidden bytes you never see (the demo above), and boxed in the <a href="#combined">combined board (Case D)</a>.</td><td>Universal.</td></tr>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/osc52-clipboard-write" rel="noopener"><b>Clipboard hijack</b> (OSC 52)</a></td><td>A viewed file or a program's output silently overwrites your clipboard, so your next paste inserts attacker text.</td><td>Terminal-dependent - <a href="#clipboard">we measured it</a>: konsole, alacritty and kitty write it by default; xterm/urxvt/st and VTE (xfce4/mate) refuse; secure-terminal refuses too.</td></tr>
       <tr><td><a href="#shots"><b>Title / tab hijack</b> (OSC 0/2)</a></td><td>Any output renames your window or tab to anything - a fake "production" label, a spoofed context.</td><td>Most terminals - shown live below (konsole and kitty are partial exceptions).</td></tr>
     </tbody>
   </table></div>
@@ -187,7 +187,7 @@ cat homoglyph-domain-install-2021.payload</div>
     <figure class="shot"><figcaption class="shotname"><b>secure-terminal - Detail</b> (default): the byte is named inline as <code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code> - you see exactly what it is.</figcaption><a href="shots/secure-terminal.homoglyph-detail.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.homoglyph-detail.png" width="1362" height="219" loading="lazy" alt="secure-terminal in Detail mode: the domain shows the homoglyph named inline as U+0430 CYRILLIC SMALL LETTER A, exposing that it is not a Latin a."></a></figure>
     <figure class="shot"><figcaption class="shotname"><b>secure-terminal - Box</b>: the Cyrillic byte becomes an inert, risk-coloured box, so the domain reads <code>ex&#9633;mple.com</code> - plainly tampered.</figcaption><a href="shots/secure-terminal.homoglyph-strip.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.homoglyph-strip.png" width="1362" height="221" loading="lazy" alt="secure-terminal in Box mode: the install one-liner's domain shows a risk-coloured box where the Cyrillic homoglyph is, so it reads ex[box]mple.com instead of the look-alike slipping through as example.com."></a></figure>
   </div>
-  <p class="shotsrc">Same harness as the shots above (<a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>, Case C), from the terminal-poc-corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/poc/homoglyph-domain-install-2021/payload.hex" rel="noopener"><code>homoglyph-domain-install-2021</code></a> PoC (read-safe hex). To spot look-alikes in any text yourself, paste it into output-lies' <a href="https://output-lies.github.io/analyze/" rel="noopener">x-ray tool</a> or take the <a href="https://output-lies.github.io/quiz/" rel="noopener">quiz</a>.</p>
+  <p class="shotsrc">Same harness as the shots above (<a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>, Case C), from the terminal-poc-corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/poc/homoglyph-domain-install-2021/payload.hex" rel="noopener"><code>homoglyph-domain-install-2021</code></a> PoC (read-safe hex). The same look-alike rides in the <a href="#combined">combined board (Case D)</a> alongside every other class. To spot look-alikes in any text yourself, paste it into output-lies' <a href="https://output-lies.github.io/analyze/" rel="noopener">x-ray tool</a> or take the <a href="https://output-lies.github.io/quiz/" rel="noopener">quiz</a>.</p>
 </div></section>
 
 <section class="cat" id="method"><div class="wrap">
@@ -264,7 +264,7 @@ cat homoglyph-domain-install-2021.payload</div>
     <span class="sw" style="background:#f5a623"></span>&nbsp;zero-width and invisible characters,
     <span class="sw" style="background:#3b9eff"></span>&nbsp;control bytes,
     <span class="sw" style="background:#a06cff"></span>&nbsp;other non-ASCII (honest foreign text, not a look-alike).</p>
-  <p class="shotsrc">These shots are generated by <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>, which feeds the exact bytes the terminal-poc-corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/poc/crafted-hostile-log/payload.hex" rel="noopener"><code>crafted-hostile-log</code></a> PoC decodes to - you can regenerate them yourself; nothing here is hand-drawn.</p>
+  <p class="shotsrc">These shots are generated by <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>, which feeds the exact bytes the terminal-poc-corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/poc/crafted-hostile-log/payload.hex" rel="noopener"><code>crafted-hostile-log</code></a> PoC decodes to - you can regenerate them yourself; nothing here is hand-drawn. The same title + colour + charset escapes ride together with every other class in the <a href="#combined">combined board (Case D)</a> below.</p>
 </div></section>
 
 <section class="cat" id="altscreen"><div class="wrap">
@@ -282,7 +282,7 @@ cat homoglyph-domain-install-2021.payload</div>
     <figure class="shot"><figcaption class="shotname"><b>konsole</b> (KDE) - stuck in the blank alternate screen.</figcaption><a href="shots/konsole.altscreen.png" target="_blank" rel="noopener"><img src="shots/konsole.altscreen.png" width="795" height="119" loading="lazy" alt="konsole stuck in the blank alternate screen buffer."></a></figure>
     <figure class="shot"><figcaption class="shotname"><b>alacritty</b> (GPU) - stuck in the blank alternate screen. No more resilient.</figcaption><a href="shots/alacritty.altscreen.png" target="_blank" rel="noopener"><img src="shots/alacritty.altscreen.png" width="758" height="106" loading="lazy" alt="alacritty, a modern GPU terminal, stuck in the blank alternate screen buffer."></a></figure>
   </div>
-  <p class="shotsrc">All nine emulators behave identically (alt-screen is a legitimate feature they all support), so three are shown; secure-terminal is the one that does not switch. Same harness: <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>.</p>
+  <p class="shotsrc">All nine emulators behave identically (alt-screen is a legitimate feature they all support), so three are shown; secure-terminal is the one that does not switch. Same harness: <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>. The same <code>?1049h</code> switch is one of the classes in the <a href="#combined">combined board (Case D)</a> below - there secure-terminal strips it while keeping the board's other tricks visible-but-inert in one frame.</p>
 </div></section>
 
 <section class="cat" id="notify"><div class="wrap">
@@ -299,18 +299,122 @@ cat homoglyph-domain-install-2021.payload</div>
   <p class="shotsrc">The notification demo carries deliberately safe wording; the OSC-9 escape is the corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/notification-spoof-kitty-2022" rel="noopener"><code>notification-spoof-kitty-2022</code></a> class.</p>
 </div></section>
 
+<section class="cat" id="clipboard"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#clipboard">We measured it: which terminals let output set your clipboard</a></h2>
+  <p class="catdesc">The <b>OSC 52 clipboard write</b> is the one class a screenshot cannot show -- its effect is on
+    your system clipboard, not the screen. So we measured it directly, per terminal. For each one we seeded the
+    X clipboard with a sentinel, <code>cat</code>'d the corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/osc52-clipboard-write" rel="noopener"><code>osc52-clipboard-write</code></a>
+    payload -- a single OSC 52 escape that silently sets the clipboard to a benign canary token -- and then read
+    the real X clipboard back (via PyQt6, no <code>xclip</code>). If the token landed, output overwrote your
+    clipboard. Tested <b>2026-08-12</b> on each terminal's shipped defaults, with its window focused (some gate
+    the write on focus).</p>
+  <div class="cmp-wrap"><table class="cmp">
+    <thead><tr><th>Terminal</th><th>OSC 52 clipboard write (shipped default)</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://packages.debian.org/konsole" rel="noopener">konsole</a> (KDE)</td><td><b>Honored</b> -- viewing the payload silently overwrote the clipboard.</td></tr>
+      <tr><td><a href="https://packages.debian.org/alacritty" rel="noopener">alacritty</a> (GPU)</td><td><b>Honored</b> -- writes by default while focused (its <code>osc52</code> default permits copy).</td></tr>
+      <tr><td><a href="https://packages.debian.org/kitty" rel="noopener">kitty</a> (GPU)</td><td><b>Honored</b> -- writes by default.</td></tr>
+      <tr><td><a href="https://packages.debian.org/xterm" rel="noopener">xterm</a>, <a href="https://packages.debian.org/rxvt-unicode" rel="noopener">urxvt</a>, <a href="https://packages.debian.org/stterm" rel="noopener">st</a></td><td>Refused -- xterm is one <code>allowWindowOps</code>/<code>disallowedWindowOps</code> flag from honoring it.</td></tr>
+      <tr><td><a href="https://packages.debian.org/xfce4-terminal" rel="noopener">xfce4-terminal</a>, <a href="https://packages.debian.org/mate-terminal" rel="noopener">mate-terminal</a> (VTE)</td><td>Refused -- mainline VTE ships no OSC 52 write at all.</td></tr>
+      <tr><td><a href="https://packages.debian.org/qterminal" rel="noopener">qterminal</a> (LXQt)</td><td>Refused.</td></tr>
+      <tr><td><b>secure-terminal</b></td><td><span class="yes">Refused</span> -- OSC 52 write is off by default, so no program's output can set your clipboard. Opt-in per tab.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="shotsrc"><b>Three of the nine emulators</b> let untrusted output silently overwrite your clipboard on
+    their shipped defaults -- so the next thing you paste is text you never copied. This is a real per-terminal
+    verdict, not a claim: <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/clipboard-verdict.sh" rel="noopener"><code>clipboard-verdict.sh</code></a>
+    (<code>secure-terminal-shots clipboard</code>) reads the real clipboard back after each terminal views the
+    corpus payload; regenerate it yourself. Note the twist versus the title hijack: konsole, which does
+    <em>not</em> surface a hijacked title, <em>does</em> honour the clipboard write.</p>
+</div></section>
+
+<section class="cat" id="combined"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#combined">Case D: every trick at once, in one file you can <code>cat</code></a></h2>
+  <p class="catdesc">Cases A-C isolate one trick each. Real hostile output does not - it stacks them. So the
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>
+    ships one safe, display-only board (the <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/tui-showcase" rel="noopener"><code>tui-showcase</code></a> PoC)
+    that carries <em>every</em> display-class at once, each row openly naming itself. <code>cat</code> it and a
+    traditional terminal paints a full-screen "what you see vs what is there" table: a hijacked window title,
+    a DEC line-drawing frame, a homoglyph <code>example.com</code> (Cyrillic <code>a</code>), a bidi
+    <code>report&nbsp;exe.doc</code> that is really <code>report&nbsp;cod.exe</code>, zero-width and invisible
+    bytes, combining "Zalgo" marks, fullwidth look-alikes, a control-byte repaint that hides a red
+    <code>FAILED</code> behind a green <code>OK</code>, an SGR fg==bg <code>SECRET</code>, an
+    OSC 8 link whose visible text is not its target, and the <code>?1049h</code>
+    alternate-screen switch - with honest Greek as the non-attack contrast.</p>
+  <p class="catdesc">It is <b>display-only</b>: it sets the window title and switches to the alternate screen -
+    both undone by <code>reset</code> - and copies nothing, types nothing, runs nothing. The reach-outside
+    classes (clipboard OSC 52, notification OSC 9, input reflection, RCE) are deliberately <em>not</em> in a
+    cat-able file; each keeps its own proof in the corpus and above. A plaintext "safe demo" warning is the
+    file's first bytes, and the board runs on the alternate screen so your real scrollback is preserved.
+    <b>You can run it yourself</b>: download the board and x-ray it byte-by-byte on
+    <a href="https://output-lies.github.io/terminal/#board" rel="noopener">output-lies</a>.</p>
+  <h3 id="combined-neut" style="margin-top:22px"><a class="h-anchor" href="#combined-neut">secure-terminal neutralises all of it in one frame</a></h3>
+  <p class="catdesc">One board is a strictly harder test than any single case, because a regression in
+    <em>any</em> class would show. <b>Box</b> mode reduces the whole board to inert, risk-coloured ASCII: the
+    title bar still reads <code>secure-terminal</code>, the alternate-screen escape is stripped (the plaintext
+    warning and scrollback stay put, and a banner offers TUI mode), the line-drawing frame shows as literal
+    <code>lqqqk</code> text, the hidden red-on-red <code>SECRET</code> is forced to a readable contrast, and
+    every look-alike, invisible, bidi and foreign byte becomes a box <b>coloured by its risk class</b>.
+    <b>Detail</b> mode names each codepoint inline instead. Four of the five risk-class colours light up in this
+    single shot - homoglyph, bidi, zero-width/invisible and other-non-ASCII; the fifth (control bytes) is absent
+    on purpose, because the board's one control-byte trick (the <code>CR</code>+erase repaint) is a line-local
+    edit secure-terminal deliberately honours, so it shows as the green <code>OK</code>, not a box (the
+    stricter <code>stcat</code> path is what reveals that one).</p>
+  <div class="shotgrid">
+    <figure class="shot"><figcaption class="shotname"><b>secure-terminal - Box</b>: the whole board reduced to inert ASCII - title untouched, alt-screen stripped, line-drawing literal, <code>SECRET</code> forced readable, every hidden/look-alike byte an inert risk-coloured box.</figcaption><a href="shots/secure-terminal.tui-showcase.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.tui-showcase.png" width="1362" height="804" loading="lazy" alt="secure-terminal in Box mode displaying the combined tui-showcase board: the window title still reads secure-terminal, the plaintext safe-demo warning and scrollback are intact because the alternate-screen escape was stripped, the DEC line-drawing frame shows as literal l q k characters, the SGR-hidden SECRET is forced to a readable colour, and each homoglyph, zero-width, bidi, combining, fullwidth and Greek byte is an inert box coloured by its risk class."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>secure-terminal - Detail</b>: the same board with each byte named inline as <code>&lt;U+XXXX NAME&gt;</code> - the Cyrillic <code>a</code> reads as <code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code>, the RTL override as <code>&lt;U+202E RIGHT-TO-LEFT OVERRIDE&gt;</code>.</figcaption><a href="shots/secure-terminal.tui-showcase-detail.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.tui-showcase-detail.png" width="1362" height="847" loading="lazy" alt="secure-terminal in Detail mode displaying the combined board: every non-ASCII byte is expanded inline to its Unicode name, so the homoglyph, bidi, zero-width, combining, fullwidth and Greek characters each read as their exact codepoint and name."></a></figure>
+  </div>
+  <p class="boxlegend">Each neutralised non-ASCII byte is an inert box <b>coloured by its risk class</b>, never by
+    the program - the four the board triggers:
+    <span class="sw" style="background:#ff5c8a"></span>&nbsp;homoglyphs confusable with ASCII,
+    <span class="sw" style="background:#e5484d"></span>&nbsp;bidi controls that reorder text,
+    <span class="sw" style="background:#f5a623"></span>&nbsp;zero-width and invisible characters,
+    <span class="sw" style="background:#a06cff"></span>&nbsp;other non-ASCII (combining marks, fullwidth forms, honest foreign text).</p>
+  <p class="catdesc"><b>And in opt-in TUI mode?</b> Even when you allow full-screen programs to draw - so the
+    board is permitted its alternate screen and its line-drawing charset - every cell is <em>still</em>
+    character-filtered: the look-alikes stay boxed and <b>coloured by their risk class</b>, exactly as in CLI Box
+    mode (homoglyph rose, bidi red, zero-width amber, other/foreign purple); the window title still reads
+    <code>secure-terminal</code> (OSC 0 stays off); and even the now-honoured line-drawing glyphs are shown as
+    boxed non-ASCII cells rather than raw bytes. TUI mode grants layout, never an unfiltered cell.</p>
+  <div class="shotgrid">
+    <figure class="shot"><figcaption class="shotname"><b>secure-terminal - TUI mode</b>: the board draws on its alternate screen, yet every non-ASCII cell is still an inert box coloured by its risk class - the title is still untouched, and even the honoured line-drawing renders as boxed cells, not raw glyphs.</figcaption><a href="shots/secure-terminal.tui-showcase-tui.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.tui-showcase-tui.png" width="1362" height="638" loading="lazy" alt="secure-terminal with TUI mode on, displaying the combined board on the alternate screen: the full-screen layout and box-drawing charset are allowed, but every homoglyph, zero-width, bidi, foreign and now-honoured line-drawing byte is still shown as an inert boxed placeholder coloured by its risk class, and the window title still reads secure-terminal."></a></figure>
+  </div>
+  <h3 id="combined-grid" style="margin-top:22px"><a class="h-anchor" href="#combined-grid">The same board in the nine terminals</a></h3>
+  <p class="catdesc">Every traditional emulator renders the board and its tricks; the differences are in
+    <em>which</em> tricks each honours. The window title is hijacked to <code>terminal attack-class demo (safe)</code>
+    on seven of the nine (konsole keeps its own session name, kitty's shell integration resets it at the prompt),
+    and the bidi override actually reorders <code>report&nbsp;cod.exe</code> into <code>report&nbsp;exe.doc</code>
+    only in the bidi-aware three (konsole, xfce4-terminal, mate-terminal); the rest show it in logical order,
+    unreordered but still there.</p>
+  <div class="shotgrid">
+    <figure class="shot"><figcaption class="shotname"><b>xterm</b> - whole board rendered; title hijacked; bidi shown unreordered (no bidi).</figcaption><a href="shots/xterm.tui-showcase.png" target="_blank" rel="noopener"><img src="shots/xterm.tui-showcase.png" width="762" height="518" loading="lazy" alt="xterm displaying the combined board: the window title is hijacked to terminal attack-class demo (safe), every class row renders, and the bidi row reads report cod.exe in logical order because xterm does not reorder bidi."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>urxvt</b> - whole board rendered; title hijacked; bidi unreordered.</figcaption><a href="shots/urxvt.tui-showcase.png" target="_blank" rel="noopener"><img src="shots/urxvt.tui-showcase.png" width="774" height="518" loading="lazy" alt="urxvt displaying the combined board: title hijacked, every class rendered, bidi row unreordered."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>st</b> - whole board rendered; title hijacked; bidi unreordered.</figcaption><a href="shots/st.tui-showcase.png" target="_blank" rel="noopener"><img src="shots/st.tui-showcase.png" width="762" height="518" loading="lazy" alt="st displaying the combined board: title hijacked, every class rendered, bidi row unreordered."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>konsole</b> (KDE) - board rendered; <b>bidi reordered</b> to <code>report exe.doc</code>; title stored, not surfaced (keeps its own session name).</figcaption><a href="shots/konsole.tui-showcase.png" target="_blank" rel="noopener"><img src="shots/konsole.tui-showcase.png" width="613" height="450" loading="lazy" alt="konsole displaying the combined board: every class rendered, the bidi row is visually reordered to report exe.doc because konsole implements bidi, and the title bar keeps konsole's own session name rather than surfacing the hijacked title."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>xfce4-terminal</b> (VTE) - board rendered; title hijacked; <b>bidi reordered</b> to <code>report exe.doc</code>.</figcaption><a href="shots/xfce4-terminal.tui-showcase.png" target="_blank" rel="noopener"><img src="shots/xfce4-terminal.tui-showcase.png" width="859" height="568" loading="lazy" alt="xfce4-terminal displaying the combined board: title hijacked, every class rendered, and the bidi row visually reordered to report exe.doc because VTE implements bidi."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>mate-terminal</b> (VTE) - board rendered; title hijacked; <b>bidi reordered</b> to <code>report exe.doc</code>.</figcaption><a href="shots/mate-terminal.tui-showcase.png" target="_blank" rel="noopener"><img src="shots/mate-terminal.tui-showcase.png" width="690" height="514" loading="lazy" alt="mate-terminal displaying the combined board: title hijacked, every class rendered, bidi row reordered to report exe.doc."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>qterminal</b> (LXQt) - board rendered; title hijacked in the bar and the tab; bidi unreordered.</figcaption><a href="shots/qterminal.tui-showcase.png" target="_blank" rel="noopener"><img src="shots/qterminal.tui-showcase.png" width="722" height="610" loading="lazy" alt="qterminal displaying the combined board: the hijacked title shows in both the window title bar and the tab, every class renders, and the bidi row is unreordered."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>alacritty</b> (GPU) - board rendered; title hijacked; bidi unreordered. No more resilient.</figcaption><a href="shots/alacritty.tui-showcase.png" target="_blank" rel="noopener"><img src="shots/alacritty.tui-showcase.png" width="758" height="516" loading="lazy" alt="alacritty, a modern GPU terminal, displaying the combined board: title hijacked, every class rendered, bidi row unreordered."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>kitty</b> (GPU) - board rendered; honours the title hijack but its shell integration resets the title at the next prompt; bidi unreordered.</figcaption><a href="shots/kitty.tui-showcase.png" target="_blank" rel="noopener"><img src="shots/kitty.tui-showcase.png" width="722" height="538" loading="lazy" alt="kitty, a modern GPU terminal, displaying the combined board: every class rendered and bidi unreordered; kitty honours the OSC title hijack but its shell integration reset the title to the cwd at the returned prompt, so the title bar is not showing the attacker string."></a></figure>
+  </div>
+  <p class="shotsrc">Case D of the same harness (<a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>),
+    from the terminal-poc-corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/tui-showcase" rel="noopener"><code>tui-showcase</code></a> PoC (read-safe hex, harness-verified). This one board subsumes Cases B and C and the
+    <a href="#altscreen">alt-screen</a> case above: it is the single-frame proof that secure-terminal neutralises
+    the whole set at once. Download it and x-ray every hidden byte on <a href="https://output-lies.github.io/terminal/#board" rel="noopener">output-lies</a>.</p>
+</div></section>
+
 <section class="cat" id="results"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#results">What happened, in a table</a></h2>
   <div class="cmp-wrap">
   <table class="cmp">
-    <thead><tr><th>Terminal</th><th>Case A (<code>/dev/random</code>)</th><th>Case B (crafted log)</th><th>Cleared by <code>reset</code>?</th></tr></thead>
+    <thead><tr><th>Terminal</th><th>Case A (<code>/dev/random</code>)</th><th>Case B (crafted log)</th><th>Case D (<a href="#combined">combined board</a>)</th><th>Cleared by <code>reset</code>?</th></tr></thead>
     <tbody>
-      <tr><td><a href="https://packages.debian.org/xterm" rel="noopener">xterm</a>, <a href="https://packages.debian.org/rxvt-unicode" rel="noopener">urxvt</a>, <a href="https://packages.debian.org/stterm" rel="noopener">st</a></td><td>Screen garbled, stuck reverse-video.</td><td>Stuck red + line-drawing; <b>title hijacked</b> to <code>example.com -- safe demonstration</code>.</td><td>Screen yes; the title not always.</td></tr>
-      <tr><td><a href="https://packages.debian.org/xfce4-terminal" rel="noopener">xfce4-terminal</a>, <a href="https://packages.debian.org/mate-terminal" rel="noopener">mate-terminal</a> (VTE)</td><td>Garbled.</td><td>Stuck colour + charset; <b>title hijacked</b>.</td><td>Screen yes; title no.</td></tr>
-      <tr><td><a href="https://packages.debian.org/konsole" rel="noopener">konsole</a> (KDE)</td><td>Garbled, selection artifacts.</td><td>Stuck colour + <b>charset stuck</b>. (Default profile does not surface the program-set title - it still stored it.)</td><td>Screen yes.</td></tr>
-      <tr><td><a href="https://packages.debian.org/qterminal" rel="noopener">qterminal</a> (LXQt)</td><td>Garbled.</td><td>Stuck colour + charset; <b>title hijacked</b>, shown in the tab.</td><td>Screen yes; title no.</td></tr>
-      <tr><td><a href="https://packages.debian.org/alacritty" rel="noopener">alacritty</a>, <a href="https://packages.debian.org/kitty" rel="noopener">kitty</a> (modern, GPU)</td><td>Garbled (kitty: replacement glyphs).</td><td>Stuck colour + charset; <b>title hijacked</b> - no more resilient than xterm (kitty honours the hijack too, but its shell integration resets the title at the prompt).</td><td>Screen yes; title no.</td></tr>
-      <tr><td><b>secure-terminal</b></td><td><span class="yes">Inert.</span> Random bytes shown as printable ASCII; title never changes; only the contrast-guarded palette.</td><td><span class="yes">Neutralised.</span> <b>Title never touched</b> (a banner notes the blocked OSC), the charset shift shows as literal text, no clipboard write, and the attacker's invisible red-on-red is forced to a plainly readable contrast-guarded colour - so it can hide nothing - and that leftover colour is reset before the shell's next prompt, so nothing stays stuck.</td><td>Never breaks - nothing to clear.</td></tr>
+      <tr><td><a href="https://packages.debian.org/xterm" rel="noopener">xterm</a>, <a href="https://packages.debian.org/rxvt-unicode" rel="noopener">urxvt</a>, <a href="https://packages.debian.org/stterm" rel="noopener">st</a></td><td>Screen garbled, stuck reverse-video.</td><td>Stuck red + line-drawing; <b>title hijacked</b> to <code>example.com -- safe demonstration</code>.</td><td>Whole board rendered; <b>title hijacked</b>; bidi shown unreordered.</td><td>Screen yes; the title not always.</td></tr>
+      <tr><td><a href="https://packages.debian.org/xfce4-terminal" rel="noopener">xfce4-terminal</a>, <a href="https://packages.debian.org/mate-terminal" rel="noopener">mate-terminal</a> (VTE)</td><td>Garbled.</td><td>Stuck colour + charset; <b>title hijacked</b>.</td><td>Whole board rendered; <b>title hijacked</b>; <b>bidi reordered</b> to <code>report exe.doc</code>.</td><td>Screen yes; title no.</td></tr>
+      <tr><td><a href="https://packages.debian.org/konsole" rel="noopener">konsole</a> (KDE)</td><td>Garbled, selection artifacts.</td><td>Stuck colour + <b>charset stuck</b>. (Default profile does not surface the program-set title - it still stored it.)</td><td>Whole board rendered; <b>bidi reordered</b> to <code>report exe.doc</code>; title stored, not surfaced.</td><td>Screen yes.</td></tr>
+      <tr><td><a href="https://packages.debian.org/qterminal" rel="noopener">qterminal</a> (LXQt)</td><td>Garbled.</td><td>Stuck colour + charset; <b>title hijacked</b>, shown in the tab.</td><td>Whole board rendered; <b>title hijacked</b> (bar + tab); bidi unreordered.</td><td>Screen yes; title no.</td></tr>
+      <tr><td><a href="https://packages.debian.org/alacritty" rel="noopener">alacritty</a>, <a href="https://packages.debian.org/kitty" rel="noopener">kitty</a> (modern, GPU)</td><td>Garbled (kitty: replacement glyphs).</td><td>Stuck colour + charset; <b>title hijacked</b> - no more resilient than xterm (kitty honours the hijack too, but its shell integration resets the title at the prompt).</td><td>Whole board rendered; <b>title hijacked</b> (kitty resets it at the prompt); bidi unreordered.</td><td>Screen yes; title no.</td></tr>
+      <tr><td><b>secure-terminal</b></td><td><span class="yes">Inert.</span> Random bytes shown as printable ASCII; title never changes; only the contrast-guarded palette.</td><td><span class="yes">Neutralised.</span> <b>Title never touched</b> (a banner notes the blocked OSC), the charset shift shows as literal text, no clipboard write, and the attacker's invisible red-on-red is forced to a plainly readable contrast-guarded colour - so it can hide nothing - and that leftover colour is reset before the shell's next prompt, so nothing stays stuck.</td><td><span class="yes">Neutralised in one frame.</span> The whole board inert - title untouched, alt-screen stripped (scrollback intact), every look-alike/invisible/bidi/foreign byte an inert risk-coloured box (four classes at once), the hidden <code>SECRET</code> forced readable.</td><td>Never breaks - nothing to clear.</td></tr>
     </tbody>
   </table>
   </div>
