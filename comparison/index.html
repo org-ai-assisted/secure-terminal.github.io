@@ -31,15 +31,15 @@
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="729" height="70" alt="secure-terminal"></a>
-    <span class="status" title="This site is AI-generated and pending human review">needs human review</span>
+    <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">needs human review</a>
     <nav>
       <a href="/#features">Features</a>
       <a href="/#install">Install</a>
       <a href="/plugins/">Plugins</a>
-      <a href="/compatibility/">Compatibility</a>
       <a href="/comparison/" class="active">Comparison</a>
       <a href="/ai-review/">AI Review</a>
       <a href="/human-review/">Human Review</a>
+      <a href="/compatibility/">Compatibility</a>
       <a href="/#faq">FAQ</a>
       <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
     </nav>
@@ -154,14 +154,14 @@
   <h2 class="catname"><a class="h-anchor" href="#homoglyph">The domain you read is not the domain you fetch</a></h2>
   <p class="catdesc">The <b>Trojan-Source</b> class (<a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a> /
     <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42694" rel="noopener">-42694</a>) in its most terminal-native
-    form: a copy-paste install one-liner whose domain hides a look-alike character. The corpus ships it as a
-    plain file - clone it and <code>cat</code> it yourself (the line is wrapped in <code>echo</code>, so it is
-    safe to run: it prints the command instead of fetching anything):</p>
+    form: a copy-paste install one-liner whose domain hides a look-alike character. The
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>
+    ships it read-safe as hex; reproduce.py decodes it to a look-alike URL (a plain string, nothing to run):</p>
   <div class="pre"><span class="c"># the 'a' in "example" is a Cyrillic homoglyph (U+0430), not Latin a:</span>
-git clone https://github.com/org-ai-assisted/dist-ai
-cd dist-ai/usr/share/secure-terminal-shots
-./make-homoglyph-log.sh &gt; homoglyph.log
-cat homoglyph.log</div>
+git clone https://github.com/secure-terminal/terminal-poc-corpus
+cd terminal-poc-corpus
+POC_CORPUS_ALLOW_HOST=1 tools/reproduce.py homoglyph-domain-install-2021
+cat homoglyph-domain-install-2021.payload</div>
   <p class="catdesc">Every traditional terminal renders it the same way - a clean, trustworthy-looking
     <code>https://example.com</code>, with no hint anything is wrong. Nothing on screen betrays that the domain is a different,
     attacker-registrable one. All nine we tested are byte-for-byte identical here: there is no
@@ -187,13 +187,13 @@ cat homoglyph.log</div>
     <figure class="shot"><figcaption class="shotname"><b>secure-terminal - Detail</b> (default): the byte is named inline as <code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code> - you see exactly what it is.</figcaption><a href="shots/secure-terminal.homoglyph-detail.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.homoglyph-detail.png" width="822" height="547" loading="lazy" alt="secure-terminal in Detail mode: the domain shows the homoglyph named inline as U+0430 CYRILLIC SMALL LETTER A, exposing that it is not a Latin a."></a></figure>
     <figure class="shot"><figcaption class="shotname"><b>secure-terminal - Box</b>: the Cyrillic byte becomes an inert, risk-coloured box, so the domain reads <code>ex&#9633;mple.com</code> - plainly tampered.</figcaption><a href="shots/secure-terminal.homoglyph-strip.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.homoglyph-strip.png" width="822" height="547" loading="lazy" alt="secure-terminal in Box mode: the install one-liner's domain shows a risk-coloured box where the Cyrillic homoglyph is, so it reads ex[box]mple.com instead of the look-alike slipping through as example.com."></a></figure>
   </div>
-  <p class="shotsrc">Same harness as the shots above (<a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>, Case C), from <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/make-homoglyph-log.sh" rel="noopener"><code>make-homoglyph-log.sh</code></a> (its deterministic generator). To spot look-alikes in any text yourself, paste it into output-lies' <a href="https://output-lies.github.io/analyze/" rel="noopener">x-ray tool</a> or take the <a href="https://output-lies.github.io/quiz/" rel="noopener">quiz</a>.</p>
+  <p class="shotsrc">Same harness as the shots above (<a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>, Case C), from the terminal-poc-corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/poc/homoglyph-domain-install-2021/payload.hex" rel="noopener"><code>homoglyph-domain-install-2021</code></a> PoC (read-safe hex). To spot look-alikes in any text yourself, paste it into output-lies' <a href="https://output-lies.github.io/analyze/" rel="noopener">x-ray tool</a> or take the <a href="https://output-lies.github.io/quiz/" rel="noopener">quiz</a>.</p>
 </div></section>
 
 <section class="cat" id="method"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#method">What we fed them</a></h2>
   <p class="catdesc">One payload, two cases, run in nine terminal emulators and in
-    secure-terminal, each on its own isolated headless display. Tested <b>2026-07-22</b>. Each
+    secure-terminal, each on its own isolated headless display. Tested <b>2026-08-12</b>. Each
     command is <em>typed at an interactive shell</em>, so every shot shows the prompt, the
     command, its output, and - tellingly - the state of the prompt <em>after</em> it. Both
     payloads and the capture harness are published so you can
@@ -203,10 +203,10 @@ cat homoglyph.log</div>
       (<code>head -c 1200 /dev/random</code>), with no crafted escapes. Whatever happens is
       genuinely what random data does - no chosen title string is possible.</p>
     <p><b>Case B - a crafted hostile log:</b> an <code>OSC 0</code> title-set to an
-      illustrative marker (<code>root@prod-db:~#</code>), a stuck colour that is never reset, and
+      illustrative marker (<code>example.com -- safe demonstration</code>), a stuck colour that is never reset, and
       a DEC line-drawing charset shift that is never reset. This is the deliberate attack a log
       file or program output can carry - shipped as a plain file you can <code>cat</code>,
-      the short, readable <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/make-hostile-log.sh" rel="noopener"><code>make-hostile-log.sh</code></a> (which prints each byte explicitly).</p>
+      its bytes are the terminal-poc-corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/poc/crafted-hostile-log/payload.hex" rel="noopener"><code>crafted-hostile-log</code></a> PoC, stored read-safe as hex (viewing the repo never fires it).</p>
   </div>
 </div></section>
 
@@ -214,9 +214,9 @@ cat homoglyph.log</div>
   <h2 class="catname"><a class="h-anchor" href="#shots">See it: the crafted attack</a></h2>
   <p class="catdesc">The crafted log (Case B) is <code>cat</code>'d at a shell prompt in each terminal,
     captured on a real LXQt desktop (the <a href="https://github.com/labwc/labwc" rel="noopener">labwc</a>
-    compositor with the Clearlooks window theme) on 2026-07-22. The prompt is a plain
+    compositor with the Clearlooks window theme) on 2026-08-12. The prompt is a plain
     <code>user@host</code> - watch how the <code>OSC 0</code> escape rewrites the window title to the
-    attacker's <code>root@prod-db:~#</code> while the real prompt still says <code>user@host</code>: the
+    attacker's <code>example.com -- safe demonstration</code> while the real prompt still says <code>user@host</code>: the
     title bar lies. Every terminal runs as a client of the compositor, which draws the same themed,
     server-side title bar on each window, so an honoured <code>OSC 0</code> hijack is legible in the bar directly -
     for the minimalist terminals (st, urxvt, alacritty) as much as for the VTE terminals that also draw their own
@@ -229,14 +229,14 @@ cat homoglyph.log</div>
     escape, and its next prompt comes back clean. Click any shot for full size.</p>
   <div class="shotgrid">
     <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - neutralised: title untouched (a banner flags the blocked OSC), the charset shift shows as literal text, only the contrast-guarded palette.</figcaption><a href="shots/secure-terminal.crafted.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.crafted.png" width="822" height="547" loading="lazy" alt="secure-terminal displaying the crafted hostile log: the tab title is unchanged, a yellow banner notes the blocked OSC title escape, the line-drawing shift shows as literal text, and colour is contrast-guarded and readable."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>xterm</b> - titlebar hijacked to <code>root@prod-db:~#</code>; stuck red; charset shifted.</figcaption><a href="shots/xterm.crafted.png" target="_blank" rel="noopener"><img src="shots/xterm.crafted.png" width="762" height="463" loading="lazy" alt="xterm displaying the crafted log: the window-manager titlebar reads root@prod-db, the screen is stuck red with line-drawing corruption."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>urxvt</b> - titlebar hijacked to <code>root@prod-db:~#</code>; stuck red.</figcaption><a href="shots/urxvt.crafted.png" target="_blank" rel="noopener"><img src="shots/urxvt.crafted.png" width="774" height="463" loading="lazy" alt="urxvt displaying the crafted log: undecorated window, screen stuck red."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>qterminal</b> (LXQt) - titlebar hijacked to <code>root@prod-db:~#</code>; its LXQt menu bar and tab visible; stuck red.</figcaption><a href="shots/qterminal.crafted.png" target="_blank" rel="noopener"><img src="shots/qterminal.crafted.png" width="722" height="467" loading="lazy" alt="qterminal displaying the crafted log: LXQt menu bar and a root@prod-db tab; the window title is hijacked to root@prod-db, shown in its title bar, and the screen is stuck red."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>xterm</b> - titlebar hijacked to <code>example.com -- safe demonstration</code>; stuck red; charset shifted.</figcaption><a href="shots/xterm.crafted.png" target="_blank" rel="noopener"><img src="shots/xterm.crafted.png" width="762" height="463" loading="lazy" alt="xterm displaying the crafted log: the window-manager titlebar reads example.com -- safe demonstration, the screen is stuck red with line-drawing corruption."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>urxvt</b> - titlebar hijacked to <code>example.com -- safe demonstration</code>; stuck red.</figcaption><a href="shots/urxvt.crafted.png" target="_blank" rel="noopener"><img src="shots/urxvt.crafted.png" width="774" height="463" loading="lazy" alt="urxvt displaying the crafted log: undecorated window, screen stuck red."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>qterminal</b> (LXQt) - titlebar hijacked to <code>example.com -- safe demonstration</code>; its LXQt menu bar and tab visible; stuck red.</figcaption><a href="shots/qterminal.crafted.png" target="_blank" rel="noopener"><img src="shots/qterminal.crafted.png" width="722" height="467" loading="lazy" alt="qterminal displaying the crafted log: LXQt menu bar and a example.com -- safe demonstration tab; the window title is hijacked to example.com -- safe demonstration, shown in its title bar, and the screen is stuck red."></a></figure>
     <figure class="shot"><figcaption class="shotname"><b>konsole</b> (KDE) - stuck red + charset; KDE toolbar visible. konsole keeps its own session name in the bar rather than surfacing the hijacked title.</figcaption><a href="shots/konsole.crafted.png" target="_blank" rel="noopener"><img src="shots/konsole.crafted.png" width="795" height="458" loading="lazy" alt="konsole displaying the crafted log: KDE tab bar visible, screen stuck red with charset corruption."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>xfce4-terminal</b> (VTE) - titlebar hijacked to <code>root@prod-db:~#</code>; VTE menu bar; stuck red + charset.</figcaption><a href="shots/xfce4-terminal.crafted.png" target="_blank" rel="noopener"><img src="shots/xfce4-terminal.crafted.png" width="859" height="510" loading="lazy" alt="xfce4-terminal displaying the crafted log: GTK menu bar visible, screen stuck red."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>mate-terminal</b> (VTE) - titlebar hijacked to <code>root@prod-db:~#</code>; stuck red + charset.</figcaption><a href="shots/mate-terminal.crafted.png" target="_blank" rel="noopener"><img src="shots/mate-terminal.crafted.png" width="690" height="462" loading="lazy" alt="mate-terminal displaying the crafted log: menu bar visible, stuck red with line-drawing corruption."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>st</b> - titlebar hijacked to <code>root@prod-db:~#</code>; stuck red + line-drawing.</figcaption><a href="shots/st.crafted.png" target="_blank" rel="noopener"><img src="shots/st.crafted.png" width="762" height="463" loading="lazy" alt="st displaying the crafted log: screen stuck red with line-drawing corruption."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>alacritty</b> (modern, GPU) - titlebar hijacked to <code>root@prod-db:~#</code>; stuck red. No more resilient.</figcaption><a href="shots/alacritty.crafted.png" target="_blank" rel="noopener"><img src="shots/alacritty.crafted.png" width="758" height="459" loading="lazy" alt="alacritty, a modern GPU terminal, displaying the crafted log: stuck red corruption."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>xfce4-terminal</b> (VTE) - titlebar hijacked to <code>example.com -- safe demonstration</code>; VTE menu bar; stuck red + charset.</figcaption><a href="shots/xfce4-terminal.crafted.png" target="_blank" rel="noopener"><img src="shots/xfce4-terminal.crafted.png" width="859" height="510" loading="lazy" alt="xfce4-terminal displaying the crafted log: GTK menu bar visible, screen stuck red."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>mate-terminal</b> (VTE) - titlebar hijacked to <code>example.com -- safe demonstration</code>; stuck red + charset.</figcaption><a href="shots/mate-terminal.crafted.png" target="_blank" rel="noopener"><img src="shots/mate-terminal.crafted.png" width="690" height="462" loading="lazy" alt="mate-terminal displaying the crafted log: menu bar visible, stuck red with line-drawing corruption."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>st</b> - titlebar hijacked to <code>example.com -- safe demonstration</code>; stuck red + line-drawing.</figcaption><a href="shots/st.crafted.png" target="_blank" rel="noopener"><img src="shots/st.crafted.png" width="762" height="463" loading="lazy" alt="st displaying the crafted log: screen stuck red with line-drawing corruption."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>alacritty</b> (modern, GPU) - titlebar hijacked to <code>example.com -- safe demonstration</code>; stuck red. No more resilient.</figcaption><a href="shots/alacritty.crafted.png" target="_blank" rel="noopener"><img src="shots/alacritty.crafted.png" width="758" height="459" loading="lazy" alt="alacritty, a modern GPU terminal, displaying the crafted log: stuck red corruption."></a></figure>
     <figure class="shot"><figcaption class="shotname"><b>kitty</b> (modern, GPU) - stuck red + charset, no more resilient; it honours the OSC title hijack too, but its shell integration reset the title to the cwd (<code>~</code>) at the next prompt.</figcaption><a href="shots/kitty.crafted.png" target="_blank" rel="noopener"><img src="shots/kitty.crafted.png" width="722" height="457" loading="lazy" alt="kitty, a modern GPU terminal, displaying the crafted log: stuck red corruption; its title bar shows the cwd because kitty's shell integration reset it at the prompt."></a></figure>
   </div>
   <h3 id="random" style="margin-top:26px"><a class="h-anchor" href="#random">And the random stream (Case A)</a></h3>
@@ -264,7 +264,39 @@ cat homoglyph.log</div>
     <span class="sw" style="background:#f5a623"></span>&nbsp;zero-width and invisible characters,
     <span class="sw" style="background:#3b9eff"></span>&nbsp;control bytes,
     <span class="sw" style="background:#a06cff"></span>&nbsp;other non-ASCII (honest foreign text, not a look-alike).</p>
-  <p class="shotsrc">These shots are generated by <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>, which feeds the exact bytes <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/make-hostile-log.sh" rel="noopener"><code>make-hostile-log.sh</code></a> emits - you can regenerate them yourself; nothing here is hand-drawn.</p>
+  <p class="shotsrc">These shots are generated by <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>, which feeds the exact bytes the terminal-poc-corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/poc/crafted-hostile-log/payload.hex" rel="noopener"><code>crafted-hostile-log</code></a> PoC decodes to - you can regenerate them yourself; nothing here is hand-drawn.</p>
+</div></section>
+
+<section class="cat" id="altscreen"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#altscreen">The screen you are left with is not the one you had</a></h2>
+  <p class="catdesc">A log can switch a terminal into its <b>alternate screen</b> - the full-screen buffer
+    <code>vim</code>, <code>less</code> and <code>htop</code> use - and simply never switch back. All nine
+    traditional terminals honour it: a blank full-screen, the prompt gone and the cursor hidden, until
+    <code>reset</code>. secure-terminal's CLI mode strips the alternate-screen escape, shows the log as inert
+    text with the scrollback and prompt intact, and flags that a full-screen program tried to draw - offering
+    its opt-in TUI mode if you actually want it. The payload is the corpus
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/poc/alt-screen-hijack/payload.hex" rel="noopener"><code>alt-screen-hijack</code></a> PoC.</p>
+  <div class="shotgrid">
+    <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - alternate-screen escape stripped: the log is inert text, scrollback and prompt intact, a banner offers TUI mode.</figcaption><a href="shots/secure-terminal.altscreen.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.altscreen.png" width="822" height="547" loading="lazy" alt="secure-terminal displaying the alt-screen payload: the log renders as inert text with the scrollback and returned prompt intact, and a banner notes a full-screen program tried to draw and offers TUI mode."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>xterm</b> - stuck in a blank alternate screen; prompt and scrollback gone.</figcaption><a href="shots/xterm.altscreen.png" target="_blank" rel="noopener"><img src="shots/xterm.altscreen.png" width="762" height="463" loading="lazy" alt="xterm stuck in a blank alternate screen: the original scrollback is gone, only the payload line and a returned prompt remain on an otherwise empty full-screen buffer."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>konsole</b> (KDE) - stuck in the blank alternate screen.</figcaption><a href="shots/konsole.altscreen.png" target="_blank" rel="noopener"><img src="shots/konsole.altscreen.png" width="795" height="458" loading="lazy" alt="konsole stuck in the blank alternate screen buffer."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>alacritty</b> (GPU) - stuck in the blank alternate screen. No more resilient.</figcaption><a href="shots/alacritty.altscreen.png" target="_blank" rel="noopener"><img src="shots/alacritty.altscreen.png" width="758" height="459" loading="lazy" alt="alacritty, a modern GPU terminal, stuck in the blank alternate screen buffer."></a></figure>
+  </div>
+  <p class="shotsrc">All nine emulators behave identically (alt-screen is a legitimate feature they all support), so three are shown; secure-terminal is the one that does not switch. Same harness: <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>.</p>
+</div></section>
+
+<section class="cat" id="notify"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#notify">The notification you get is not one you asked for</a></h2>
+  <p class="catdesc">Some terminals (kitty, iTerm2) let program output raise a real <b>desktop notification</b> via
+    an <code>OSC 9</code> escape - so a mere log line can pop a system notification, with attacker-chosen text,
+    outside the terminal window entirely. Here a build log pops a notification reading "Safe demonstration only".
+    secure-terminal's CLI mode neutralises the escape: no popup, the text stays inert in the terminal, and a
+    banner notes the blocked notification.</p>
+  <div class="shotgrid">
+    <figure class="shot"><figcaption class="shotname"><b>kitty</b> - a log line pops a real desktop notification (top-right), outside the terminal.</figcaption><a href="shots/kitty.notify.png" target="_blank" rel="noopener"><img src="shots/kitty.notify.png" width="820" height="512" loading="lazy" alt="kitty: cat-ing a build log pops a desktop notification in the top-right corner reading Safe demonstration only: secure-terminal terminal-attack comparison test. No action needed."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - OSC-9 notification neutralised: no popup, inert text, a banner flags the blocked escape.</figcaption><a href="shots/secure-terminal.notify.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.notify.png" width="820" height="512" loading="lazy" alt="secure-terminal displaying the same build log: no desktop notification appears, the text is inert, and a banner notes the blocked OSC desktop-notification escape."></a></figure>
+  </div>
+  <p class="shotsrc">The notification demo carries deliberately safe wording; the OSC-9 escape is the corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/notification-spoof-kitty-2022" rel="noopener"><code>notification-spoof-kitty-2022</code></a> class.</p>
 </div></section>
 
 <section class="cat" id="results"><div class="wrap">
@@ -273,7 +305,7 @@ cat homoglyph.log</div>
   <table class="cmp">
     <thead><tr><th>Terminal</th><th>Case A (<code>/dev/random</code>)</th><th>Case B (crafted log)</th><th>Cleared by <code>reset</code>?</th></tr></thead>
     <tbody>
-      <tr><td><a href="https://packages.debian.org/xterm" rel="noopener">xterm</a>, <a href="https://packages.debian.org/rxvt-unicode" rel="noopener">urxvt</a>, <a href="https://packages.debian.org/stterm" rel="noopener">st</a></td><td>Screen garbled, stuck reverse-video.</td><td>Stuck red + line-drawing; <b>title hijacked</b> to <code>root@prod-db:~#</code>.</td><td>Screen yes; the title not always.</td></tr>
+      <tr><td><a href="https://packages.debian.org/xterm" rel="noopener">xterm</a>, <a href="https://packages.debian.org/rxvt-unicode" rel="noopener">urxvt</a>, <a href="https://packages.debian.org/stterm" rel="noopener">st</a></td><td>Screen garbled, stuck reverse-video.</td><td>Stuck red + line-drawing; <b>title hijacked</b> to <code>example.com -- safe demonstration</code>.</td><td>Screen yes; the title not always.</td></tr>
       <tr><td><a href="https://packages.debian.org/xfce4-terminal" rel="noopener">xfce4-terminal</a>, <a href="https://packages.debian.org/mate-terminal" rel="noopener">mate-terminal</a> (VTE)</td><td>Garbled.</td><td>Stuck colour + charset; <b>title hijacked</b>.</td><td>Screen yes; title no.</td></tr>
       <tr><td><a href="https://packages.debian.org/konsole" rel="noopener">konsole</a> (KDE)</td><td>Garbled, selection artifacts.</td><td>Stuck colour + <b>charset stuck</b>. (Default profile does not surface the program-set title - it still stored it.)</td><td>Screen yes.</td></tr>
       <tr><td><a href="https://packages.debian.org/qterminal" rel="noopener">qterminal</a> (LXQt)</td><td>Garbled.</td><td>Stuck colour + charset; <b>title hijacked</b>, shown in the tab.</td><td>Screen yes; title no.</td></tr>
@@ -301,18 +333,22 @@ cat homoglyph.log</div>
 
 <section class="cat" id="reproduce"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#reproduce">Reproduce it yourself</a></h2>
-  <p class="catdesc">Nothing here is a claim you have to take on trust. Case B is deterministic:
-    the same bytes every run, produced by one small, readable script in
-    <a href="https://github.com/org-ai-assisted/dist-ai/tree/master/usr/share/secure-terminal-shots" rel="noopener">dist-ai</a>.</p>
-  <div class="pre"><span class="c"># Case B is just a log file. Generate it from its deterministic source,</span>
-<span class="c"># then viewing it IS the attack:</span>
-git clone https://github.com/org-ai-assisted/dist-ai
-cd dist-ai/usr/share/secure-terminal-shots
-./make-hostile-log.sh &gt; hostile.log   <span class="c"># the payload, byte for byte</span>
-cat hostile.log            <span class="c"># now check your window / tab title</span>
+  <p class="catdesc">Nothing here is a claim you have to take on trust. The crafted log is a real,
+    publicly-disclosed payload from the
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>,
+    stored <strong>read-safe as hex</strong> - so you can view the exact bytes directly at
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/poc/crafted-hostile-log/payload.hex" rel="noopener"><code>poc/crafted-hostile-log/payload.hex</code></a>,
+    and cloning, <code>grep</code>-ing or the GitHub view never fires it. The live attack bytes exist only
+    after you decode it in a <strong>throwaway</strong> terminal:</p>
+  <div class="pre"><span class="c"># viewing it IS the attack -- use a THROWAWAY terminal; `reset` restores the display:</span>
+git clone https://github.com/secure-terminal/terminal-poc-corpus
+cd terminal-poc-corpus
+POC_CORPUS_ALLOW_HOST=1 tools/reproduce.py crafted-hostile-log   <span class="c"># decodes the hex + prints its risk tier</span>
+cat crafted-hostile-log.payload   <span class="c"># now check your window / tab title</span>
+reset
 
-<span class="c"># or just read the generator - it prints each byte (^[ is ESC) explicitly:</span>
-cat make-hostile-log.sh</div>
+<span class="c"># every PoC in the corpus; reproduce.py prints the safe way to feed each one:</span>
+tools/reproduce.py --list</div>
   <p class="shotsrc" style="margin-top:10px">Regenerating the screenshots above is a footnote, not the point:
     <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>
     drives each emulator headless and screenshots it - see its
@@ -463,7 +499,6 @@ cat make-hostile-log.sh</div>
   </div>
   <div class="fbot">
     <span class="fcopy">&copy; 2026 <a href="https://www.encrypted-support.com">ENCRYPTED SUPPORT LLC</a></span>
-    <span class="fcopy">Operated by <a href="https://github.com/adrelanos">@adrelanos</a></span>
     <span class="fcopy sp"><a href="https://org-ai-assisted.github.io">Built with AI assistance</a></span>
   </div>
 </footer>
