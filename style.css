@@ -70,7 +70,7 @@
   .tbl tr:last-child td{border-bottom:0}
   .term{background:var(--tbg);color:var(--tfg);font:.92rem/1.7 var(--mono);padding:16px;border-radius:11px;border:1px solid #23262e;overflow-x:auto;white-space:pre;unicode-bidi:isolate}
   .term .g{color:#9ece6a}.term .r{color:#f7768e}.term .d{color:#7d8593}.term .y{color:#e0af68}
-  .fg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+  .fg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;align-items:start}
   .fg .issue{margin:0}
   @media(max-width:640px){ .fg{grid-template-columns:1fr} }
   .risk{border-left:4px solid #e5a50a;background:#fbf6ec}
@@ -197,6 +197,13 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
   .issue:target, .shot:target, figure:target, article:target, .level:target{
     box-shadow:0 0 0 2px #e5484d; border-radius:8px;
   }
+  /* Many boxes carry the id on their heading (e.g. an FAQ or feature <h3 id>),
+     so :target lands on the h3, not the box. Ring the containing box instead, so
+     a jump to #faq-ai / #ascii-output highlights the whole card like a section. */
+  .issue:has(> h3:target), .level:has(> h3:target), article:has(> h3:target){
+    box-shadow:0 0 0 2px #e5484d; border-radius:8px;
+  }
+  h3:target, h2:target{ scroll-margin-top:76px; }
   /* A bare section column has no padding of its own, so a box-shadow hugging its
      border box rings the text too tightly. Use an offset outline instead: it
      keeps an even gap around the content and adds no layout shift. The generous
