@@ -101,48 +101,25 @@
 
   <article class="issue">
     <h3 id="no-escape-parser"><a class="h-anchor" href="#no-escape-parser">No escape parser in CLI mode</a></h3>
-    <p>By default there is no general ANSI parser to attack. The terminal honors no vertical or absolute cursor
-      movement, no alternate screens and no OSC hyperlinks from the child process. Two narrow exceptions are
-      honored on purpose: safe, contrast-guarded colour, and the four line-local edits a shell's line editor
-      emits (cursor forward/back, cursor-to-column, erase-in-line), which cannot leave
-      <a href="#current-line">the line being written</a>. Parsing attacker-influenced escapes is the entire vulnerability class; a
-      terminal that will not parse them cannot fall for them. Out of the box it has no terminal side-effects at
-      all: no window-title control, no clipboard-write escape (OSC&nbsp;52), no hyperlinks. Each of those OSC
-      features is a separate, off-by-default toggle you may enable at your own risk, and turning one on dims a
-      security indicator so the extra surface is never invisible.</p>
+    <p>By default there is no general ANSI parser to attack: no vertical or absolute cursor movement, no alternate
+      screens, no OSC hyperlinks, no window-title control, no clipboard-write escape (OSC&nbsp;52). Parsing
+      attacker-influenced escapes is the entire vulnerability class; a terminal that will not parse them cannot
+      fall for them. Two narrow exceptions are honoured on purpose - safe, contrast-guarded colour, and the four
+      line-local edits a shell's line editor emits, which cannot leave <a href="#current-line">the line being
+      written</a>. Each OSC feature is a separate, off-by-default toggle you may enable at your own risk, and
+      turning one on dims a security indicator so the extra surface is never invisible.</p>
   </article>
 
   <article class="issue">
     <h3 id="current-line"><a class="h-anchor" href="#current-line">What a program can still do to its own line</a></h3>
-    <p>Being precise about the one thing CLI mode does <b>not</b> prevent, because a guarantee you have to guess
-      at is worth less than a narrow one you can rely on.</p>
-    <p><b>Why they are honored at all.</b> These are the escapes a shell's line editor emits to redraw the
-      line you are typing. Without them, <b>tab completion</b> prints a mangled duplicate instead of updating the
-      line, <code>Ctrl+R</code> history search and <code>Ctrl+A</code>/<code>Ctrl+E</code> editing leave debris,
-      and a <code>\r</code> progress bar stacks one line per update. They are the price of a usable shell, kept as
-      small as it can be.</p>
-    <p>So CLI mode honors four line-local escapes: cursor forward, cursor back, cursor-to-column, and
-      erase-in-line. All four are clamped to <b>the line currently being written</b>. Vertical and absolute movement (cursor-up, row;column addressing) is stripped, so nothing
-      can reach a line you have already scrolled past, and a whole-screen <code>clear</code> is a deliberate
-      no-op.</p>
-    <p>The consequence, stated plainly: a program <b>can</b> overwrite what it itself just printed on the current
-      line, exactly as a <code>\r</code> progress bar does. Feed a terminal
-      <code>STATUS=FAIL</code>, then an erase-line, then <code>STATUS=PASS</code>, and the line reads
-      <code>STATUS=PASS</code> -- here as anywhere else. That is not an escape being "interpreted" in the
-      dangerous sense: no escape byte reaches the display, the cursor cannot leave the line, and the scrollback
-      above is untouched. But it does mean <b>transcript integrity is per-line</b>: everything already scrolled
-      past is append-only, while the line still being written is the program's to redraw.</p>
-    <p>To be equally plain about the limit: the overwritten text is <b>gone</b>. Switching display mode replays
-      the retained output through the same line editor, and a saved transcript records the rendered document, so
-      neither brings <code>STATUS=FAIL</code> back. If you need a byte-exact record of what a program emitted,
-      capture its output with <a href="https://output-lies.github.io/terminal/" rel="noopener"><code>stcat</code></a>
-      or pipe it to a file -- there the erase is neutralized to a visible placeholder instead of being applied.</p>
-    <p><b>Or turn it off.</b> <b>View -&gt; Line editing</b> (config key <code>line_edits</code>, default on)
-      drops the four ops entirely, so output becomes append-only against escapes and nothing can redraw a line
-      at all. The trade is real: tab completion and progress bars then append a line per update instead of
-      redrawing in place. An administrator can lock the key either way. Carriage return and backspace are raw
-      control bytes rather than escapes, so they stay honoured regardless -- this is append-only against
-      escapes, not against every byte.</p>
+    <p>One honest caveat, stated narrowly. CLI mode honours the four line-local edits a shell's line editor emits
+      (cursor forward/back, cursor-to-column, erase-in-line), all clamped to <b>the line currently being
+      written</b> - so a program can overwrite what it itself just printed on that line, exactly as a
+      <code>\r</code> progress bar does, but nothing can reach a line you have already scrolled past. Transcript
+      integrity is <b>per-line</b>: everything above is append-only, and the overwritten text is gone (capture it
+      with <a href="https://output-lies.github.io/terminal/" rel="noopener"><code>stcat</code></a> if you need a
+      byte-exact record). You can drop even this with <b>View -&gt; Line editing</b> (<code>line_edits</code>,
+      default on). <a href="/compatibility/#line-edits">Full detail on the compatibility page.</a></p>
   </article>
 
   <article class="issue">
@@ -174,41 +151,33 @@
   <div class="fg">
     <article class="issue">
       <h3 id="paste-warning"><a class="h-anchor" href="#paste-warning">Paste warning</a></h3>
-      <p>Paste something with unicode or control characters and a review bar opens <b>inside the window</b>,
-        holding the paste before a byte reaches the shell. Its Detail panes show it <b>four
-        ways</b> - the original as it looks, each hidden character named inline as a <code>&lt;U+XXXX&gt;</code>
-        badge, and exactly what each send button would deliver (stripped to ASCII, or with printable unicode kept;
-        control, bidi and zero-width dropped either way) - rendered by the terminal's own pipeline, so each is
-        risk-coloured and click-to-inspect. While the paste is held, terminal input is suspended and <b>both</b>
-        send buttons are countdown-gated (Enter or Esc rejects), so a stray key can reach nothing. When to warn is
-        configurable: <b>always</b>, <b>only when a paste carries unicode or control</b> (the default), or
-        <b>never</b>. <b>never</b> turns off the <em>prompt</em>, not the safety - the paste is still sanitized to
-        ASCII, because feeding raw control or bidi bytes to your shell is the exact thing this terminal exists to
-        prevent; there is no mode that pastes them through. A single plain-ASCII line is never interrupted; a
-        multi-line paste is held for review too, so a hidden second command cannot run the instant you paste.</p>
-      <p><b>Copy is reviewed the same way, in the other direction.</b> The same bar guards text <em>leaving</em> via
-        copy: after <code>cat evil-log</code>, selecting and copying in Show mode (where the real glyphs are kept)
-        would otherwise put a look-alike straight on the system clipboard - so you choose to copy it stripped to
-        ASCII, with printable unicode kept, or not at all. It is configured <b>separately</b> from the paste
-        warning, because copy and paste are opposite trust directions.</p>
+      <p>Paste anything with unicode or control characters and a review bar opens <b>inside the window</b>,
+        holding the paste before a byte reaches the shell. It shows the paste <b>four ways</b> - as it looks, each
+        hidden character named inline as a <code>&lt;U+XXXX&gt;</code> badge, and exactly what each send button
+        would deliver (stripped to ASCII, or with printable unicode kept) - all risk-coloured by the terminal's own
+        pipeline. Input is suspended and both send buttons are countdown-gated while it is held, so a stray key
+        reaches nothing. When to warn is configurable (always / only on unicode-or-control, the default / never);
+        <b>never</b> turns off the prompt, not the safety - a paste is always sanitised to ASCII, there is no
+        pass-through mode. A multi-line paste is held too, so a hidden second command cannot run the instant you
+        paste.</p>
+      <p><b>Copy is reviewed the same way, in the other direction</b> - the same bar guards text <em>leaving</em>
+        via copy, configured separately because copy and paste are opposite trust directions. The two screenshots
+        below show both bars.</p>
     </article>
     <article class="issue">
       <h3 id="display-modes"><a class="h-anchor" href="#display-modes">Four unicode display modes</a></h3>
-      <p>Per tab: <b>Box</b> (every non-ASCII character becomes an inert box, coloured by risk class;
-        a copied box maps to a plain <code>_</code>, while a saved transcript names it inline so nothing is lost), <b>Reveal</b> (every
-        non-ASCII character as a <code>&lt;U+XXXX&gt;</code> badge, to inspect exactly what is there),
-        <b>Detail</b> (the same badge with the codepoint's Unicode name inline, <code>&lt;U+041D CYRILLIC
-        CAPITAL LETTER EN&gt;</code>, what <code>unicode-show</code> annotates - the safe default), and <b>Show</b> (render
-        legitimate unicode so you can read a log, each glyph still tinted by risk class - a homoglyph
-        confusable with ASCII wears a louder colour than honest foreign text - while the invisible, bidi and
-        control classes, which have no visible glyph, still show as a coloured placeholder).</p>
-      <p class="modenote"><b>Show does not mean run.</b> All four modes remove escape sequences first
-        (there is no general escape parser in CLI mode), so nothing a program prints - a title change, a clipboard
-        write, an alternate screen, a jump to another line - is ever interpreted, in <b>any</b> mode, Show
-        included. The mode never changes that; the only escapes honored in every mode are safe colour and the
-        four line-local edits described under <a href="#current-line">the current line</a>. A bare escape or
-        control byte is still neutralized to a coloured placeholder in Show; the mode only changes how the
-        remaining, already-safe characters are drawn, never whether escapes are interpreted.</p>
+      <p>Per tab: <b>Box</b> (every non-ASCII character becomes an inert box, coloured by risk class),
+        <b>Reveal</b> (each as a <code>&lt;U+XXXX&gt;</code> badge, to inspect exactly what is there), <b>Detail</b>
+        (the same badge with the codepoint's Unicode name inline, the safe default), and <b>Show</b> (render
+        legitimate unicode so you can read a log, each glyph still tinted by risk class - a homoglyph confusable
+        with ASCII wears a louder colour than honest foreign text). The figure below is one <code>ls</code> listing
+        in all four.</p>
+      <p class="modenote"><b>Show does not mean run.</b> All four modes remove escape sequences first (there is no
+        general escape parser in CLI mode), so nothing a program prints - a title change, a clipboard write, an
+        alternate screen, a jump to another line - is ever interpreted, in <b>any</b> mode, Show included. The mode
+        only changes how the remaining, already-safe characters are drawn, never whether escapes are honoured; the
+        only escapes honoured in every mode are safe colour and the four line-local edits described under
+        <a href="#current-line">the current line</a>.</p>
 
       <figure class="shot" style="max-width:900px;margin:24px auto 0">
         <figcaption class="shotname"><b>The same <code>ls</code> listing, all four modes</b> - three of the
@@ -240,12 +209,11 @@
       <h3 id="escape-controls"><a class="h-anchor" href="#escape-controls">Granular escape-feature controls</a></h3>
       <p>The OSC escapes that reach out of the grid - window title, desktop notification, clickable hyperlink,
         clipboard write, clipboard read, palette change, working-directory report - are each a <b>separate,
-        off-by-default toggle</b> with a one-line plain-language note on what it exposes. (The iTerm2 OSC 1337
-        extensions have <b>no toggle at all</b> - they can never be safely enabled, so they are always
-        neutralized.) A three-part <b>security indicator</b> reflects your choices, dimming from green toward red
-        as you enable riskier features (the two clipboard toggles weigh most). When a program tries to use a
-        feature you have left off, a dismissible banner tells you <b>once per feature per tab</b>, so the attempt
-        is visible but never nagging - and you can silence the notice globally or per feature.</p>
+        off-by-default toggle</b> with a one-line note on what it exposes. (The iTerm2 OSC 1337 extensions have
+        <b>no toggle</b> - they can never be safely enabled, so they are always neutralised.) A three-part
+        <b>security indicator</b> dims from green toward red as you enable riskier features. When a program tries
+        to use a feature you left off, a dismissible banner tells you <b>once per feature per tab</b> - visible but
+        never nagging, and silenceable globally or per feature.</p>
     </article>
   </div>
   <figure class="shot" style="max-width:1000px;margin:28px auto 0">
@@ -420,20 +388,16 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
       <a href="https://github.com/secure-terminal/secure-terminal">code is open for you
       to audit</a> regardless of how it was produced - and the security claims are
       testable, not taken on trust.</p>
-    <p>Traditional terminal emulators have a live vulnerability class: merely
-      <em>viewing</em> a file - <code>cat</code> a log, <code>tail</code> a server's
-      output - can make the terminal
-      <a href="/comparison/#behaviour">type an attacker's text into your shell and run
-      it</a>, no keypress needed. It is not a historical footnote: the same class keeps
-      recurring, most recently as
+    <p>Traditional terminal emulators have a live vulnerability class: merely <em>viewing</em> a file -
+      <code>cat</code> a log, <code>tail</code> a server's output - can make the terminal
+      <a href="/comparison/#behaviour">type an attacker's text into your shell and run it</a>, no keypress needed.
+      It is not a historical footnote: the same class recurs, most recently as
       <a href="https://vin01.github.io/piptagole/escape-sequences/iterm2/rce/2024/06/16/iterm2-rce-window-title-tmux-integration.html" rel="noopener">remote
-      code execution in iTerm2 in 2024</a> (CVE-2024-38395) - one of the twenty-odd
-      real cases the
-      <a href="https://github.com/secure-terminal/terminal-poc-corpus">terminal-poc-corpus</a>
-      collects, most from the last few years. secure-terminal closes the whole class
-      <em>by design</em> - CLI mode runs no escape parser and answers no
-      query sequence, so output can never become input. See the
-      <a href="/comparison/">comparison</a>, measured with screenshots.</p>
+      code execution in iTerm2 in 2024</a> (CVE-2024-38395), one of the twenty-odd real cases the
+      <a href="https://github.com/secure-terminal/terminal-poc-corpus">terminal-poc-corpus</a> collects.
+      secure-terminal closes the whole class <em>by design</em> - CLI mode runs no escape parser and answers no
+      query sequence, so output can never become input. See the <a href="/comparison/">comparison</a>, measured
+      with screenshots.</p>
   </div>
   </div>
 </div></section>

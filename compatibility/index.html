@@ -58,7 +58,7 @@
     The four line-local edits a shell's line editor needs (cursor forward/back, cursor-to-column,
     erase-in-line) are honoured within the line being written, so a program can redraw its own
     current line exactly as a <code>\r</code> progress bar does -- see
-    <a href="/#current-line">what a program can still do to its own line</a>. <b>TUI mode</b> (opt-in, per tab)
+    <a href="#line-edits">what a program can still do to its own line</a>. <b>TUI mode</b> (opt-in, per tab)
     interprets escapes inside
     an isolated in-memory screen so full-screen programs render, while every cell is still
     character-filtered and the terminal still answers no query and touches no clipboard. The tables below are backed by real tests,
@@ -122,6 +122,41 @@
     cursor-<em>positioning</em> escapes, so a full-screen redraw (an editor, a live dashboard)
     needs TUI mode. Ordinary colour and single-line progress are honoured, so everyday
     command output looks the way you expect.</p>
+</div></section>
+
+<section class="cat" id="line-edits"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#line-edits">What a program can still do to its own line</a></h2>
+  <p class="catdesc">Being precise about the one thing CLI mode does <b>not</b> prevent, because a
+    guarantee you have to guess at is worth less than a narrow one you can rely on.</p>
+  <div class="issue">
+    <p><b>Why they are honoured at all.</b> These are the escapes a shell's line editor emits to redraw the
+      line you are typing. Without them, <b>tab completion</b> prints a mangled duplicate instead of updating the
+      line, <code>Ctrl+R</code> history search and <code>Ctrl+A</code>/<code>Ctrl+E</code> editing leave debris,
+      and a <code>\r</code> progress bar stacks one line per update. They are the price of a usable shell, kept as
+      small as it can be.</p>
+    <p>So CLI mode honours four line-local escapes: cursor forward, cursor back, cursor-to-column, and
+      erase-in-line. All four are clamped to <b>the line currently being written</b>. Vertical and absolute
+      movement (cursor-up, row;column addressing) is stripped, so nothing can reach a line you have already
+      scrolled past, and a whole-screen <code>clear</code> is a deliberate no-op.</p>
+    <p>The consequence, stated plainly: a program <b>can</b> overwrite what it itself just printed on the current
+      line, exactly as a <code>\r</code> progress bar does. Feed a terminal <code>STATUS=FAIL</code>, then an
+      erase-line, then <code>STATUS=PASS</code>, and the line reads <code>STATUS=PASS</code>. That is not an escape
+      being "interpreted" in the dangerous sense: no escape byte reaches the display, the cursor cannot leave the
+      line, and the scrollback above is untouched. But it does mean <b>transcript integrity is per-line</b>:
+      everything already scrolled past is append-only, while the line still being written is the program's to
+      redraw.</p>
+    <p>To be equally plain about the limit: the overwritten text is <b>gone</b>. Switching display mode replays the
+      retained output through the same line editor, and a saved transcript records the rendered document, so
+      neither brings <code>STATUS=FAIL</code> back. If you need a byte-exact record of what a program emitted,
+      capture its output with <a href="https://output-lies.github.io/terminal/" rel="noopener"><code>stcat</code></a>
+      or pipe it to a file - there the erase is neutralised to a visible placeholder instead of being applied.</p>
+    <p><b>Or turn it off.</b> <b>View -&gt; Line editing</b> (config key <code>line_edits</code>, default on) drops
+      the four ops entirely, so output becomes append-only against escapes and nothing can redraw a line at all.
+      The trade is real: tab completion and progress bars then append a line per update instead of redrawing in
+      place. An administrator can lock the key either way. Carriage return and backspace are raw control bytes
+      rather than escapes, so they stay honoured regardless - this is append-only against escapes, not against
+      every byte.</p>
+  </div>
 </div></section>
 
 <section class="cat" id="contrast-guard"><div class="wrap">
