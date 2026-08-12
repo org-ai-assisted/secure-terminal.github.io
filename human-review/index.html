@@ -176,7 +176,7 @@
   <p class="catdesc">Writing - and fully auditing - a terminal emulator is a big job, not a weekend
     side project.</p>
   <div class="issue">
-    <p>secure-terminal is roughly <b>7,600 lines</b> of code today, and a terminal emulator is a
+    <p>secure-terminal is roughly <b>6,300 lines</b> of code today, and a terminal emulator is a
       notoriously fiddly thing to get right: escape-sequence parsing, a screen model, input handling,
       and every edge case programs rely on. Established emulators are typically maintained by a single
       person or a small team and have been developed and hardened over <b>years</b>, not weeks. For a
@@ -185,13 +185,13 @@
       page exists rather than an implied clean bill of health.</p>
     <p>For scale, here is roughly how much code each terminal we compared against carries, counted
       with <a href="https://github.com/AlDanial/cloc" rel="noopener">cloc</a> over the primary
-      source (approximate; AI-checked):</p>
+      source (approximate; AI-checked; secure-terminal re-counted 2026-08-12):</p>
     <div class="cmp-wrap">
     <table class="cmp">
       <thead><tr><th>Terminal</th><th>Approx. lines of code</th><th>Language</th></tr></thead>
       <tbody>
         <tr><td><a href="https://git.suckless.org/st/" rel="noopener">st</a></td><td>~4,000</td><td>C (deliberately minimal)</td></tr>
-        <tr><td><b>secure-terminal</b></td><td><b>~7,600</b></td><td><b>Python (memory-safe)</b></td></tr>
+        <tr><td><b>secure-terminal</b></td><td><b>~6,300</b></td><td><b>Python (memory-safe)</b></td></tr>
         <tr><td><a href="https://github.com/alacritty/alacritty" rel="noopener">alacritty</a></td><td>~25,000</td><td>Rust (memory-safe)</td></tr>
         <tr><td><a href="https://invent.kde.org/utilities/konsole" rel="noopener">konsole</a></td><td>~50,000</td><td>C++</td></tr>
         <tr><td><a href="https://invisible-island.net/xterm/" rel="noopener">xterm</a></td><td>~90,000</td><td>C</td></tr>

@@ -19,7 +19,10 @@
   .nav > .wrap{display:flex;align-items:center;gap:14px;min-height:56px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
   .brand{font-family:var(--mono);font-weight:700;letter-spacing:-.02em;text-decoration:none;display:inline-flex;align-items:center;gap:9px;white-space:nowrap;font-size:1.02rem}
   .brand .logo{width:1.4em;height:1.4em;flex:0 0 auto}
-  .brand .brandmark{height:30px;width:auto;display:block}
+  .brand .brandmark{height:30px;width:auto;max-width:100%;display:block}
+  /* narrow phones: the wordmark at 30px is ~324px wide and would overflow a
+     320-375px viewport, so shrink it there (the sibling sites do the same) */
+  @media(max-width:420px){ .brand .brandmark{height:22px} }
   .brand b{color:var(--accent)}
   .brand .tm{font-size:.72em;color:var(--muted);margin-left:.14em;font-weight:600;align-self:flex-start;line-height:1}
   .nav .status{margin-left:12px;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--danger);border-radius:5px;padding:3px 8px;white-space:nowrap}
