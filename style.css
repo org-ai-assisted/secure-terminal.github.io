@@ -41,7 +41,7 @@
   .hero h1{font-size:clamp(2rem,6vw,3.6rem);line-height:1.05;letter-spacing:-.03em;margin:0 0 18px;font-weight:800}
   .hero h1 .u{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:6px}
   .hero p.sub{font-size:clamp(1.05rem,2.4vw,1.3rem);color:#2c2e33;max-width:60ch;margin:0}
-  .hero p.lede{max-width:66ch}
+  .hero p.lede{max-width:72ch}
   .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
   .btn{display:inline-block;padding:11px 18px;border-radius:9px;font-weight:650;text-decoration:none;font-size:.95rem;border:1px solid var(--ink)}
   .btn.primary{background:var(--ink);color:var(--bg)}
@@ -49,15 +49,15 @@
 
   .whatis{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
   .whatis .wrap{padding:22px 20px}
-  .whatis p{margin:0;max-width:74ch;color:#33353a;font-size:1.02rem}
+  .whatis p{margin:0;max-width:72ch;color:#33353a;font-size:1.02rem}
   .whatis b{color:var(--accent)}
 
   section.cat{padding:48px 0 8px}
   .catname{font-size:.82rem;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 4px}
-  .catdesc{margin:0 0 18px;color:var(--muted);max-width:66ch}
+  .catdesc{margin:0 0 18px;color:var(--muted);max-width:72ch}
   .issue{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}
   .issue h3{margin:0 0 8px;font-size:1.2rem;letter-spacing:-.01em}
-  .issue p{margin:0 0 8px;color:#3a3c41;max-width:74ch}
+  .issue p{margin:0 0 8px;color:#3a3c41;max-width:72ch}
   .issue p:last-child{margin-bottom:0}
   .modenote{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
   .modenote b{color:var(--ink)}
@@ -77,10 +77,10 @@
   .flag{color:#b9770a;font-weight:700}
   .pre{background:var(--tbg);color:var(--tfg);font:.9rem/1.65 var(--mono);padding:16px;border-radius:11px;border:1px solid #23262e;overflow-x:auto;white-space:pre;unicode-bidi:isolate}
   /* Cap the table to the same reading measure as the prose above it (.issue p
-     is max-width:74ch) so the intro text and the table share one column edge
+     is max-width:72ch) so the intro text and the table share one column edge
      rather than the table running wider. min-width on .cmp keeps it scrollable
      on narrow screens. */
-  .cmp-wrap{overflow-x:auto;margin:16px 0;max-width:74ch;
+  .cmp-wrap{overflow-x:auto;margin:16px 0;max-width:72ch;
     /* self-hiding scroll shadows: a soft shadow appears on whichever edge still
        has table to scroll to, so the hidden third column (secure-terminal) is
        discoverable on narrow screens. Pure CSS, no script. */
@@ -181,7 +181,7 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
 .inst .ibadge.ok{background:rgba(31,138,84,.13);color:#166f40}
 .inst .ibadge.soon{background:rgba(107,111,118,.15);color:#595d63}
 .inst .ibody{padding:2px 16px 16px}
-.inst .ibody > p{margin:0 0 10px;color:#3a3c41;max-width:74ch}
+.inst .ibody > p{margin:0 0 10px;color:#3a3c41;max-width:72ch}
 .inst .ibody > p:last-child{margin-bottom:0}
 
   /* jump-to-anchor highlight: a red ring around the element you navigated to
