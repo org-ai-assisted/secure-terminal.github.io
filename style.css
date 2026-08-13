@@ -260,6 +260,33 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
      variant shows); with CSS OFF every variant shows and its terminal name shows with it */
   .vonly{display:none}
 
+  /* ---- secure-terminal view switcher: CLI/TUI x Box/Detail ----
+     A second CSS-only axis pair. Same INVARIANT as the terminal switcher: these radios
+     are direct children of fieldset.cmp-switch, ahead of .panel, so `~ .panel .sv` reaches
+     them. The four .sv board variants show by default and each checked radio hides the
+     variants that do not match its axis -- cli+box (the defaults) leave exactly .sv.m-cli.u-box.
+     With CSS OFF all four .sv show, each captioned (the noscript/no-CSS fallback). */
+  .mchip{display:inline-flex;align-items:center;cursor:pointer;user-select:none;
+    border:1px solid var(--line);background:var(--card);
+    padding:5px 12px;font-size:.82rem;font-weight:650;color:var(--muted);
+    transition:color .12s,background .12s,border-color .12s}
+  .mchip.first{border-radius:999px 0 0 999px;border-right-width:0}
+  .mchip.last{border-radius:0 999px 999px 0}
+  .mchip.gap{margin-left:8px}
+  .mchip:hover{color:var(--ink);border-color:var(--muted)}
+  .tsel:checked + .mchip{color:#fff;background:var(--ink);border-color:var(--ink)}
+  .tsel:focus-visible + .mchip{outline:2px solid var(--accent);outline-offset:2px}
+  .panel .sv{display:block}
+  #st-cli:checked    ~ .panel .sv.m-tui,
+  #st-tui:checked    ~ .panel .sv.m-cli,
+  #st-box:checked    ~ .panel .sv.u-detail,
+  #st-detail:checked ~ .panel .sv.u-box{display:none}
+
+  /* per-row screenshot inside a matrix row's info-expander: reuse .board2/.shot, a touch
+     tighter than the hero board. The .var engine already swaps the competitor shot. */
+  .rowinfo .ibody .shotgrid{margin:10px 0 2px}
+  .rowinfo .ibody .shotname{font-size:.82rem}
+
   /* two-up screenshot board */
   .board2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:6px 0 0;align-items:start}
   @media(max-width:640px){ .board2{grid-template-columns:1fr} }
