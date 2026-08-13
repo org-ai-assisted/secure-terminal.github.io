@@ -172,7 +172,8 @@
         (the same badge with the codepoint's Unicode name inline, the safe default), and <b>Show</b> (render
         legitimate unicode so you can read a log, each glyph still tinted by risk class (except inert box-drawing
         and block elements, drawn in the program's own colour) - a homoglyph confusable
-        with ASCII wears a louder colour than honest foreign text). The figure below is one <code>ls</code> listing
+        with ASCII wears a louder colour than honest foreign text, and a non-ASCII space is shown as a distinct
+        marker and copies as <code>_</code>, never as a space). The figure below is one <code>ls</code> listing
         in all four.</p>
       <p class="modenote"><b>Show does not mean run.</b> All four modes remove escape sequences first (there is no
         general escape parser in CLI mode), so nothing a program prints - a title change, a clipboard write, an

@@ -58,6 +58,11 @@
   section.cat{padding:48px 0 8px}
   .catname{font-size:.82rem;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 4px}
   .catdesc{margin:0 0 18px;color:var(--muted);max-width:72ch}
+  /* comparison intro: compact so the switcher + matrix are the focus near the top.
+     .lede here is outside .hero, so it needs its own reading-measure + spacing. */
+  #compare{padding-top:26px}
+  #compare .catname{margin:0 0 8px}
+  #compare .lede{max-width:72ch;margin:0 0 12px;color:#2c2e33;font-size:1.05rem;line-height:1.5}
   .issue{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}
   .issue h3{margin:0 0 8px;font-size:1.2rem;letter-spacing:-.01em}
   .issue p{margin:0 0 8px;color:#3a3c41;max-width:72ch}
@@ -190,6 +195,15 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
 .inst .ibody{padding:2px 16px 16px}
 .inst .ibody > p{margin:0 0 10px;color:#3a3c41;max-width:72ch}
 .inst .ibody > p:last-child{margin-bottom:0}
+/* Evidence tables live in a full-width .inst card, not the 72ch reading column. The
+   default .cmp-wrap max-width:72ch (sized for the matrix's 72ch ibody) would cap the
+   table narrower than the card and leave dead space to its right, so let it fill the
+   card. min-width on .cmp still makes it scroll on narrow/mobile viewports. */
+.inst .ibody .cmp-wrap{max-width:none}
+/* terminal-logo attribution list (footer icon-credits collapsible) */
+.credits{margin:6px 0 12px;padding-left:20px;color:#3a3c41;font-size:.9rem;line-height:1.7;max-width:72ch}
+.credits li{margin:2px 0}
+.credits b{color:var(--ink)}
 
   /* jump-to-anchor highlight: a red ring around the element you navigated to
      (the sticky header needs the scroll-margin so the target is not hidden). */
@@ -234,7 +248,7 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
   .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden;white-space:nowrap}
   /* radios visually hidden but keyboard-focusable -- NEVER display:none */
   .tsel{position:absolute;width:1px;height:1px;margin:-1px;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden}
-  .chip{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;
+  .chip{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:text;
     border:1px solid var(--line);border-radius:999px;background:var(--card);
     padding:6px 13px 6px 8px;font-size:.9rem;font-weight:650;color:var(--muted);
     transition:color .12s,background .12s,border-color .12s}
@@ -270,7 +284,7 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
      auto-switches to Box. The page mirrors that -- selecting TUI greys the Detail chip and,
      if Detail was the remembered choice, forces tui+box; Show stays valid in TUI. Switching
      back to CLI restores Detail. With CSS OFF all .sv show, each captioned (no-CSS fallback). */
-  .mchip{display:inline-flex;align-items:center;cursor:pointer;user-select:none;
+  .mchip{display:inline-flex;align-items:center;cursor:pointer;user-select:text;
     border:1px solid var(--line);background:var(--card);
     padding:5px 12px;font-size:.82rem;font-weight:650;color:var(--muted);
     transition:color .12s,background .12s,border-color .12s}
@@ -295,7 +309,13 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
      grey the Detail chip -- mirrors the app disabling Detail and auto-switching to Box in
      TUI. Show IS valid in TUI, so it is neither forced nor greyed. */
   #st-tui:checked ~ #st-detail:checked ~ .panel .sv.m-tui.u-box{display:block}
-  #st-tui:checked ~ label[for="st-detail"]{opacity:.4;pointer-events:none;cursor:not-allowed}
+  /* Detail is unavailable in TUI: make its chip read clearly as DISABLED -- dimmed, struck
+     through, not-allowed cursor -- and override the `.tsel:checked + .mchip` selected fill so
+     it never looks like the active choice while Box is actually shown. The id in the selector
+     outranks that rule, so no !important is needed. Pure CSS cannot re-select the Box radio,
+     so returning to CLI reshows Detail (the app does the real re-select). */
+  #st-tui:checked ~ label[for="st-detail"]{opacity:.5;cursor:not-allowed;text-decoration:line-through;
+    color:var(--muted);background:var(--card);border-color:var(--line)}
 
   /* per-row screenshot inside a matrix row's info-expander: reuse .board2/.shot, a touch
      tighter than the hero board. The .var engine already swaps the competitor shot. */
@@ -318,24 +338,50 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
   .vd{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.9rem;white-space:nowrap}
   .vd .vico{width:15px;height:15px;flex:0 0 auto}
   .vd.ok{color:var(--safe)} .vd.bad{color:var(--danger)} .vd.warn{color:#b9770a} .vd.na{color:var(--muted)}
-  /* per-row info-expander: a full-width row holding a native <details> with a circled "i" */
+  /* per-row info-expander: a full-width row holding a CSS-only checkbox+label toggle
+     (same hidden-input + :checked-sibling idiom as the chips -- no JS). The marker is a
+     rotating chevron: an EXPAND affordance, not a circled "i" tooltip. */
   .matrix tr.minfo > td{padding:0 12px 6px}
   .rowinfo{border:0;background:transparent;margin:0}
-  .rowinfo > summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:6px 0;font-size:.85rem;color:var(--muted)}
-  .rowinfo > summary::-webkit-details-marker{display:none}
-  .rowinfo > summary::before{content:"i";display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;flex:0 0 auto;border:1px solid var(--muted);border-radius:50%;font:italic 700 .72rem/1 var(--mono)}
-  .rowinfo > summary:hover{color:var(--ink)}
-  .rowinfo[open] > summary{color:var(--ink)}
-  .rowinfo[open] > summary::before{border-color:var(--accent);color:var(--accent)}
-  .rowinfo .ibody{padding:4px 0 14px;color:#3a3c41;max-width:72ch;font-size:.92rem}
+  /* checkbox visually hidden but keyboard-focusable -- NEVER display:none */
+  .rowtoggle{position:absolute;width:1px;height:1px;margin:-1px;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden}
+  .rowsum{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:6px 0;font-size:.85rem;color:var(--muted);user-select:text}
+  .rowsum::before{content:"\25B8";display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;flex:0 0 auto;font-size:.8rem;color:var(--muted);transition:transform .12s}
+  .rowsum:hover{color:var(--ink)}
+  .rowtoggle:focus-visible + .rowsum{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+  /* open state (own toggle OR the master expand-all): chevron rotates to point down,
+     label + marker take the accent. The master must precede .cmp-wrap as its sibling. */
+  .rowtoggle:checked + .rowsum,
+  #expand-all:checked ~ .cmp-wrap .rowsum{color:var(--ink)}
+  .rowtoggle:checked + .rowsum::before,
+  #expand-all:checked ~ .cmp-wrap .rowsum::before{transform:rotate(90deg);color:var(--accent)}
+  .rowinfo .ibody{display:none;padding:4px 0 14px;color:#3a3c41;max-width:72ch;font-size:.92rem}
+  .rowtoggle:checked ~ .ibody,
+  #expand-all:checked ~ .cmp-wrap .rowinfo .ibody{display:block}
   .rowinfo .ibody p{margin:0 0 9px}
   .rowinfo .ibody p:last-child{margin-bottom:0}
   .rowinfo .ibody .cmp-wrap{margin:10px 0}
+
+  /* master expand-all / collapse-all control (CSS checkbox, no JS). Sits in .panel just
+     ahead of .cmp-wrap so `~ .cmp-wrap` reaches every row body. Label text swaps on :checked. */
+  .expand-all-cb{position:absolute;width:1px;height:1px;margin:-1px;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden}
+  .expand-all{display:inline-flex;align-items:center;gap:7px;cursor:pointer;user-select:text;margin:14px 0 2px;
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;background:var(--card);padding:5px 13px;
+    transition:color .12s,background .12s,border-color .12s}
+  .expand-all::before{content:"\25B8";font-size:.8rem;transition:transform .12s}
+  .expand-all:hover{color:var(--ink);border-color:var(--muted)}
+  .expand-all-cb:checked + .expand-all{color:#fff;background:var(--ink);border-color:var(--ink)}
+  .expand-all-cb:checked + .expand-all::before{transform:rotate(90deg)}
+  .expand-all-cb:focus-visible + .expand-all{outline:2px solid var(--accent);outline-offset:2px}
+  .expand-all .collapse-txt{display:none}
+  .expand-all-cb:checked + .expand-all .expand-txt{display:none}
+  .expand-all-cb:checked + .expand-all .collapse-txt{display:inline}
   @media(max-width:640px){ .matrix{font-size:.88rem} .matrix th,.matrix td{padding:10px 7px} .matrix td.verdict{white-space:normal} }
 
-  /* deep-link ring extends to a matrix row and an opened info-details */
+  /* deep-link ring extends to a matrix row and an opened info-body */
   tr.mrow:target > *{box-shadow:inset 0 2px 0 #e5484d, inset 0 -2px 0 #e5484d}
-  details.rowinfo:target{outline:2px solid #e5484d;outline-offset:3px;border-radius:6px}
+  .rowinfo:target{outline:2px solid #e5484d;outline-offset:3px;border-radius:6px}
 
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}

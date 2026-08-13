@@ -9,13 +9,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>secure-terminal vs a normal terminal: hostile byte streams</title>
-<meta name="description" content="Pick any popular terminal emulator and see, side by side, what a hostile byte stream does to it - and what secure-terminal does instead. A scannable verdict matrix with screenshots, measured per terminal. Works with JavaScript off.">
+<meta name="description" content="Pick any popular terminal emulator and see, side by side, what a hostile byte stream does to it - and what secure-terminal does instead. A scannable verdict matrix with screenshots, measured per terminal.">
 <link rel="canonical" href="https://secure-terminal.github.io/comparison/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="secure-terminal">
 <meta property="og:title" content="secure-terminal vs a normal terminal: hostile byte streams">
-<meta property="og:description" content="Pick a terminal, see the difference. A per-terminal verdict matrix plus screenshots: every normal terminal is corrupted; secure-terminal is not.">
+<meta property="og:description" content="Hostile bytes, side by side: the same board fed to ten popular terminal emulators and to secure-terminal on shipped defaults. Normal terminals interpret the escape sequences; secure-terminal reduces them to inert printable ASCII.">
 <meta property="og:url" content="https://secure-terminal.github.io/comparison/">
 <meta property="og:image" content="https://secure-terminal.github.io/og.png">
 <meta property="og:image:width" content="1200">
@@ -48,24 +48,18 @@
 </header>
 
 <main>
-<section class="hero"><div class="wrap">
-  <p class="eyebrow">HOSTILE BYTE STREAMS: THE DIFFERENCE, MEASURED</p>
-  <h1>Pipe garbage at a terminal.<br>Only one shrugs it off.</h1>
-  <p class="lede">Untrusted bytes - random data, a program's output, a hostile log - are interpreted as
-    escape sequences by a normal terminal: they garble the screen, stick it in the wrong colours, and can
-    silently rewrite your window title or overwrite your clipboard. secure-terminal reduces the identical
-    bytes to inert printable ASCII. Pick a terminal below and see it, side by side.</p>
-</div></section>
-
 <section class="cat" id="compare"><div class="wrap">
-  <h2 class="catname"><a class="h-anchor" href="#compare">Pick a terminal, see the difference</a></h2>
-  <p class="catdesc">The same hostile board fed to ten popular emulators and to secure-terminal, each on its
-    own isolated headless display, on their shipped defaults. Tested <b>2026-08-12</b>. Choose which terminal
-    sits on the right; the screenshot and the verdicts update to it. Every row's <b>(i)</b> opens the full
-    detail. Works with JavaScript off.</p>
+  <h1 class="catname"><a class="h-anchor" href="#compare">Hostile bytes, side by side</a></h1>
+  <p class="lede">A normal terminal interprets untrusted bytes - random data, program output, a hostile log -
+    as escape sequences: they can garble the screen, force colours, rewrite the window title, or overwrite the
+    clipboard. secure-terminal reduces the identical bytes to inert printable ASCII.</p>
+  <!-- no-JS: every switcher and info-row toggle here is CSS-only (hidden radio/checkbox +
+       :checked sibling combinator). Keep it that way; do NOT advertise the no-JS behavior on the page. -->
+  <p class="catdesc">The same hostile board, fed to ten popular emulators and to secure-terminal on shipped
+    defaults, each on an isolated headless display. Tested <b>2026-08-12</b>.</p>
 
   <fieldset class="cmp-switch">
-    <legend class="sr-only">Choose the secure-terminal view, and which terminal to compare against</legend>
+    <legend class="sr-only">Choose the secure-terminal view and the terminal to compare against. Expand any row for the full detail.</legend>
     <span class="swlead" aria-hidden="true">secure-terminal view:</span>
     <input class="tsel" type="radio" name="stmode" id="st-cli" checked>
     <label class="mchip first" for="st-cli">CLI</label>
@@ -73,10 +67,10 @@
     <label class="mchip last" for="st-tui">TUI</label>
     <input class="tsel" type="radio" name="stuni" id="st-box" checked>
     <label class="mchip first gap" for="st-box">Box</label>
-    <input class="tsel" type="radio" name="stuni" id="st-show">
-    <label class="mchip mid" for="st-show">Show</label>
     <input class="tsel" type="radio" name="stuni" id="st-detail">
-    <label class="mchip last" for="st-detail">Detail</label>
+    <label class="mchip mid" for="st-detail">Detail</label>
+    <input class="tsel" type="radio" name="stuni" id="st-show">
+    <label class="mchip last" for="st-show">Show</label>
     <span class="swlead" aria-hidden="true">Compare against:</span>
     <input class="tsel" type="radio" name="cmp" id="t-gnome" checked>
     <label class="chip" for="t-gnome"><img class="cico" src="icons/gnome-terminal.webp" width="20" height="20" alt="">gnome-terminal</label>
@@ -126,6 +120,9 @@
         <span class="sw" style="background:#3b9eff"></span>&nbsp;control bytes,
         <span class="sw" style="background:#a06cff"></span>&nbsp;other non-ASCII (honest foreign text).</p>
 
+      <input class="expand-all-cb" type="checkbox" id="expand-all">
+      <label class="expand-all" for="expand-all"><span class="expand-txt">Expand all rows</span><span class="collapse-txt">Collapse all rows</span></label>
+
       <div class="cmp-wrap"><table class="matrix">
         <thead><tr>
           <th scope="col">Attack / behaviour</th>
@@ -139,7 +136,7 @@
             <td class="verdict"><span class="vd ok"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6.3 11.4 3 8.1l1.2-1.2 2.1 2.1 5.5-5.5L13 4.7z"/></svg>Not parsed</span></td>
             <td class="verdict"><span class="vd bad"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4.5 3.4 8 6.9l3.5-3.5 1.1 1.1L9.1 8l3.5 3.5-1.1 1.1L8 9.1l-3.5 3.5-1.1-1.1L6.9 8 3.4 4.5z"/></svg>Interpreted</span></td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>How output can repaint your screen</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-1"><label class="rowsum" for="ri-1">How output can repaint your screen</label><div class="ibody">
             <p>A normal terminal treats program output as commands: move the cursor, erase and repaint lines, hide or fake text. secure-terminal parses none of it apart from safe colour and four line-local edits (<code>CSI C/D/G/K</code>) clamped to the line being written, so any stray control byte shows as an inert box and nothing a program prints can repaint the screen or reach a line already scrolled past. See the <a href="/compatibility/">compatibility page</a> for exactly which sequences are neutralised.</p>
             <div class="shotgrid board2">
             <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - the escapes are inert: safe colour clamped readable, the DEC frame shown as literal characters; nothing repaints and the prompt returns clean.</figcaption><a href="shots/secure-terminal.crafted.webp" target="_blank" rel="noopener"><img src="shots/secure-terminal.crafted.webp" width="1362" height="380" loading="lazy" alt="secure-terminal displaying the crafted log: colours clamped readable, the DEC line-drawing shown as literal characters, no repaint, the prompt returned clean."></a></figure>
@@ -154,16 +151,16 @@
             <div class="var x-alacritty"><figure class="shot"><figcaption class="shotname"><b>alacritty</b> - interprets the sequences - the stuck colour and DEC line-drawing repaint the screen.</figcaption><a href="shots/alacritty.crafted.webp" target="_blank" rel="noopener"><img src="shots/alacritty.crafted.webp" width="758" height="210" loading="lazy" alt="displaying the crafted log: the escape sequences are interpreted, stuck colour and DEC line-drawing repaint the screen."></a></figure></div>
             <div class="var x-kitty"><figure class="shot"><figcaption class="shotname"><b>kitty</b> - interprets the sequences - the stuck colour and DEC line-drawing repaint the screen.</figcaption><a href="shots/kitty.crafted.webp" target="_blank" rel="noopener"><img src="shots/kitty.crafted.webp" width="722" height="218" loading="lazy" alt="displaying the crafted log: the escape sequences are interpreted, stuck colour and DEC line-drawing repaint the screen."></a></figure></div>
           </div>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
           <tr class="mrow">
             <th scope="row">Merely viewing a file (<code>cat</code>, a log, a diff)</th>
             <td class="verdict"><span class="vd ok"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6.3 11.4 3 8.1l1.2-1.2 2.1 2.1 5.5-5.5L13 4.7z"/></svg>Safe</span></td>
             <td class="verdict"><span class="vd bad"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4.5 3.4 8 6.9l3.5-3.5 1.1 1.1L9.1 8l3.5 3.5-1.1 1.1L8 9.1l-3.5 3.5-1.1-1.1L6.9 8 3.4 4.5z"/></svg>Triggers tricks</span></td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>Why <code>cat</code>-ing a hostile file is the whole attack</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-2"><label class="rowsum" for="ri-2">Why <code>cat</code>-ing a hostile file is the whole attack</label><div class="ibody">
             <p>Every escape trick above fires just by being displayed - viewing an attacker's log or diff is enough, no execution needed. secure-terminal is safe to <code>cat</code> anything: output is sanitized first, and in every mode no invisible, bidi or control character reaches you unmarked.</p>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
           <tr class="mrow" id="row-title">
             <th scope="row">Window / tab title hijack (OSC&nbsp;0/2)</th>
@@ -174,7 +171,7 @@
               <span class="var x-kitty"><span class="vonly">kitty: </span><span class="vd warn"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 2 15 14H1z"/><path fill="#fff" d="M7.2 6.3h1.6v3.4H7.2zm0 4.3h1.6v1.6H7.2z"/></svg>Reset at prompt</span></span>
             </td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>The silent title change - and the two partial exceptions</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-3"><label class="rowsum" for="ri-3">The silent title change - and the two partial exceptions</label><div class="ibody">
             <p>An <code>OSC 0/2</code> escape in output renames your window or tab to anything - a fake "production" label, a spoofed context. On seven of the ten emulators the attacker-controlled title reads back in the title bar. Two are partial: <b>konsole</b> parses and stores it but the default tab format omits the program-set title (one profile edit from showing it); <b>kitty</b> honours it, but its default shell integration resets the title to the cwd at the next prompt, so the hijack shows until then. secure-terminal never sets the title from output; a banner notes the blocked escape.</p>
             <div class="shotgrid board2">
             <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - the title bar still reads secure-terminal; the OSC title escape is neutralised and a banner flags the blocked escape.</figcaption><a href="shots/secure-terminal.crafted.webp" target="_blank" rel="noopener"><img src="shots/secure-terminal.crafted.webp" width="1362" height="380" loading="lazy" alt="secure-terminal displaying the crafted log: the window title still reads secure-terminal, the OSC title escape neutralised."></a></figure>
@@ -189,7 +186,7 @@
             <div class="var x-alacritty"><figure class="shot"><figcaption class="shotname"><b>alacritty</b> - the window title is hijacked to the crafted label.</figcaption><a href="shots/alacritty.crafted.webp" target="_blank" rel="noopener"><img src="shots/alacritty.crafted.webp" width="758" height="210" loading="lazy" alt="displaying the crafted log: the window title bar is hijacked to the attacker-set label."></a></figure></div>
             <div class="var x-kitty"><figure class="shot"><figcaption class="shotname"><b>kitty</b> - honours the title hijack; shell integration resets it at the next prompt.</figcaption><a href="shots/kitty.crafted.webp" target="_blank" rel="noopener"><img src="shots/kitty.crafted.webp" width="722" height="218" loading="lazy" alt="displaying the crafted log: kitty honours the OSC title hijack but its shell integration resets the title at the next prompt."></a></figure></div>
           </div>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
           <tr class="mrow">
             <th scope="row">Desktop notification spoof (OSC&nbsp;9)</th>
@@ -199,13 +196,13 @@
               <span class="var x-gnome x-konsole x-xfce4 x-mate x-qterminal x-xterm x-urxvt x-st x-alacritty"><span class="vonly">the others: </span><span class="vd na"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7.2" width="10" height="1.6" fill="currentColor"/></svg>No OSC&nbsp;9</span></span>
             </td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>A log line that pops a system notification</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-4"><label class="rowsum" for="ri-4">A log line that pops a system notification</label><div class="ibody">
             <p>kitty (like iTerm2) implements <code>OSC 9</code>, so program output can raise a real desktop notification with attacker-chosen text, outside the terminal window entirely. The others in this set do not implement it, so the class does not apply to them. secure-terminal's CLI mode strips the escape - no popup, inert text, a banner flags it. The payload is the corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/notification-spoof-kitty-2022" rel="noopener"><code>notification-spoof-kitty-2022</code></a> class.</p>
             <div class="shotgrid board2">
             <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - OSC-9 notification neutralised: no popup, inert text, a banner flags the blocked escape.</figcaption><a href="shots/secure-terminal.notify.webp" target="_blank" rel="noopener"><img src="shots/secure-terminal.notify.webp" width="1362" height="285" loading="lazy" alt="secure-terminal displaying the same build log: no desktop notification appears, the text is inert, and a banner notes the blocked OSC desktop-notification escape."></a></figure>
             <div class="var x-kitty"><figure class="shot"><figcaption class="shotname"><b>kitty</b> - a log line pops a real desktop notification (top-right), outside the terminal.</figcaption><a href="shots/kitty.notify.webp" target="_blank" rel="noopener"><img src="shots/kitty.notify.webp" width="1430" height="229" loading="lazy" alt="kitty: cat-ing a build log pops a desktop notification in the top-right corner. No action needed."></a></figure></div>
           </div>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
           <tr class="mrow" id="clipboard">
             <th scope="row">Clipboard write from output (OSC&nbsp;52)</th>
@@ -215,7 +212,7 @@
               <span class="var x-gnome x-xfce4 x-mate x-qterminal x-xterm x-urxvt x-st"><span class="vonly">gnome-terminal, xfce4-terminal, mate-terminal, qterminal, xterm, urxvt, st: </span><span class="vd na"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7.2" width="10" height="1.6" fill="currentColor"/></svg>Refused</span></span>
             </td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>We measured it: which terminals let output set your clipboard</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-5"><label class="rowsum" for="ri-5">We measured it: which terminals let output set your clipboard</label><div class="ibody">
             <p>The <b>OSC 52 clipboard write</b> is the one class a screenshot cannot show - its effect is on your system clipboard, not the screen. So we measured it directly: for each terminal we seeded the X clipboard with a sentinel, <code>cat</code>'d the corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/osc52-clipboard-write" rel="noopener"><code>osc52-clipboard-write</code></a> payload, and read the real clipboard back (via PyQt6). If the token landed, output overwrote your clipboard. Tested <b>2026-08-12</b> on shipped defaults, window focused.</p>
             <div class="cmp-wrap"><table class="cmp">
               <thead><tr><th>Terminal</th><th>OSC 52 clipboard write (shipped default)</th></tr></thead>
@@ -228,24 +225,24 @@
               </tbody>
             </table></div>
             <p><b>Three of the ten</b> let untrusted output silently overwrite your clipboard on their defaults. This is a real per-terminal verdict: <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/clipboard-verdict.sh" rel="noopener"><code>clipboard-verdict.sh</code></a> reads the real clipboard back after each terminal views the payload. Note the twist: konsole does <em>not</em> surface a hijacked title, yet <em>does</em> honour the clipboard write.</p>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
           <tr class="mrow">
             <th scope="row">Clipboard read / query reflection (OSC&nbsp;52 read, DA, answerback)</th>
             <td class="verdict"><span class="vd ok"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6.3 11.4 3 8.1l1.2-1.2 2.1 2.1 5.5-5.5L13 4.7z"/></svg>Never answered</span></td>
             <td class="verdict"><span class="vd bad"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4.5 3.4 8 6.9l3.5-3.5 1.1 1.1L9.1 8l3.5 3.5-1.1 1.1L8 9.1l-3.5 3.5-1.1-1.1L6.9 8 3.4 4.5z"/></svg>Reflects queries</span></td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>"Output becomes input": the reflection bug class</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-6"><label class="rowsum" for="ri-6">"Output becomes input": the reflection bug class</label><div class="ibody">
             <p>A terminal and the program it runs share <b>one two-way channel</b> (the pseudo-terminal). When output contains a <em>query</em> escape - say <code>ESC[c</code> ("what terminal are you?") - a normal terminal answers by writing the reply back onto that same channel, and the input side of that channel <em>is</em> the program's keyboard. So a query hidden in attacker output makes the terminal inject bytes as if you had typed them - no keypress needed. That reflection is how a remote program reads your clipboard back through an OSC 52 read query, and how a title or answerback report becomes spoofed input.</p>
             <p>David Leadbeater's <a href="https://dgl.cx/2023/09/ansi-terminal-security" rel="noopener">2023 review</a> catalogued the class across current terminals, with fresh CVEs: <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-45872" rel="noopener">CVE-2022-45872</a> (iTerm2), <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-47583" rel="noopener">CVE-2022-47583</a> / <a href="https://nvd.nist.gov/vuln/detail/CVE-2023-39726" rel="noopener">CVE-2023-39726</a> (mintty), <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-23465" rel="noopener">CVE-2022-23465</a> (SwiftTerm). secure-terminal answers no query by default - an automated test asserts zero bytes are ever written back. The one exception is clipboard <em>read</em>, opt-in and human-gated once per tab.</p>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
           <tr class="mrow">
             <th scope="row">Invisible / zero-width characters</th>
             <td class="verdict"><span class="vd ok"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6.3 11.4 3 8.1l1.2-1.2 2.1 2.1 5.5-5.5L13 4.7z"/></svg>Marked / boxed</span></td>
             <td class="verdict"><span class="vd bad"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4.5 3.4 8 6.9l3.5-3.5 1.1 1.1L9.1 8l3.5 3.5-1.1 1.1L8 9.1l-3.5 3.5-1.1-1.1L6.9 8 3.4 4.5z"/></svg>Drawn as nothing</span></td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>Bytes you can never see</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-7"><label class="rowsum" for="ri-7">Bytes you can never see</label><div class="ibody">
             <p>Zero-width and other invisible characters draw nothing, so a command or a paste can carry hidden bytes you never see - the heart of the <a href="/attacks/#paste-demo">pastejacking demo</a>. secure-terminal names each inline as <code>&lt;U+XXXX NAME&gt;</code> by default, or shows an inert risk-coloured box.</p>
             <div class="shotgrid board2">
             <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - the hidden zero-width byte is an inert box between <code>admin</code> and <code>istrator</code>; you can see it is there.</figcaption><a href="shots/secure-terminal.zerowidth.webp" target="_blank" rel="noopener"><img src="shots/secure-terminal.zerowidth.webp" width="1362" height="224" loading="lazy" alt="secure-terminal displaying the zero-width payload: the hidden U+200B is drawn as an inert box between admin and istrator."></a></figure>
@@ -260,14 +257,14 @@
             <div class="var x-alacritty"><figure class="shot"><figcaption class="shotname"><b>alacritty</b> - the word reads as a clean <code>administrator</code> - the zero-width byte is invisible.</figcaption><a href="shots/alacritty.zerowidth.webp" target="_blank" rel="noopener"><img src="shots/alacritty.zerowidth.webp" width="758" height="120" loading="lazy" alt="displaying the zero-width payload: the word reads as a clean administrator with no sign of the hidden zero-width byte."></a></figure></div>
             <div class="var x-kitty"><figure class="shot"><figcaption class="shotname"><b>kitty</b> - the word reads as a clean <code>administrator</code> - the zero-width byte is invisible.</figcaption><a href="shots/kitty.zerowidth.webp" target="_blank" rel="noopener"><img src="shots/kitty.zerowidth.webp" width="722" height="128" loading="lazy" alt="displaying the zero-width payload: the word reads as a clean administrator with no sign of the hidden zero-width byte."></a></figure></div>
           </div>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
           <tr class="mrow">
             <th scope="row">Homoglyph look-alikes</th>
             <td class="verdict"><span class="vd ok"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6.3 11.4 3 8.1l1.2-1.2 2.1 2.1 5.5-5.5L13 4.7z"/></svg>Boxed / named</span></td>
             <td class="verdict"><span class="vd bad"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4.5 3.4 8 6.9l3.5-3.5 1.1 1.1L9.1 8l3.5 3.5-1.1 1.1L8 9.1l-3.5 3.5-1.1-1.1L6.9 8 3.4 4.5z"/></svg>Renders identical</span></td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>A Cyrillic <code>a</code> that reads as ASCII</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-8"><label class="rowsum" for="ri-8">A Cyrillic <code>a</code> that reads as ASCII</label><div class="ibody">
             <p>Non-ASCII characters identical in shape to ASCII (a Cyrillic <code>a</code>, a Greek <code>o</code>) make a fake command or URL read as legitimate - a clean <code>example.com</code> that is not. Universal across terminals. secure-terminal flags the look-alike byte as a coloured box, or names its exact codepoint in Detail mode.</p>
             <div class="shotgrid board2">
             <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - the Cyrillic look-alike is an inert coloured box; Detail mode names it <code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code>.</figcaption><a href="shots/secure-terminal.homoglyph-strip.webp" target="_blank" rel="noopener"><img src="shots/secure-terminal.homoglyph-strip.webp" width="1362" height="224" loading="lazy" alt="secure-terminal displaying the homoglyph domain: the Cyrillic look-alike byte is drawn as an inert coloured box."></a></figure>
@@ -282,7 +279,7 @@
             <div class="var x-alacritty"><figure class="shot"><figcaption class="shotname"><b>alacritty</b> - renders a clean-looking <code>example.com</code> - the Cyrillic look-alike is indistinguishable.</figcaption><a href="shots/alacritty.homoglyph.webp" target="_blank" rel="noopener"><img src="shots/alacritty.homoglyph.webp" width="758" height="84" loading="lazy" alt="displaying the homoglyph domain: it renders as a clean-looking example.com, the Cyrillic look-alike indistinguishable from ASCII."></a></figure></div>
             <div class="var x-kitty"><figure class="shot"><figcaption class="shotname"><b>kitty</b> - renders a clean-looking <code>example.com</code> - the Cyrillic look-alike is indistinguishable.</figcaption><a href="shots/kitty.homoglyph.webp" target="_blank" rel="noopener"><img src="shots/kitty.homoglyph.webp" width="722" height="92" loading="lazy" alt="displaying the homoglyph domain: it renders as a clean-looking example.com, the Cyrillic look-alike indistinguishable from ASCII."></a></figure></div>
           </div>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
           <tr class="mrow">
             <th scope="row">Bidi reorder / Trojan Source</th>
@@ -292,7 +289,7 @@
               <span class="var x-qterminal x-xterm x-urxvt x-st x-alacritty x-kitty"><span class="vonly">qterminal, xterm, urxvt, st, alacritty, kitty: </span><span class="vd warn"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 2 15 14H1z"/><path fill="#fff" d="M7.2 6.3h1.6v3.4H7.2zm0 4.3h1.6v1.6H7.2z"/></svg>Present, not reordered</span></span>
             </td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>The code you read is not the code that runs (<a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a>)</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-9"><label class="rowsum" for="ri-9">The code you read is not the code that runs (<a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a>)</label><div class="ibody">
             <p>Bidirectional control characters reorder how a line renders, so <code>report&nbsp;cod.exe</code> displays as <code>report&nbsp;exe.doc</code>. The four bidi-aware terminals here (the three VTE apps and konsole) actually reorder it; the rest leave the bytes present but in logical order - weaker, but the invisible controls are still there and unmarked. secure-terminal neutralises the bidi controls entirely. Proof: corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener"><code>trojan-source-bidi-2021</code></a>.</p>
             <div class="shotgrid board2">
             <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - the bidi controls are neutralised: the line reads in logical order, the RLO shown as an inert box.</figcaption><a href="shots/secure-terminal.bidi.webp" target="_blank" rel="noopener"><img src="shots/secure-terminal.bidi.webp" width="1362" height="224" loading="lazy" alt="secure-terminal displaying the bidi payload: the RLO control is an inert box and the text reads in logical order."></a></figure>
@@ -307,14 +304,14 @@
             <div class="var x-alacritty"><figure class="shot"><figcaption class="shotname"><b>alacritty</b> - leaves the bytes in logical (scrambled) order; the invisible RLO is present but unmarked.</figcaption><a href="shots/alacritty.bidi.webp" target="_blank" rel="noopener"><img src="shots/alacritty.bidi.webp" width="758" height="84" loading="lazy" alt="displaying the bidi payload: the bytes stay in logical scrambled order and the invisible RLO override is present but unmarked."></a></figure></div>
             <div class="var x-kitty"><figure class="shot"><figcaption class="shotname"><b>kitty</b> - leaves the bytes in logical (scrambled) order; the invisible RLO is present but unmarked.</figcaption><a href="shots/kitty.bidi.webp" target="_blank" rel="noopener"><img src="shots/kitty.bidi.webp" width="722" height="92" loading="lazy" alt="displaying the bidi payload: the bytes stay in logical scrambled order and the invisible RLO override is present but unmarked."></a></figure></div>
           </div>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
           <tr class="mrow">
             <th scope="row">Raw random bytes (screen garble, stuck colour)</th>
             <td class="verdict"><span class="vd ok"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6.3 11.4 3 8.1l1.2-1.2 2.1 2.1 5.5-5.5L13 4.7z"/></svg>Inert ASCII</span></td>
             <td class="verdict"><span class="vd bad"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4.5 3.4 8 6.9l3.5-3.5 1.1 1.1L9.1 8l3.5 3.5-1.1 1.1L8 9.1l-3.5 3.5-1.1-1.1L6.9 8 3.4 4.5z"/></svg>Garbled</span></td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>What plain random data does</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-10"><label class="rowsum" for="ri-10">What plain random data does</label><div class="ibody">
             <p><code>head -c 1200 /dev/random</code> at a prompt: every normal terminal is garbled, most with stuck reverse-video or replacement glyphs, and the visible mess clears only with <code>reset</code>. secure-terminal shows every non-ASCII byte as inert, risk-coloured ASCII with the prompt returning clean.</p>
             <div class="shotgrid board2">
             <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - printable ASCII as-is, every other byte an inert risk-coloured box; title unchanged, prompt returns clean.</figcaption><a href="shots/secure-terminal.random.webp" target="_blank" rel="noopener"><img src="shots/secure-terminal.random.webp" width="1362" height="440" loading="lazy" alt="secure-terminal displaying random bytes: printable ASCII as-is and every other byte an inert box coloured by risk class, title unchanged, the returned prompt on its own line."></a></figure>
@@ -329,23 +326,23 @@
             <div class="var x-alacritty"><figure class="shot"><figcaption class="shotname"><b>alacritty</b> - garbled.</figcaption><a href="shots/alacritty.random.webp" target="_blank" rel="noopener"><img src="shots/alacritty.random.webp" width="758" height="426" loading="lazy" alt="alacritty displaying random bytes: garbled."></a></figure></div>
             <div class="var x-kitty"><figure class="shot"><figcaption class="shotname"><b>kitty</b> - garbled, replacement glyphs.</figcaption><a href="shots/kitty.random.webp" target="_blank" rel="noopener"><img src="shots/kitty.random.webp" width="722" height="457" loading="lazy" alt="kitty displaying random bytes: garbled with replacement glyphs."></a></figure></div>
           </div>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
           <tr class="mrow">
             <th scope="row">Pasted-command smuggling (pastejacking, bracketed-paste bypass)</th>
             <td class="verdict"><span class="vd ok"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6.3 11.4 3 8.1l1.2-1.2 2.1 2.1 5.5-5.5L13 4.7z"/></svg>Sanitized + warned</span></td>
             <td class="verdict"><span class="vd bad"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4.5 3.4 8 6.9l3.5-3.5 1.1 1.1L9.1 8l3.5 3.5-1.1 1.1L8 9.1l-3.5 3.5-1.1-1.1L6.9 8 3.4 4.5z"/></svg>Rides along hidden</span></td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>The command you copy is not the command you run</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-11"><label class="rowsum" for="ri-11">The command you copy is not the command you run</label><div class="ibody">
             <p>A command copied from a web page can carry a whole second command chained on with <code>&amp;&amp;</code> and an invisible byte at the seam - it draws nothing, so a normal terminal shows no sign it is there. Modern shells mitigate multi-line paste with bracketed paste, but it is opt-in and one-line <code>&amp;&amp;</code> tricks slip through. secure-terminal catches any invisible, control or bidi character in a paste, names what is hidden, and lets you drop it to ASCII or cancel. See the <b><a href="/attacks/#paste-demo">live pastejacking demo</a></b> and the full still-applicable list on the <a href="/attacks/">attacks page</a>.</p>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
           <tr class="mrow">
             <th scope="row">Full-screen programs (ssh, vim, htop, tmux)</th>
             <td class="verdict"><span class="vd ok"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6.3 11.4 3 8.1l1.2-1.2 2.1 2.1 5.5-5.5L13 4.7z"/></svg>Yes, cell-filtered</span></td>
             <td class="verdict"><span class="vd na"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7.2" width="10" height="1.6" fill="currentColor"/></svg>Yes</span></td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>Layout, never an unfiltered cell</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-12"><label class="rowsum" for="ri-12">Layout, never an unfiltered cell</label><div class="ibody">
             <p>Running full-screen programs is a capability, not a vulnerability - every terminal does it. secure-terminal's opt-in TUI mode grants the layout, but every cell is <em>still</em> character-filtered: look-alikes stay boxed and the title stays off. TUI mode grants layout, never an unfiltered cell. Only run programs you trust - in TUI mode a program can still draw a misleading interface within its own screen.</p>
             <div class="shotgrid board2">
             <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - the alt-screen switch is stripped; the board renders inline and the prompt returns clean (opt-in TUI mode grants the layout, still cell-filtered).</figcaption><a href="shots/secure-terminal.altscreen.webp" target="_blank" rel="noopener"><img src="shots/secure-terminal.altscreen.webp" width="1362" height="282" loading="lazy" alt="secure-terminal displaying the alt-screen payload: the alternate-screen switch is stripped, the content renders inline and the prompt returns clean."></a></figure>
@@ -360,7 +357,7 @@
             <div class="var x-alacritty"><figure class="shot"><figcaption class="shotname"><b>alacritty</b> - stuck full-screen on the unrestored alternate screen; the prompt is gone until <code>reset</code>.</figcaption><a href="shots/alacritty.altscreen.webp" target="_blank" rel="noopener"><img src="shots/alacritty.altscreen.webp" width="758" height="100" loading="lazy" alt="displaying the alt-screen payload: stuck full-screen on the unrestored alternate screen with the prompt gone until reset."></a></figure></div>
             <div class="var x-kitty"><figure class="shot"><figcaption class="shotname"><b>kitty</b> - stuck full-screen on the unrestored alternate screen; the prompt is gone until <code>reset</code>.</figcaption><a href="shots/kitty.altscreen.webp" target="_blank" rel="noopener"><img src="shots/kitty.altscreen.webp" width="722" height="108" loading="lazy" alt="displaying the alt-screen payload: stuck full-screen on the unrestored alternate screen with the prompt gone until reset."></a></figure></div>
           </div>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
           <tr class="mrow">
             <th scope="row">Memory safety of the parser</th>
@@ -371,9 +368,9 @@
               <span class="var x-gnome x-konsole x-xfce4 x-mate x-qterminal x-xterm x-urxvt x-st"><span class="vonly">gnome-terminal, konsole, xfce4-terminal, mate-terminal, qterminal, xterm, urxvt, st: </span><span class="vd warn"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 2 15 14H1z"/><path fill="#fff" d="M7.2 6.3h1.6v3.4H7.2zm0 4.3h1.6v1.6H7.2z"/></svg>C / C++</span></span>
             </td>
           </tr>
-          <tr class="minfo"><td colspan="3"><details class="rowinfo"><summary>What language parses your hostile bytes</summary><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-13"><label class="rowsum" for="ri-13">What language parses your hostile bytes</label><div class="ibody">
             <p>The code that parses untrusted bytes is where a memory-safety bug bites. Most terminals here are C or C++ (xterm, urxvt, st, VTE, konsole, qterminal); alacritty is Rust (memory-safe); kitty mixes C and Python. secure-terminal parses in a memory-safe language. Read this as "fewer places for a bug to hide", not a proof there are none - see <a href="/human-review/#inapplicable">what does not apply, and what still might</a>.</p>
-          </div></details></td></tr>
+          </div></div></td></tr>
 
         </tbody>
       </table></div>
@@ -414,18 +411,25 @@
 
   <details class="inst" id="reproduce"><summary><span class="ititle">Reproduce it yourself</span></summary>
     <div class="ibody">
-      <p>The crafted payloads are real, publicly-disclosed corpus PoCs stored <strong>read-safe as hex</strong>, so
-        cloning, <code>grep</code>-ing or the GitHub view never fires them. The live attack bytes exist only after
-        you decode them in a <strong>throwaway</strong> terminal:</p>
-      <div class="pre"><span class="c"># viewing it IS the attack -- use a THROWAWAY terminal; `reset` restores the display:</span>
-git clone https://github.com/secure-terminal/terminal-poc-corpus
-cd terminal-poc-corpus
-POC_CORPUS_ALLOW_HOST=1 tools/reproduce.py crafted-hostile-log   <span class="c"># decodes the hex + prints its risk tier</span>
-cat crafted-hostile-log.payload   <span class="c"># now check your window / tab title</span>
+      <p>The board shown above is published as one read-safe text file -- the same board behind the
+        <a href="https://output-lies.github.io/terminal/#board" rel="noopener">output-lies terminal demo</a>.
+        <code>cat</code>-ing it changes only the <strong>display</strong>: it sets the window title and switches
+        to the alternate screen, both undone by <code>reset</code>. It does not touch your clipboard, type at your
+        prompt, or run anything. View it in a <strong>throwaway</strong> terminal, then feed the same file to
+        secure-terminal:</p>
+      <div class="pre"><span class="c"># the same board, hosted read-safe as text:</span>
+curl -O https://output-lies.github.io/demos/terminal-attack-demo-WARNING-display-only-safe.txt
+
+<span class="c"># plain cat -- only the display changes; `reset` restores it:</span>
+cat terminal-attack-demo-WARNING-display-only-safe.txt
 reset
 
-<span class="c"># every PoC in the corpus; reproduce.py prints the safe way to feed each one:</span>
-tools/reproduce.py --list</div>
+<span class="c"># the same file through secure-terminal: each hidden, look-alike, bidi and invisible</span>
+<span class="c"># byte is marked or boxed, the title left untouched, the alt-screen stripped:</span>
+secure-terminal-cli cat terminal-attack-demo-WARNING-display-only-safe.txt</div>
+      <p class="shotsrc">That file carries the display classes (title, alt-screen, homoglyph, bidi, zero-width,
+        SGR-hidden text, OSC&nbsp;8). For the clipboard, notification and other non-display classes -- and every
+        PoC stored read-safe as hex -- see the <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>.</p>
       <p class="shotsrc">Regenerating the screenshots is a footnote: <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>
         drives each emulator headless and screenshots it. An automated, always-on version ships as the opt-in
         <code>terminal-resilience-tests</code> in <a href="https://github.com/org-ai-assisted/dist-ai" rel="noopener">dist-ai</a>.</p>
@@ -544,6 +548,27 @@ tools/reproduce.py --list</div>
     <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.webp" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
     <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.webp" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>
     <a class="freebadge" href="https://github.com/secure-terminal/secure-terminal.github.io/blob/master/LICENSE" rel="license">Licensed AGPL-3+</a>
+  </div>
+  <div class="wrap">
+    <details class="inst fcredits" id="icon-credits"><summary><span class="ititle">Terminal logo credits &amp; licenses</span></summary>
+      <div class="ibody">
+        <p>The terminal chips above use each project's own Free Software / Open Source application
+          icon, reused for a factual, nominative comparison. Per project, the icon's license, holder and source:</p>
+        <ul class="credits">
+          <li><b>xterm</b> - MIT/X11 - Thomas E. Dickey - <a href="https://invisible-island.net/xterm/" rel="noopener">invisible-island.net/xterm/</a></li>
+          <li><b>alacritty</b> - MIT or Apache-2.0 - Joe Wilm - <a href="https://github.com/alacritty/alacritty" rel="noopener">github.com/alacritty/alacritty</a></li>
+          <li><b>kitty</b> - GPLv3 (copyleft) - Kovid Goyal - <a href="https://github.com/kovidgoyal/kitty" rel="noopener">github.com/kovidgoyal/kitty</a></li>
+          <li><b>konsole</b> - LGPLv3+ - KDE (Breeze icons) - <a href="https://invent.kde.org/frameworks/breeze-icons" rel="noopener">invent.kde.org/frameworks/breeze-icons</a></li>
+          <li><b>gnome-terminal</b> - GPLv3+ - GNOME - <a href="https://gitlab.gnome.org/GNOME/gnome-terminal" rel="noopener">gitlab.gnome.org/GNOME/gnome-terminal</a></li>
+          <li><b>xfce4-terminal</b> - GPLv2+ - Xfce - <a href="https://gitlab.xfce.org/apps/xfce4-terminal" rel="noopener">gitlab.xfce.org/apps/xfce4-terminal</a></li>
+          <li><b>qterminal</b> - GPLv2+ - LXQt - <a href="https://github.com/lxqt/qterminal" rel="noopener">github.com/lxqt/qterminal</a></li>
+        </ul>
+        <p><b>urxvt</b>, <b>st</b> and <b>mate-terminal</b> have no official project logo; they use a generic
+          terminal glyph with the factual project name only, not an official mark. The GNOME name and foot logo
+          are trademarks of the GNOME Foundation; only the GPL-licensed GNOME&nbsp;Terminal application icon is
+          used here, never the foot logo.</p>
+      </div>
+    </details>
   </div>
   <div class="fbot">
     <span class="fcopy">&copy; 2026 <a href="https://www.encrypted-support.com">ENCRYPTED SUPPORT LLC</a></span>
