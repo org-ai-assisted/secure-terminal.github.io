@@ -9,7 +9,7 @@ Regenerate; do not paint or hand-crop.
 
 ## This directory (`shots/`) - the paste/copy review bar
 
-`paste-warning.png`, `copy-warning.png` render the real
+`paste-warning.webp`, `copy-warning.webp` render the real
 `secure_terminal.review.ReviewBar` headless (offscreen Qt `grab()`, deterministic).
 
     secure-terminal-shots review [OUTPUT_SHOTS_DIR]     # defaults to this dir

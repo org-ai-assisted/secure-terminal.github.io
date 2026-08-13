@@ -224,6 +224,77 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
     section:target > .wrap{ outline-offset:14px; }
   }
 
+  /* ---- comparison: noJS terminal switcher (CSS radio + :checked sibling combinator) ----
+     INVARIANT: the 10 radios, their 10 chip labels, and the single .panel are ALL direct
+     children of fieldset.cmp-switch. `~` reaches only FOLLOWING SIBLINGS, so the .panel
+     (and everything it contains) must follow the radios and share their parent. Wrapping
+     the radios in a sub-div silently breaks every `#t-*:checked ~ .panel .var.*` rule. */
+  .cmp-switch{display:flex;flex-wrap:wrap;gap:9px;align-items:flex-start;border:0;margin:14px 0 0;padding:0;min-width:0}
+  .cmp-switch .swlead{flex:1 0 100%;margin:0 0 4px;font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden;white-space:nowrap}
+  /* radios visually hidden but keyboard-focusable -- NEVER display:none */
+  .tsel{position:absolute;width:1px;height:1px;margin:-1px;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden}
+  .chip{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;
+    border:1px solid var(--line);border-radius:999px;background:var(--card);
+    padding:6px 13px 6px 8px;font-size:.9rem;font-weight:650;color:var(--muted);
+    transition:color .12s,background .12s,border-color .12s}
+  .chip .cico{width:20px;height:20px;flex:0 0 auto;display:block}
+  .chip:hover{color:var(--ink);border-color:var(--muted)}
+  .tsel:checked + .chip{color:#fff;background:var(--ink);border-color:var(--ink)}
+  .tsel:focus-visible + .chip{outline:2px solid var(--accent);outline-offset:2px}
+  .panel{flex:1 0 100%;margin-top:22px;min-width:0}
+
+  /* one variant engine drives BOTH inline cells (span -> inline) and figures (div -> block) */
+  .panel .var{display:none}
+  #t-gnome:checked     ~ .panel .var.x-gnome,
+  #t-konsole:checked   ~ .panel .var.x-konsole,
+  #t-xfce4:checked     ~ .panel .var.x-xfce4,
+  #t-mate:checked      ~ .panel .var.x-mate,
+  #t-qterminal:checked ~ .panel .var.x-qterminal,
+  #t-xterm:checked     ~ .panel .var.x-xterm,
+  #t-urxvt:checked     ~ .panel .var.x-urxvt,
+  #t-st:checked        ~ .panel .var.x-st,
+  #t-alacritty:checked ~ .panel .var.x-alacritty,
+  #t-kitty:checked     ~ .panel .var.x-kitty{display:revert}
+  /* .vonly self-labels a varying cell when CSS is ON it is hidden (only the selected
+     variant shows); with CSS OFF every variant shows and its terminal name shows with it */
+  .vonly{display:none}
+
+  /* two-up screenshot board */
+  .board2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:6px 0 0;align-items:start}
+  @media(max-width:640px){ .board2{grid-template-columns:1fr} }
+  .board2 .shot{margin:0}
+
+  /* ---- comparison: the verdict matrix (Whonix-style) ---- */
+  table.matrix{width:100%;border-collapse:collapse;font-size:.95rem;margin:6px 0 0}
+  .matrix thead th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
+  .matrix thead th.col-st{color:var(--accent)}
+  .matrix th[scope=row]{text-align:left;font-weight:600;color:var(--ink);padding:12px;vertical-align:top}
+  .matrix td.verdict{width:1%;white-space:nowrap;padding:12px;vertical-align:top}
+  .matrix tr.mrow > *{border-top:1px solid var(--line)}
+  .matrix tr.mrow:first-of-type > *{border-top:0}
+  .vd{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.9rem;white-space:nowrap}
+  .vd .vico{width:15px;height:15px;flex:0 0 auto}
+  .vd.ok{color:var(--safe)} .vd.bad{color:var(--danger)} .vd.warn{color:#b9770a} .vd.na{color:var(--muted)}
+  /* per-row info-expander: a full-width row holding a native <details> with a circled "i" */
+  .matrix tr.minfo > td{padding:0 12px 6px}
+  .rowinfo{border:0;background:transparent;margin:0}
+  .rowinfo > summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:6px 0;font-size:.85rem;color:var(--muted)}
+  .rowinfo > summary::-webkit-details-marker{display:none}
+  .rowinfo > summary::before{content:"i";display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;flex:0 0 auto;border:1px solid var(--muted);border-radius:50%;font:italic 700 .72rem/1 var(--mono)}
+  .rowinfo > summary:hover{color:var(--ink)}
+  .rowinfo[open] > summary{color:var(--ink)}
+  .rowinfo[open] > summary::before{border-color:var(--accent);color:var(--accent)}
+  .rowinfo .ibody{padding:4px 0 14px;color:#3a3c41;max-width:72ch;font-size:.92rem}
+  .rowinfo .ibody p{margin:0 0 9px}
+  .rowinfo .ibody p:last-child{margin-bottom:0}
+  .rowinfo .ibody .cmp-wrap{margin:10px 0}
+  @media(max-width:640px){ .matrix{font-size:.88rem} .matrix th,.matrix td{padding:10px 7px} .matrix td.verdict{white-space:normal} }
+
+  /* deep-link ring extends to a matrix row and an opened info-details */
+  tr.mrow:target > *{box-shadow:inset 0 2px 0 #e5484d, inset 0 -2px 0 #e5484d}
+  details.rowinfo:target{outline:2px solid #e5484d;outline-offset:3px;border-radius:6px}
+
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     .inst .ibadge,.h-anchor::after{transition:none}

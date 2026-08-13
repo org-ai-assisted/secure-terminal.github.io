@@ -32,13 +32,14 @@
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="755" height="70" alt="secure-terminal"></a>
+    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="755" height="70" alt="secure-terminal"></a>
     <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">needs human review</a>
     <nav>
       <a href="#features">Features</a>
       <a href="#install">Install</a>
       <a href="/plugins/">Plugins</a>
       <a href="/comparison/">Comparison</a>
+      <a href="/attacks/">Attacks</a>
       <a href="/ai-review/">AI Review</a>
       <a href="/human-review/">Human Review</a>
       <a href="/compatibility/">Compatibility</a>
@@ -64,7 +65,7 @@
     <a class="btn ghost" href="https://output-lies.github.io">See the problem it removes</a>
   </div>
   <figure class="shot" style="max-width:620px;margin:30px auto 0">
-    <a href="/shots/hero.png" target="_blank" rel="noopener"><img src="/shots/hero.png" width="560" height="160" alt="A short secure-terminal session in Detail, the default display mode. An ls of ~/Downloads lists installer.sh, invoice.pdf, report.txt and notes.md, but two of the names carry a hidden character named inline in red: invoice contains U+0430 CYRILLIC SMALL LETTER A, a look-alike for ASCII a, and report contains U+202E RIGHT-TO-LEFT OVERRIDE. The following head -2 deploy.log output, deploy: starting and deploy: OK, is rendered as plain unremarkable text."></a>
+    <a href="/shots/hero.webp" target="_blank" rel="noopener"><img src="/shots/hero.webp" width="560" height="160" alt="A short secure-terminal session in Detail, the default display mode. An ls of ~/Downloads lists installer.sh, invoice.pdf, report.txt and notes.md, but two of the names carry a hidden character named inline in red: invoice contains U+0430 CYRILLIC SMALL LETTER A, a look-alike for ASCII a, and report contains U+202E RIGHT-TO-LEFT OVERRIDE. The following head -2 deploy.log output, deploy: starting and deploy: OK, is rendered as plain unremarkable text."></a>
     <figcaption><b>Detail</b>, the default display mode. Ordinary output stays ordinary - a terminal that
       mangled normal text would not be usable - while two of those filenames carry a hidden character each,
       named inline so it cannot pretend otherwise. Three other modes trade verbosity for brevity:
@@ -183,7 +184,7 @@
         <figcaption class="shotname"><b>The same <code>ls</code> listing, all four modes</b> - three of the
           filenames are lying (a right-to-left override, a Cyrillic look-alike, a zero-width space) and two are
           honest non-ASCII (<code>r&#233;sum&#233;.pdf</code>, a CJK name).</figcaption>
-        <a href="/shots/display-modes.png" target="_blank" rel="noopener"><img src="/shots/display-modes.png" width="792" height="606" loading="lazy" alt="One ls listing rendered four times by secure-terminal, ending with Detail, the default. Box: every non-ASCII byte, hostile or honest, becomes a single coloured placeholder box, so the accented and CJK names are boxed too. Show: the honest resume.pdf and the CJK name are readable as themselves, while the Cyrillic look-alike 'a' is kept but tinted red and the bidi override and zero-width space still collapse to placeholders. Reveal: each hidden character is named inline as a badge, U+202E, U+0430, U+200B, U+00E9, U+4E2D, U+6587. Detail: the same badges expanded to full Unicode names, RIGHT-TO-LEFT OVERRIDE, CYRILLIC SMALL LETTER A, ZERO WIDTH SPACE, LATIN SMALL LETTER E WITH ACUTE, CJK UNIFIED IDEOGRAPH."></a>
+        <a href="/shots/display-modes.webp" target="_blank" rel="noopener"><img src="/shots/display-modes.webp" width="792" height="606" loading="lazy" alt="One ls listing rendered four times by secure-terminal, ending with Detail, the default. Box: every non-ASCII byte, hostile or honest, becomes a single coloured placeholder box, so the accented and CJK names are boxed too. Show: the honest resume.pdf and the CJK name are readable as themselves, while the Cyrillic look-alike 'a' is kept but tinted red and the bidi override and zero-width space still collapse to placeholders. Reveal: each hidden character is named inline as a badge, U+202E, U+0430, U+200B, U+00E9, U+4E2D, U+6587. Detail: the same badges expanded to full Unicode names, RIGHT-TO-LEFT OVERRIDE, CYRILLIC SMALL LETTER A, ZERO WIDTH SPACE, LATIN SMALL LETTER E WITH ACUTE, CJK UNIFIED IDEOGRAPH."></a>
         <figcaption>This is also the honest answer to <b>&quot;is it ASCII only?&quot;</b> - it is not, and the
           panels show why. <b>Box</b> is ASCII in text but draws a non-ASCII placeholder glyph, and it boxes
           <em>honest</em> non-ASCII too. <b>Show</b> deliberately keeps real printable non-ASCII, tinting a
@@ -219,7 +220,7 @@
   <figure class="shot" style="max-width:1000px;margin:28px auto 0">
     <figcaption class="shotname"><b>The paste review</b> - a <code>curl | bash</code> line hiding two Cyrillic
       homoglyphs (in <code>example</code> and <code>bash</code>), a zero-width space and a right-to-left override.</figcaption>
-    <a href="/shots/paste-warning.png" target="_blank" rel="noopener"><img src="/shots/paste-warning.png" width="1180" height="258" loading="lazy" alt="secure-terminal's in-window paste-review bar showing the hostile paste four ways: the Original pane, where the bidi override reorders the trailing comment; the Detail pane, naming each hidden character inline in its risk-class colour as U+0430 CYRILLIC SMALL LETTER A, U+200B ZERO WIDTH SPACE and U+202E RIGHT-TO-LEFT OVERRIDE; the Paste-stripped pane, where the homoglyph domain collapses to exmple.com and 'bash' to 'bsh'; and the Paste-with-unicode pane, which keeps the look-alike example.com (its Cyrillic a tinted) but drops the invisibles. Both send buttons are countdown-disabled; only Reject is available immediately."></a>
+    <a href="/shots/paste-warning.webp" target="_blank" rel="noopener"><img src="/shots/paste-warning.webp" width="1180" height="258" loading="lazy" alt="secure-terminal's in-window paste-review bar showing the hostile paste four ways: the Original pane, where the bidi override reorders the trailing comment; the Detail pane, naming each hidden character inline in its risk-class colour as U+0430 CYRILLIC SMALL LETTER A, U+200B ZERO WIDTH SPACE and U+202E RIGHT-TO-LEFT OVERRIDE; the Paste-stripped pane, where the homoglyph domain collapses to exmple.com and 'bash' to 'bsh'; and the Paste-with-unicode pane, which keeps the look-alike example.com (its Cyrillic a tinted) but drops the invisibles. Both send buttons are countdown-disabled; only Reject is available immediately."></a>
     <figcaption>The four panes read left to right: the <b>Original</b> as it arrives, <b>Detail</b> naming every
       hidden character inline (<code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code>), and the two send previews -
       <b>Stripped</b> drops the look-alikes so the domain changes to <code>exmple.com</code>, while
@@ -229,7 +230,7 @@
   <figure class="shot" style="max-width:1000px;margin:28px auto 0">
     <figcaption class="shotname"><b>The same bar, for copy going the other way</b> - selecting and copying that
       same line in Show mode, before it reaches the system clipboard.</figcaption>
-    <a href="/shots/copy-warning.png" target="_blank" rel="noopener"><img src="/shots/copy-warning.png" width="1180" height="258" loading="lazy" alt="secure-terminal's review bar for a copy: the summary reads 'This copy would carry 1 bidirectional control, 1 invisible character, 2 non-ASCII characters onto the clipboard'; the four panes are Original, Detail (naming each hidden character in its risk-class colour), 'Copy stripped puts' (the homoglyph domain collapsed to exmple.com), and 'Copy with unicode puts' (the look-alike example.com kept, its Cyrillic a tinted). The buttons read Don't copy, Copy stripped, Copy with unicode, with no countdown since a copy is not executed."></a>
+    <a href="/shots/copy-warning.webp" target="_blank" rel="noopener"><img src="/shots/copy-warning.webp" width="1180" height="258" loading="lazy" alt="secure-terminal's review bar for a copy: the summary reads 'This copy would carry 1 bidirectional control, 1 invisible character, 2 non-ASCII characters onto the clipboard'; the four panes are Original, Detail (naming each hidden character in its risk-class colour), 'Copy stripped puts' (the homoglyph domain collapsed to exmple.com), and 'Copy with unicode puts' (the look-alike example.com kept, its Cyrillic a tinted). The buttons read Don't copy, Copy stripped, Copy with unicode, with no countdown since a copy is not executed."></a>
     <figcaption>Copy is reviewed with the <b>same bar</b>, just relabelled for the other direction (<b>Don't copy</b> /
       <b>Copy stripped</b> / <b>Copy with unicode</b>) and configured by its own setting. There is no countdown - a
       copy is not executed, so the anti-fat-finger gate the paste needs does not apply.</figcaption>
@@ -418,7 +419,7 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
 <footer>
   <div class="ftop">
     <div class="fbrand">
-      <span class="ftag"><img src="/logo-wide.png" width="755" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
+      <span class="ftag"><img src="/logo-wide.webp" width="755" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
       <p>Paste in, read out. Every invisible, bidi, or look-alike byte arrives marked.</p>
     </div>
     <nav class="fcols">
@@ -496,8 +497,8 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
     })();
   </script>
   <div class="ffree">
-    <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.png" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
-    <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.png" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>
+    <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.webp" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
+    <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.webp" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>
     <a class="freebadge" href="https://github.com/secure-terminal/secure-terminal.github.io/blob/master/LICENSE" rel="license">Licensed AGPL-3+</a>
   </div>
   <div class="fbot">

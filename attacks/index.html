@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  secure-terminal: live attack demos. AI-Assisted.
+  Source: https://github.com/secure-terminal/secure-terminal.github.io
+-->
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ai-disclosure" content="ai-assisted">
+<title>secure-terminal: the terminal attacks that still work today</title>
+<meta name="description" content="A live pastejacking demo - the command you copy is not the command you run - and the deception and clipboard classes that still work on a stock, up-to-date terminal today, each with a proof in the corpus.">
+<link rel="canonical" href="https://secure-terminal.github.io/attacks/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="secure-terminal">
+<meta property="og:title" content="secure-terminal: the terminal attacks that still work today">
+<meta property="og:description" content="A live pastejacking demo plus the deception and clipboard classes that still work on a stock terminal today, each with a corpus proof.">
+<meta property="og:url" content="https://secure-terminal.github.io/attacks/">
+<meta property="og:image" content="https://secure-terminal.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="secure-terminal terminal-attack demos">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="secure-terminal: the terminal attacks that still work today">
+<meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
+<meta name="theme-color" content="#f3f2ee">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css?v=3">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
+    <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">needs human review</a>
+    <nav>
+      <a href="/#features">Features</a>
+      <a href="/#install">Install</a>
+      <a href="/plugins/">Plugins</a>
+      <a href="/comparison/">Comparison</a>
+      <a href="/attacks/" class="active">Attacks</a>
+      <a href="/ai-review/">AI Review</a>
+      <a href="/human-review/">Human Review</a>
+      <a href="/compatibility/">Compatibility</a>
+      <a href="/#faq">FAQ</a>
+      <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <p class="eyebrow">THE ATTACKS THAT STILL WORK TODAY</p>
+  <h1>The command you copy is<br>not the command you run.</h1>
+  <p class="lede">The worst terminal attack needs no hostile file - only your habit of copying a command from a
+    web page. Try it below, then read the deception and clipboard classes that still work on a stock,
+    up-to-date terminal today. Every one links a proof in the
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>.
+    For the side-by-side terminal verdicts, see the <a href="/comparison/">comparison</a>.</p>
+</div></section>
+
+<section class="cat" id="paste-demo"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#paste-demo">Live demo: pastejacking</a></h2>
+  <p class="catdesc">Here is a command a site might offer you. It reads <code>echo "test"</code>. Copy it, then
+    reveal what actually landed on your clipboard - here, or by pasting it into output-lies'
+    <a href="https://output-lies.github.io/analyze/" rel="noopener">x-ray tool</a>. It is perfectly safe to run:
+    every part is just <code>echo</code>.</p>
+  <div class="pastedemo">
+    <div class="cmdrow">
+      <code class="cmd" id="pd-cmd">echo "test"</code>
+      <button type="button" class="btn ghost pd-btn" id="pd-copy">Copy</button>
+      <button type="button" class="btn ghost pd-btn" id="pd-reveal">Reveal what you copied</button>
+      <span class="pd-status" id="pd-status" aria-live="polite"></span>
+    </div>
+    <pre class="pd-out" id="pd-out" hidden></pre>
+    <noscript>
+      <p class="pd-status">JavaScript is off, so the live Copy and Reveal buttons are inactive - but here is
+        exactly what the innocent-looking "<code>echo "test"</code>" button would place on your clipboard
+        (<code>&lt;U+200B&gt;</code> marks a zero-width character that normally draws nothing):</p>
+      <pre class="pd-out">echo "test"&lt;U+200B&gt;&amp;&amp; echo "you did not expect this additional echo: unexpected code execution"&lt;U+200B&gt;</pre>
+    </noscript>
+  </div>
+  <p class="catdesc">You saw <code>echo "test"</code>. Your clipboard held a whole second command chained on with
+    <code>&amp;&amp;</code> - <code>echo "you did not expect this additional echo: unexpected code execution"</code> -
+    kept to a single line on purpose. Paste <em>multiple</em> lines and several terminals warn you: we tested it, and
+    xfce4-terminal pops a "Warning: Potentially Unsafe Paste" dialog (its default, triggered by a newline in the paste), while qterminal offers a multiline-paste confirmation that is off by default.
+    One line joined by <code>&amp;&amp;</code> trips neither - it slips in silently and runs the moment you press
+    Enter on a line you thought said only <code>echo "test"</code> (go ahead and run it - both halves are just
+    <code>echo</code>). The page only ever shows <code>echo "test"</code>; the Copy button's JavaScript quietly
+    writes the longer command to your clipboard instead, and slips a zero-width character in right at the
+    <code>&amp;&amp;</code> seam - it draws nothing, so a normal terminal shows no sign it is there. Real classes,
+    not hypotheticals: this is <b>pastejacking</b>, and the same paste channel carries
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/bracketed-paste-bypass-2021" rel="noopener">bracketed-paste bypass</a>
+    and <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener">Trojan Source</a> tricks.</p>
+  <p class="catdesc"><b>secure-terminal strips the smuggling.</b> A paste carrying any invisible, control or bidi
+    character is caught before it reaches your shell: secure-terminal names exactly what is hidden in it
+    (<span class="yes">"1 invisible character"</span>) and lets you drop it to plain ASCII or cancel - so nothing
+    rides along unseen and the text you are about to run is fully visible to read first. It cannot judge a visible
+    command for you - no terminal can, and a plain ASCII paste still submits; that is the opt-in
+    <a href="/plugins/">hook</a>'s job - but it guarantees there is nothing hidden inside the paste. The corpus's
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/harness/adversarial.py" rel="noopener">adversarial harness</a>
+    feeds every one of these payloads to secure-terminal and asserts it neutralises each one.</p>
+  <script>
+  (function () {
+    var Z = "\u200b";                          /* zero-width space: no glyph */
+    var PAYLOAD = 'echo "test"' + Z
+                + '&& echo "you did not expect this additional echo: unexpected code execution"' + Z;
+    var copy = document.getElementById('pd-copy'),
+        reveal = document.getElementById('pd-reveal'),
+        status = document.getElementById('pd-status'),
+        out = document.getElementById('pd-out');
+    if (!copy || !reveal || !status || !out) { return; }   /* nothing to enhance */
+    function showPayload() {
+      out.textContent = PAYLOAD.split(Z).join('<U+200B>');
+      out.hidden = false;
+    }
+    reveal.addEventListener('click', function () {
+      showPayload();
+      status.textContent = 'Revealed below - this is exactly what Copy puts on your clipboard.';
+    });
+    copy.addEventListener('click', function () {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(PAYLOAD).then(
+          function () { status.textContent = 'Copied. Now click Reveal, or paste it into any terminal - both halves are just echo, so it is safe to run.'; },
+          function () { status.textContent = 'Your browser blocked clipboard access. Here is exactly what it would have copied:'; showPayload(); });
+      } else {
+        status.textContent = 'This browser gives pages no clipboard access. Here is exactly what the button would have copied:';
+        showPayload();
+      }
+    });
+  })();
+  </script>
+</div></section>
+
+<section class="cat" id="still"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#still">And what still bites your terminal today</a></h2>
+  <p class="catdesc">The paste above is one vector. These deception and clipboard classes still work on a
+    stock, up-to-date terminal today - each links a proof in the corpus, and the
+    <a href="/comparison/">comparison matrix</a> shows the per-terminal verdict.</p>
+  <div class="cmp-wrap"><table class="cmp">
+    <thead><tr><th>Still-applicable issue</th><th>What it does</th><th>Reach</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener"><b>Trojan Source</b> (bidi override)</a> - <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a></td><td>Bidirectional control characters reorder how a line renders, so the code you read is not the code that runs. Shown live in the <a href="/comparison/#combined">combined board</a>.</td><td>Any bidi-aware renderer - code hosts, editors, and terminals that implement bidi.</td></tr>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/homoglyph-2021" rel="noopener"><b>Homoglyph</b> look-alikes</a></td><td>Non-ASCII characters identical in shape to ASCII (Cyrillic a, Greek o) make a fake command or URL read as legitimate.</td><td>Universal.</td></tr>
+      <tr><td><a href="#paste-demo"><b>Invisible / zero-width</b> characters</a></td><td>Zero-width and other invisibles draw nothing, so a command or a paste can carry hidden bytes you never see (the demo above), and boxed in the <a href="/comparison/#combined">combined board</a>.</td><td>Universal.</td></tr>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/osc52-clipboard-write" rel="noopener"><b>Clipboard hijack</b> (OSC 52)</a></td><td>A viewed file or a program's output silently overwrites your clipboard, so your next paste inserts attacker text.</td><td>Terminal-dependent - <a href="/comparison/#clipboard">we measured it</a>: konsole, alacritty and kitty write it by default; xterm/urxvt/st and VTE (gnome/xfce4/mate) refuse; secure-terminal refuses too.</td></tr>
+      <tr><td><a href="/comparison/#row-title"><b>Title / tab hijack</b> (OSC 0/2)</a></td><td>Any output renames your window or tab to anything - a fake "production" label, a spoofed context.</td><td>Most terminals - shown live in the <a href="/comparison/#combined">combined board</a> (konsole and kitty are partial exceptions).</td></tr>
+    </tbody>
+  </table></div>
+  <p class="catdesc">secure-terminal closes all five by design: non-ASCII becomes an inert,
+    risk-coloured box (or a revealed <code>&lt;U+XXXX&gt;</code>), the clipboard is never written from
+    output, and the title is never touched - proven against each payload by the corpus's
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/harness/adversarial.py" rel="noopener">adversarial harness</a>.</p>
+  <div class="cta">
+    <a class="btn primary" href="/comparison/">See the per-terminal comparison</a>
+    <a class="btn ghost" href="/#install">Install secure-terminal</a>
+  </div>
+</div></section>
+</main>
+<footer>
+  <div class="ftop">
+    <div class="fbrand">
+      <span class="ftag"><img src="/logo-wide.webp" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
+      <p>Paste in, read out. Every invisible, bidi, or look-alike byte arrives marked.</p>
+    </div>
+    <nav class="fcols">
+      <div class="fcol">
+        <h3>Project</h3>
+        <a href="https://github.com/secure-terminal">Organisation</a>
+        <a href="https://github.com/secure-terminal/secure-terminal.github.io">This page</a>
+      </div>
+      <div class="fcol">
+        <h3>Family</h3>
+        <a href="https://output-lies.github.io">output lies</a>
+        <a class="self" href="https://secure-terminal.github.io" aria-current="page">secure-terminal</a>
+        <a href="https://org-ai-assisted.github.io">org-ai-assisted</a>
+      </div>
+      <div class="fcol">
+        <h3>Safe text</h3>
+        <a href="https://github.com/Kicksecure/helper-scripts">helper-scripts</a>
+        <a href="https://www.kicksecure.com/wiki/Unicode-show">unicode-show</a>
+      </div>
+    </nav>
+  </div>
+  <div class="fshare">
+    <span class="fshare-l">Share:</span>
+    <noscript><style>.fshare a.sh,.fshare button.sh{display:none}</style><span class="sh-msg" style="color:var(--muted)">Sharing needs JavaScript, which is off - copy this page's address from your browser to share it.</span></noscript>
+    <a class="sh" data-net="x" rel="nofollow noopener">X</a>
+    <a class="sh" data-net="facebook" rel="nofollow noopener">Facebook</a>
+    <a class="sh" data-net="telegram" rel="nofollow noopener">Telegram</a>
+    <a class="sh" data-net="reddit" rel="nofollow noopener">Reddit</a>
+    <a class="sh" data-net="whatsapp" rel="nofollow noopener">WhatsApp</a>
+    <a class="sh" data-net="linkedin" rel="nofollow noopener">LinkedIn</a>
+    <a class="sh" data-net="hn" rel="nofollow noopener">Hacker News</a>
+    <a class="sh" data-net="mastodon" href="#" rel="nofollow noopener">Mastodon</a>
+    <a class="sh" data-net="email">Email</a>
+    <button class="sh" data-net="copy" type="button">Copy link</button>
+    <button class="sh" data-net="md" type="button">Copy as Markdown</button>
+    <span class="sh-msg" aria-live="polite"></span>
+  </div>
+  <script>
+    /* Local-only share links. No third-party script or resource is loaded; a
+       target opens only when the user clicks it. */
+    (function () {
+      var u = encodeURIComponent(location.href), t = encodeURIComponent(document.title);
+      var L = {
+        x: 'https://twitter.com/intent/tweet?url=' + u + '&text=' + t,
+        facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + u,
+        telegram: 'https://t.me/share/url?url=' + u + '&text=' + t,
+        reddit: 'https://www.reddit.com/submit?url=' + u + '&title=' + t,
+        whatsapp: 'https://api.whatsapp.com/send?text=' + t + '%20' + u,
+        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + u,
+        hn: 'https://news.ycombinator.com/submitlink?u=' + u + '&t=' + t,
+        email: 'mailto:?subject=' + t + '&body=' + u
+      };
+      document.querySelectorAll('.fshare a.sh').forEach(function (a) {
+        var n = a.getAttribute('data-net');
+        if (L[n]) { a.href = L[n]; if (n !== 'email') { a.target = '_blank'; } }
+      });
+      var m = document.querySelector('.fshare [data-net=mastodon]');
+      if (m) m.addEventListener('click', function (e) {
+        e.preventDefault();
+        var i = prompt('Your Mastodon instance (e.g. mastodon.social):');
+        if (i) { i = i.replace(/^https?:\/\//i, '').replace(/\/.*$/, '').trim();
+          if (/^[a-z0-9.-]+$/i.test(i)) { window.open('https://' + i + '/share?text=' + t + '%20' + u, '_blank', 'noopener'); } else { alert('That does not look like a Mastodon instance host name.'); } }
+      });
+      var msg = document.querySelector('.fshare .sh-msg');
+      function flash(x) { if (msg) { msg.textContent = x; setTimeout(function () { msg.textContent = ''; }, 2000); } }
+      var c = document.querySelector('.fshare [data-net=copy]');
+      if (c) c.addEventListener('click', function () {
+        if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { flash('link copied'); });
+      });
+      var md = document.querySelector('.fshare [data-net=md]');
+      if (md) md.addEventListener('click', function () {
+        var text = '[' + document.title + '](' + location.href + ')';
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { flash('markdown copied'); });
+      });
+    })();
+  </script>
+  <div class="ffree">
+    <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.webp" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
+    <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.webp" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>
+    <a class="freebadge" href="https://github.com/secure-terminal/secure-terminal.github.io/blob/master/LICENSE" rel="license">Licensed AGPL-3+</a>
+  </div>
+  <div class="fbot">
+    <span class="fcopy">&copy; 2026 <a href="https://www.encrypted-support.com">ENCRYPTED SUPPORT LLC</a></span>
+    <span class="fcopy sp"><a href="https://org-ai-assisted.github.io">Built with AI assistance</a></span>
+  </div>
+</footer>
