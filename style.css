@@ -260,17 +260,22 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
      variant shows); with CSS OFF every variant shows and its terminal name shows with it */
   .vonly{display:none}
 
-  /* ---- secure-terminal view switcher: CLI/TUI x Box/Detail ----
-     A second CSS-only axis pair. Same INVARIANT as the terminal switcher: these radios
-     are direct children of fieldset.cmp-switch, ahead of .panel, so `~ .panel .sv` reaches
-     them. The four .sv board variants show by default and each checked radio hides the
-     variants that do not match its axis -- cli+box (the defaults) leave exactly .sv.m-cli.u-box.
-     With CSS OFF all four .sv show, each captioned (the noscript/no-CSS fallback). */
+  /* ---- secure-terminal view switcher: CLI/TUI mode x Box/Show/Detail unicode ----
+     Two CSS-only axes. Same INVARIANT as the terminal switcher: these radios are direct
+     children of fieldset.cmp-switch, ahead of .panel, so `~ .panel .sv` reaches them. Five
+     .sv board variants (cli+box, cli+show, cli+detail, tui+box, tui+show) show by default
+     and each checked radio hides the variants that do not match its axis -- cli+box (the
+     defaults) leave exactly .sv.m-cli.u-box. Detail (and Reveal) are CLI-only: the fixed
+     TUI grid cannot expand a codepoint inline, so the app disables Detail in TUI and
+     auto-switches to Box. The page mirrors that -- selecting TUI greys the Detail chip and,
+     if Detail was the remembered choice, forces tui+box; Show stays valid in TUI. Switching
+     back to CLI restores Detail. With CSS OFF all .sv show, each captioned (no-CSS fallback). */
   .mchip{display:inline-flex;align-items:center;cursor:pointer;user-select:none;
     border:1px solid var(--line);background:var(--card);
     padding:5px 12px;font-size:.82rem;font-weight:650;color:var(--muted);
     transition:color .12s,background .12s,border-color .12s}
   .mchip.first{border-radius:999px 0 0 999px;border-right-width:0}
+  .mchip.mid{border-right-width:0}
   .mchip.last{border-radius:0 999px 999px 0}
   .mchip.gap{margin-left:8px}
   .mchip:hover{color:var(--ink);border-color:var(--muted)}
@@ -279,8 +284,18 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
   .panel .sv{display:block}
   #st-cli:checked    ~ .panel .sv.m-tui,
   #st-tui:checked    ~ .panel .sv.m-cli,
+  #st-box:checked    ~ .panel .sv.u-show,
   #st-box:checked    ~ .panel .sv.u-detail,
-  #st-detail:checked ~ .panel .sv.u-box{display:none}
+  #st-show:checked   ~ .panel .sv.u-box,
+  #st-show:checked   ~ .panel .sv.u-detail,
+  #st-detail:checked ~ .panel .sv.u-box,
+  #st-detail:checked ~ .panel .sv.u-show{display:none}
+  /* TUI has no Detail/Reveal board (the fixed grid cannot expand a codepoint inline): when
+     TUI+Detail is the remembered pair, force tui+box (2 ids beat the u-box hide above) and
+     grey the Detail chip -- mirrors the app disabling Detail and auto-switching to Box in
+     TUI. Show IS valid in TUI, so it is neither forced nor greyed. */
+  #st-tui:checked ~ #st-detail:checked ~ .panel .sv.m-tui.u-box{display:block}
+  #st-tui:checked ~ label[for="st-detail"]{opacity:.4;pointer-events:none;cursor:not-allowed}
 
   /* per-row screenshot inside a matrix row's info-expander: reuse .board2/.shot, a touch
      tighter than the hero board. The .var engine already swaps the competitor shot. */
