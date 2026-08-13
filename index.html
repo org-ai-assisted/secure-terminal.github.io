@@ -169,7 +169,8 @@
       <p>Per tab: <b>Box</b> (every non-ASCII character becomes an inert box, coloured by risk class),
         <b>Reveal</b> (each as a <code>&lt;U+XXXX&gt;</code> badge, to inspect exactly what is there), <b>Detail</b>
         (the same badge with the codepoint's Unicode name inline, the safe default), and <b>Show</b> (render
-        legitimate unicode so you can read a log, each glyph still tinted by risk class - a homoglyph confusable
+        legitimate unicode so you can read a log, each glyph still tinted by risk class (except inert box-drawing
+        and block elements, drawn in the program's own colour) - a homoglyph confusable
         with ASCII wears a louder colour than honest foreign text). The figure below is one <code>ls</code> listing
         in all four.</p>
       <p class="modenote"><b>Show does not mean run.</b> All four modes remove escape sequences first (there is no
