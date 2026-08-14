@@ -17,12 +17,17 @@
 
   header.nav{position:sticky;top:0;z-index:10;background:rgba(243,242,238,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
   .nav > .wrap{display:flex;align-items:center;gap:12px;min-height:56px;position:relative}
-  .brand{font-family:var(--mono);font-weight:700;letter-spacing:-.02em;text-decoration:none;display:inline-flex;align-items:center;gap:9px;white-space:nowrap;font-size:1.02rem}
+  .brand{font-family:var(--mono);font-weight:700;letter-spacing:-.02em;text-decoration:none;display:inline-flex;align-items:center;gap:9px;white-space:nowrap;font-size:1.02rem;flex:0 0 auto}
   .brand .logo{width:1.4em;height:1.4em;flex:0 0 auto}
   .brand .brandmark{height:30px;width:auto;max-width:100%;display:block}
   /* narrow phones: the wordmark at 30px is ~324px wide and would overflow a
      320-375px viewport, so shrink it there (the sibling sites do the same) */
-  @media(max-width:420px){ .brand .brandmark{height:22px} }
+  /* the wordmark is very wide (~10.8:1); on a phone it must be small enough to
+     fit undistorted beside the status pill + toggle, so scale it down here. */
+  @media(max-width:640px){ .brand .brandmark{height:16px} }
+  /* only on the very narrowest screens is there no room for the pill too
+     (higher specificity than the base .nav .status so source order is moot) */
+  @media(max-width:340px){ .nav > .wrap > .status{display:none} }
   .brand b{color:var(--accent)}
   .brand .tm{font-size:.72em;color:var(--muted);margin-left:.14em;font-weight:600;align-self:flex-start;line-height:1}
   /* Auto margin after the badge keeps brand+badge clustered left; when the
@@ -49,6 +54,9 @@
   .nav .navtoggle:checked ~ .navscrim{display:block;position:fixed;inset:0;z-index:1}
   @media(min-width:1000px){
     .nav .menubtn{display:none}
+    /* the 10-item nav is wider than the 1000px content column, so let it wrap to
+       a second row here (as it did before) rather than shrink the logo/overflow */
+    .nav > .wrap{flex-wrap:wrap;row-gap:6px}
     .nav nav{display:flex;gap:16px;align-items:center;position:static;margin-left:auto}
   }
 
