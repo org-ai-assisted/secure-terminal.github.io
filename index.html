@@ -266,8 +266,8 @@ with every cell still filtered and the title/clipboard still off-limits.</div>
   <div class="fg">
     <article class="issue"><h3 id="tabs"><a class="h-anchor" href="#tabs">Tabs</a></h3><p>Named, colour-coded, each its own shell. Per-tab theme, zoom,
       unicode mode and colours. Rename by double-click; a user name and a program title are kept separately.</p></article>
-    <article class="issue"><h3 id="colours"><a class="h-anchor" href="#colours">Safe optional colours</a></h3><p>A 16-colour subset of ANSI, off by default, with a
-      <a href="/compatibility/#contrast-guard">contrast guard</a> so text is never invisible. Honours <code>NO_COLOR</code> and <code>TERM=dumb</code>.</p></article>
+    <article class="issue"><h3 id="colours"><a class="h-anchor" href="#colours">Safe optional colours</a></h3><p>Full ANSI colour -- 16-colour, 256-colour and 24-bit truecolor -- off by default, with a
+      <a href="/compatibility/#contrast-guard">contrast guard</a> so text can never be invisible or hide itself against the background (a crafted red-on-red is forced legible). Honours <code>NO_COLOR</code> and <code>TERM=dumb</code>.</p></article>
     <article class="issue"><h3 id="session-restore"><a class="h-anchor" href="#session-restore">Session restore</a></h3><p>Tabs and their scrollback survive a restart or reboot, under a
       fresh shell. Stored under <code>~/.local/state</code>; on by default, and you can turn it off or clear it.</p></article>
     <article class="issue"><h3 id="settings"><a class="h-anchor" href="#settings">Drop-in settings</a></h3><p>systemd-style <code>.conf</code> directories: a distro or
