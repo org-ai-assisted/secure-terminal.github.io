@@ -538,6 +538,23 @@
     bar first.</p>
 </div></section>
 
+<section class="cat" id="unicode-gallery"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#unicode-gallery">It shows every character - and flags the dangerous ones</a></h2>
+  <p class="catdesc">The table above, shown. A display-only <code>cat unicode.payload</code> gallery walks the
+    Unicode space and lets secure-terminal do the rest: where the font has a glyph it renders it, and every
+    non-ASCII character is tinted by <em>risk class</em> - a homoglyph (ASCII look-alike) red, a combining
+    mark blue on a dotted circle, zero-width bytes and non-ASCII spaces flagged, honest foreign text the mild
+    neutral tint. The raw control, bidi and zero-width bytes ride inline, each terminated so the file returns
+    to ground state at every newline - safe to <code>cat</code> in any terminal. In Detail mode every code
+    point becomes a readable <code>&lt;U+XXXX NAME&gt;</code> badge, so nothing is shown silently, not even a
+    code point the font cannot draw.</p>
+  <div class="shotgrid">
+    <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (CLI, Show) - glyphs rendered and tinted by risk class: homoglyphs red, combining marks blue, spaces flagged.</figcaption><a href="/comparison/shots/secure-terminal.unicode-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.unicode-show.webp" width="862" height="647" loading="lazy" alt="secure-terminal in CLI Show mode rendering a Unicode gallery with each character tinted by its risk class."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (TUI, Show) - the same gallery full-screen, a code-chart grid of tinted glyphs.</figcaption><a href="/comparison/shots/secure-terminal.unicode-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.unicode-tui-show.webp" width="862" height="647" loading="lazy" alt="secure-terminal in TUI Show mode rendering the Unicode gallery as a full-screen code-chart grid."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (CLI, Detail) - every code point named inline as a &lt;U+XXXX NAME&gt; badge, so nothing is shown silently.</figcaption><a href="/comparison/shots/secure-terminal.unicode-detail.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.unicode-detail.webp" width="862" height="587" loading="lazy" alt="secure-terminal in CLI Detail mode labelling every code point with its Unicode name as a badge."></a></figure>
+  </div>
+</div></section>
+
 <section class="cat" id="gui-vs-cli"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#gui-vs-cli">Two forms: the GUI app and the CLI wrapper</a></h2>
   <p class="catdesc">"secure-terminal" ships in two forms that share one sanitization core. The
