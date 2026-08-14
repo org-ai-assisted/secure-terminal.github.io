@@ -418,6 +418,16 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
   .rowinfo .ibody > p{max-width:72ch}
   .rowtoggle:checked ~ .ibody,
   #expand-all:checked ~ .cmp-wrap .rowinfo .ibody{display:block}
+  /* Master expand-all + per-row toggle would conflict under a plain OR (the master wins, so a
+     per-row Hide is inert). So while expand-all is on, a row is open by DEFAULT and its OWN
+     toggle INVERTS to a Hide -- checking it collapses THAT row while the rest stay open. No row
+     is checked by default, so the two states stay consistent. */
+  #expand-all:checked ~ .cmp-wrap .rowtoggle:checked ~ .ibody{display:none}
+  #expand-all:checked ~ .cmp-wrap .rowtoggle:checked + .rowsum{color:var(--muted)}
+  #expand-all:checked ~ .cmp-wrap .rowtoggle:checked + .rowsum::before{transform:none;color:var(--muted)}
+  #expand-all:checked ~ .cmp-wrap .rowtoggle:checked + .rowsum .ihint{border-color:var(--line);color:var(--muted)}
+  #expand-all:checked ~ .cmp-wrap .rowtoggle:checked + .rowsum .ihint .ihint-hide{display:none}
+  #expand-all:checked ~ .cmp-wrap .rowtoggle:checked + .rowsum .ihint .ihint-show{display:inline}
   .rowinfo .ibody p{margin:0 0 9px}
   .rowinfo .ibody p:last-child{margin-bottom:0}
   .rowinfo .ibody .cmp-wrap{margin:10px 0}
