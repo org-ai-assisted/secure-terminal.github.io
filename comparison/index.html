@@ -31,7 +31,9 @@
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
-    <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">needs human review</a>
+    <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
+    <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
+    <label class="menubtn" for="navtoggle">Menu</label>
     <nav>
       <a href="/#features">Features</a>
       <a href="/#install">Install</a>
@@ -44,12 +46,14 @@
       <a href="/#faq">FAQ</a>
       <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
     </nav>
+    <label class="navscrim" for="navtoggle" aria-hidden="true"></label>
   </div>
 </header>
 
 <main>
-<section class="cat" id="compare"><div class="wrap">
-  <h1 class="catname"><a class="h-anchor" href="#compare">Hostile bytes, side by side</a></h1>
+<section class="hero" id="compare"><div class="wrap">
+  <p class="kicker">Hostile bytes, side by side</p>
+  <h1>The same hostile board, ten terminals.</h1>
   <p class="lede">A normal terminal interprets untrusted bytes - random data, program output, a hostile log -
     as escape sequences: they can garble the screen, force colours, rewrite the window title, or overwrite the
     clipboard. secure-terminal reduces the identical bytes to inert printable ASCII.</p>

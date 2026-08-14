@@ -16,7 +16,7 @@
   .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
 
   header.nav{position:sticky;top:0;z-index:10;background:rgba(243,242,238,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-  .nav > .wrap{display:flex;align-items:center;gap:14px;min-height:56px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+  .nav > .wrap{display:flex;align-items:center;gap:12px;min-height:56px;position:relative}
   .brand{font-family:var(--mono);font-weight:700;letter-spacing:-.02em;text-decoration:none;display:inline-flex;align-items:center;gap:9px;white-space:nowrap;font-size:1.02rem}
   .brand .logo{width:1.4em;height:1.4em;flex:0 0 auto}
   .brand .brandmark{height:30px;width:auto;max-width:100%;display:block}
@@ -28,22 +28,40 @@
   /* Auto margin after the badge keeps brand+badge clustered left; when the
      9-item nav wraps to its own row it sits LEFT-aligned under them, not shoved
      to the right edge (the odd empty indent it had). */
-  .nav .status{margin-left:12px;margin-right:auto;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--danger);border-radius:5px;padding:3px 8px;white-space:nowrap;text-decoration:none;cursor:pointer;transition:filter .15s,box-shadow .15s}
+  .nav .status{margin-left:12px;display:inline-block;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#c21a74;border-radius:5px;padding:3px 8px;white-space:nowrap;text-decoration:none;cursor:pointer;transition:filter .15s,box-shadow .15s}
   .nav a.status:hover{filter:brightness(1.12);box-shadow:0 1px 5px rgba(0,0,0,.28);text-decoration:none}
   .nav a.status:focus-visible{outline:2px solid #fff;outline-offset:2px}
-  .nav nav{display:flex;gap:16px;flex-wrap:wrap}
-  .nav nav a{font-size:.9rem;color:var(--muted);text-decoration:none}
+  .nav .navtoggle{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+  .nav .menubtn{margin-left:auto;display:inline-block;cursor:pointer;user-select:none;font-size:0;
+    color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 10px}
+  .nav .menubtn::before{content:"";display:inline-block;width:15px;height:11px;
+    background:linear-gradient(currentColor 0 2px,transparent 2px 4.5px,currentColor 4.5px 6.5px,transparent 6.5px 9px,currentColor 9px 11px)}
+  .nav .navtoggle:focus-visible + .menubtn{outline:2px solid var(--accent);outline-offset:2px}
+  .nav nav a{font-size:.9rem;color:var(--muted);text-decoration:none;white-space:nowrap}
   .nav nav a:hover{color:var(--ink)}
+  .nav nav a.active{color:var(--ink);font-weight:650}
+  .nav nav{display:none}
+  .nav .navtoggle:checked ~ nav{position:absolute;left:0;right:0;top:100%;display:flex;flex-direction:column;
+    align-items:stretch;gap:0;background:var(--bg);z-index:2;border-bottom:1px solid var(--line);
+    padding:2px 20px 10px;box-shadow:0 12px 26px rgba(0,0,0,.10)}
+  .nav .navtoggle:checked ~ nav a{padding:11px 2px;border-top:1px solid var(--line);font-size:1rem;white-space:normal;color:var(--ink)}
+  .nav .navscrim{display:none}
+  .nav .navtoggle:checked ~ .navscrim{display:block;position:fixed;inset:0;z-index:1}
+  @media(min-width:1000px){
+    .nav .menubtn{display:none}
+    .nav nav{display:flex;gap:16px;align-items:center;position:static;margin-left:auto}
+  }
 
   .notice{background:#eef7f1;border-bottom:1px solid #cfe6da;color:#274b39}
   .notice .wrap{padding:11px 20px;font-size:.92rem}
   .notice b{color:var(--accent)}
 
-  .hero{padding:56px 0 30px}
+  .hero{padding:clamp(28px,7vw,48px) 0 clamp(22px,5vw,40px)}
   .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
   .hero h1{font-size:clamp(2rem,6vw,3.6rem);line-height:1.05;letter-spacing:-.03em;margin:0 0 18px;font-weight:800;text-wrap:balance}
   .hero h1 .u{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:6px}
-  .hero p.sub{font-size:clamp(1.05rem,2.4vw,1.3rem);color:#2c2e33;max-width:60ch;margin:0}
+  .hero p.sub,.hero p.lede{font-size:clamp(1.05rem,2.4vw,1.3rem);color:#2c2e33;margin:0}
+  .hero p.sub{max-width:60ch}
   .hero p.lede{max-width:72ch}
   .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
   .btn{display:inline-block;padding:11px 18px;border-radius:9px;font-weight:650;text-decoration:none;font-size:.95rem;border:1px solid var(--ink)}
@@ -55,7 +73,7 @@
   .whatis p{margin:0;max-width:72ch;color:#33353a;font-size:1.02rem}
   .whatis b{color:var(--accent)}
 
-  section.cat{padding:48px 0 8px}
+  section.cat{padding:clamp(26px,6vw,52px) 0 8px}
   .catname{font-size:.82rem;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 4px}
   .catdesc{margin:0 0 18px;color:var(--muted);max-width:72ch}
   /* comparison intro: compact so the switcher + matrix are the focus near the top.
@@ -250,7 +268,7 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
   /* Narrow viewports wrap the nav onto three rows, so the sticky header is far
      taller than 76px and an anchor landed UNDER it -- the heading you navigated
      to was hidden. Scale the offset with the header instead of pinning it. */
-  @media(max-width:640px){ html{scroll-padding-top:200px} :target{scroll-margin-top:206px} }
+  @media(max-width:640px){ html{scroll-padding-top:80px} :target{scroll-margin-top:86px} }
   /* Contained targets ring themselves; a full-bleed section rings its inner
      .wrap instead, so the vertical ring edges stay on-screen (a ring on the
      edge-to-edge section would sit at the viewport edges). */

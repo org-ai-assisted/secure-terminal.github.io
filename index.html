@@ -33,7 +33,9 @@
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="755" height="70" alt="secure-terminal"></a>
-    <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">needs human review</a>
+    <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
+    <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
+    <label class="menubtn" for="navtoggle">Menu</label>
     <nav>
       <a href="#features">Features</a>
       <a href="#install">Install</a>
@@ -46,6 +48,7 @@
       <a href="#faq">FAQ</a>
       <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
     </nav>
+    <label class="navscrim" for="navtoggle" aria-hidden="true"></label>
   </div>
 </header>
 
@@ -53,7 +56,7 @@
 <section class="hero"><div class="wrap">
   <p class="kicker">Safe in both directions</p>
   <h1>Safe to paste. Safe to <span class="u">read</span>.</h1>
-  <p class="sub">Pasted commands are sanitized and program output is neutralized, so neither what you copy in
+  <p class="lede">Pasted commands are sanitized and program output is neutralized, so neither what you copy in
     nor what a program prints out can hide invisible characters, bidi overrides or escape sequences.
     Other modes trade some of that back on purpose: <a href="#display-modes">see all four side by side</a>.</p>
   <div class="cta">

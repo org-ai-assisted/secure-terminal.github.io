@@ -42,7 +42,9 @@
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
-    <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">needs human review</a>
+    <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
+    <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
+    <label class="menubtn" for="navtoggle">Menu</label>
     <nav>
       <a href="/#features">Features</a>
       <a href="/#install">Install</a>
@@ -55,12 +57,13 @@
       <a href="/#faq">FAQ</a>
       <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
     </nav>
+    <label class="navscrim" for="navtoggle" aria-hidden="true"></label>
   </div>
 </header>
 
 <main>
 <section class="hero"><div class="wrap">
-  <p class="eyebrow">HUMAN REVIEW: WHERE THIS STANDS</p>
+  <p class="kicker">HUMAN REVIEW: WHERE THIS STANDS</p>
   <h1>Not yet human-audited. Here is the trade-off.</h1>
   <p class="lede">secure-terminal is AI-authored. It has not had a full human security audit. This page lays out exactly what review it has had, what it
     has not, and why - even so - it can be the safer choice than a traditional terminal whose attack

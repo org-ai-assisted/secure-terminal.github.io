@@ -31,7 +31,9 @@
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
-    <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">needs human review</a>
+    <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
+    <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
+    <label class="menubtn" for="navtoggle">Menu</label>
     <nav>
       <a href="/#features">Features</a>
       <a href="/#install">Install</a>
@@ -44,12 +46,13 @@
       <a href="/#faq">FAQ</a>
       <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
     </nav>
+    <label class="navscrim" for="navtoggle" aria-hidden="true"></label>
   </div>
 </header>
 
 <main>
 <section class="hero"><div class="wrap">
-  <p class="eyebrow">PLUGINS: THE COMMAND HOOK</p>
+  <p class="kicker">PLUGINS: THE COMMAND HOOK</p>
   <h1>The terminal ships no policy. You bring the judgment.</h1>
   <p class="lede">No terminal can decide by design that <code>curl x | sh</code> or a
     subtly wrong <code>rm</code> is dangerous - that is a judgment call, not a parsing
@@ -61,7 +64,7 @@
 </div></section>
 
 <section class="cat" id="protocol"><div class="wrap">
-  <h2 class="catname">A tiny JSON protocol</h2>
+  <h2 class="catname"><a class="h-anchor" href="#protocol">A tiny JSON protocol</a></h2>
   <p class="catdesc">The handler is any executable. It reads a JSON request on stdin and writes a JSON verdict on stdout. That is the whole interface.</p>
   <div class="pre"><span class="c"># request (stdin): the command you are about to run</span>
 {"version":1,"command":"git push --force","cwd":"/home/user/repo","tab":"repo"}
@@ -75,7 +78,7 @@
 </div></section>
 
 <section class="cat" id="escalate"><div class="wrap">
-  <h2 class="catname">Cheap first, escalate only if needed</h2>
+  <h2 class="catname"><a class="h-anchor" href="#escalate">Cheap first, escalate only if needed</a></h2>
   <p class="catdesc">The scrollback is long, expensive to process, and the most injection-prone input there is. So it is not sent unless your handler asks.</p>
   <div class="issue">
     <p>On the first call the handler sees only the command. If it can decide from that
@@ -88,7 +91,7 @@
 </div></section>
 
 <section class="cat" id="examples"><div class="wrap">
-  <h2 class="catname">Two example handlers</h2>
+  <h2 class="catname"><a class="h-anchor" href="#examples">Two example handlers</a></h2>
   <p class="catdesc">secure-terminal ships two samples under <code>/usr/share/secure-terminal/hooks/</code>. Point the terminal at one, or write your own.</p>
   <div class="fg">
   <div class="issue">
@@ -111,7 +114,7 @@
 </div></section>
 
 <section class="cat" id="enable"><div class="wrap">
-  <h2 class="catname">Enable it</h2>
+  <h2 class="catname"><a class="h-anchor" href="#enable">Enable it</a></h2>
   <p class="catdesc">Off by default. Turn it on with a settings drop-in.</p>
   <div class="pre"><span class="c"># ~/.config/secure-terminal.d/50_user.conf</span>
 command_hook=/usr/share/secure-terminal/hooks/example-hook
@@ -123,7 +126,7 @@ command_hook_transcript=none         <span class="c"># 'ask' lets the handler re
 </div></section>
 
 <section class="cat" id="why-terminal"><div class="wrap">
-  <h2 class="catname">Why in the terminal, not the shell?</h2>
+  <h2 class="catname"><a class="h-anchor" href="#why-terminal">Why in the terminal, not the shell?</a></h2>
   <p class="catdesc">A fair question. <a href="https://zsh.sourceforge.io/Doc/Release/Functions.html#Hook-Functions" rel="noopener">zsh's <code>preexec</code></a>
     or <a href="https://github.com/rcaloras/bash-preexec" rel="noopener">bash-preexec</a> can call a
     handler before each command too, and for most people that is simpler and sees <em>more</em>: it
@@ -155,7 +158,7 @@ command_hook_transcript=none         <span class="c"># 'ask' lets the handler re
 </div></section>
 
 <section class="cat" id="limits"><div class="wrap">
-  <h2 class="catname">Limits</h2>
+  <h2 class="catname"><a class="h-anchor" href="#limits">Limits</a></h2>
   <div class="issue">
     <p>The hook sees the command line you typed, <b>not</b> what the shell expands it to
       (aliases, variables, globs), and it runs in <b>CLI mode only</b> - a shell prompt
