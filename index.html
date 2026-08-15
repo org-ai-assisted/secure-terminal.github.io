@@ -28,7 +28,7 @@
 <meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
 <meta name="theme-color" content="#f3f2ee">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/style.css?v=5">
+<link rel="stylesheet" href="/style.css?v=6">
 
 <header class="nav">
   <div class="wrap">
@@ -66,11 +66,13 @@
   </div>
   <figure class="shot herocmp" data-start="52">
     <div class="herocmp-stage" style="aspect-ratio:702/379">
-      <img src="/comparison/shots/hero-traditional.webp" width="702" height="379"
+      <img src="/comparison/shots/hero-traditional.webp" width="702" height="379" draggable="false"
         alt="A GNOME Terminal window whose title bar has been silently changed by the file it is displaying to read 'gnome-terminal (window title injected)'. The text is a pre-deploy verification checklist for acme-cli release v3.2.0 that reads as entirely trustworthy: it fetches from https://example.com, reports a good maintainer signature, an attachment named q3-report.exe.pdf 'reported document-only, safe', a deploy under the account administrator@corp.internal, and a support contact ops@example.com, ending 'All preflight checks passed -- ready to deploy'. Only the injected title hints anything is off.">
+      <a class="herocmp-link herocmp-link-base" href="/comparison/shots/hero-traditional.webp" target="_blank" rel="noopener" aria-label="Open the traditional-terminal screenshot full size (opens in a new tab)"></a>
       <div class="herocmp-top">
-        <img src="/comparison/shots/hero-secure.webp" width="702" height="379"
+        <img src="/comparison/shots/hero-secure.webp" width="702" height="379" draggable="false"
           alt="The same file shown by secure-terminal in Show mode, its own title bar unchanged. It flags every trap in the same bytes: both 'example.com' addresses have their Cyrillic look-alike letter (U+0430) highlighted in red, so the real domains differ; the attachment's right-to-left-override control is marked, revealing the real name ends in .exe not .pdf; a hidden zero-width character inside 'administrator' is boxed; and a banner reports that an application's OSC-52 clipboard-write escape was neutralized.">
+        <a class="herocmp-link herocmp-link-top" href="/comparison/shots/hero-secure.webp" target="_blank" rel="noopener" aria-label="Open the secure-terminal screenshot full size (opens in a new tab)"></a>
       </div>
       <button type="button" class="herocmp-handle" aria-label="Drag to compare secure-terminal with a traditional terminal"
         role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="52"><span class="herocmp-grip"></span></button>
@@ -85,7 +87,7 @@
       session; secure-terminal shows the same bytes and flags every one. Real screenshots, captured
       under a labwc compositor; title-hijack behaviour varies by terminal (konsole, for instance,
       resets it).
-      <span class="herocmp-hint">Drag the red divider right to reveal each trap.</span></figcaption>
+      <span class="herocmp-hint">Drag to compare, or click a side to open it full size.</span></figcaption>
   </figure>
 </div></section>
 
@@ -515,8 +517,11 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
   </script>
   <script>
     /* Progressive enhancement for the hero before/after slider. With JS off, the
-       overlay's CSS resize:horizontal corner remains the control (see style.css);
-       this adds a centred grip and pointer / touch / keyboard dragging. */
+       overlay's CSS resize:horizontal corner is the control and each side's <a> opens
+       its screenshot full size (see style.css). This adds a centred grip plus pointer /
+       touch / keyboard dragging, and distinguishes a DRAG (slide) from a CLICK (let the
+       side's native <a target=_blank> open the image -- so middle-click, Ctrl/Cmd-click,
+       right-click and keyboard all keep their "open in new tab" behaviour). */
     (function () {
       var cmp = document.querySelector('.herocmp');
       if (!cmp) return;
@@ -534,30 +539,40 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
         handle.setAttribute('aria-valuenow', Math.round(pct));
       }
       set(pct);
-      var dragging = false;
       function pctFrom(e) {
         var r = stage.getBoundingClientRect();
         if (r.width <= 0) return pct;
         return ((e.clientX - r.left) / r.width) * 100;
       }
+      var TH = 5, active = null, sx = 0, sy = 0, dragging = false, moved = false;
       stage.addEventListener('pointerdown', function (e) {
-        dragging = true;
-        if (stage.setPointerCapture) { try { stage.setPointerCapture(e.pointerId); } catch (_) {} }
-        set(pctFrom(e));
-        e.preventDefault();
+        if (e.button && e.button !== 0) return;   // primary button / touch only
+        active = e.pointerId; sx = e.clientX; sy = e.clientY;
+        dragging = false; moved = false;
+        /* No capture and no preventDefault yet: a pure click must still reach the <a>. */
       });
       stage.addEventListener('pointermove', function (e) {
-        if (!dragging) return;
+        if (active === null || e.pointerId !== active) return;
+        if (!dragging) {
+          if (Math.abs(e.clientX - sx) < TH && Math.abs(e.clientY - sy) < TH) return;
+          dragging = true; moved = true;   // movement past the threshold: this is a slide
+          if (stage.setPointerCapture) { try { stage.setPointerCapture(e.pointerId); } catch (_) {} }
+        }
         set(pctFrom(e));
         e.preventDefault();
       });
       function end(e) {
-        if (!dragging) return;
-        dragging = false;
-        if (stage.releasePointerCapture) { try { stage.releasePointerCapture(e.pointerId); } catch (_) {} }
+        if (active === null || e.pointerId !== active) return;
+        if (dragging && stage.releasePointerCapture) { try { stage.releasePointerCapture(e.pointerId); } catch (_) {} }
+        active = null; dragging = false;
       }
       stage.addEventListener('pointerup', end);
       stage.addEventListener('pointercancel', end);
+      /* Cancel the click that trails a drag, so releasing the divider never opens a tab.
+         A genuine click (no movement) falls through to the side's <a>. */
+      stage.addEventListener('click', function (e) {
+        if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+      });
       handle.addEventListener('keydown', function (e) {
         var step = e.shiftKey ? 10 : 2;
         if (e.key === 'ArrowLeft') { set(pct - step); e.preventDefault(); }

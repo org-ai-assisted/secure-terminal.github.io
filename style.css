@@ -182,7 +182,15 @@
   /* inner image pinned to the full stage size so it never squishes as the box narrows;
      max-width:none defeats the global img{max-width:100%}. */
   .herocmp-top img{position:absolute;top:0;left:0;height:100%;width:auto;max-width:none}
-  /* No-JS: the resize corner is the control; the grip button stays hidden. */
+  /* Click-to-open: a transparent <a> over each side opens that screenshot full size in a
+     new tab (native anchor, so middle / Ctrl / right-click + keyboard keep "open in new
+     tab"). The base link covers the whole stage -- its uncovered right half opens the
+     traditional shot; the overlay link covers the clipped secure side. JS distinguishes a
+     drag (slide) from a click (open); no-JS, the click just opens and the resize corner slides. */
+  .herocmp-link{position:absolute;top:0;left:0;right:0;bottom:0;display:block;cursor:zoom-in;-webkit-user-drag:none}
+  /* no-JS only: keep the overlay's bottom-right resize corner reachable for the CSS slider */
+  .herocmp:not(.js) .herocmp-link-top{bottom:18px}
+  /* No-JS: the resize corner is the divider control; the grip button stays hidden. */
   .herocmp-handle{display:none}
   .herocmp.js .herocmp-top{resize:none}
   .herocmp.js .herocmp-handle{display:block;position:absolute;top:0;bottom:0;left:52%;width:40px;
