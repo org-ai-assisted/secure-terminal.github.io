@@ -167,6 +167,35 @@
   .shot figcaption.shotname{padding:10px 12px;font-size:.9rem;color:var(--muted);border-bottom:1px solid var(--line);order:-1}
   .shot figcaption.shotname b{color:var(--ink)}
   .shot figcaption{padding:10px 12px;font-size:.9rem;color:var(--muted)}
+
+  /* Homepage hero before/after slider. Two identical-size screenshots of the SAME
+     hostile file: a traditional terminal (base image, shown to the right of the
+     divider) under secure-terminal Show mode (overlay, shown to the left). No-JS
+     baseline: the overlay is a resize:horizontal box with a red divider -- drag its
+     corner to wipe. Progressive enhancement (.js) adds a centred grip plus pointer,
+     touch and keyboard control; with JS off the resize corner still works. */
+  .herocmp{max-width:760px;margin:30px auto 0}
+  .herocmp-stage{position:relative;width:100%;line-height:0;background:#fff;overflow:hidden;touch-action:pan-y}
+  .herocmp-stage img{display:block;width:100%;height:auto;max-width:100%;background:#fff;-webkit-user-drag:none;user-select:none}
+  .herocmp-top{position:absolute;top:0;left:0;bottom:0;width:52%;min-width:44px;max-width:100%;
+    overflow:hidden;resize:horizontal;border-right:3px solid #e5484d;box-sizing:border-box}
+  /* inner image pinned to the full stage size so it never squishes as the box narrows;
+     max-width:none defeats the global img{max-width:100%}. */
+  .herocmp-top img{position:absolute;top:0;left:0;height:100%;width:auto;max-width:none}
+  /* No-JS: the resize corner is the control; the grip button stays hidden. */
+  .herocmp-handle{display:none}
+  .herocmp.js .herocmp-top{resize:none}
+  .herocmp.js .herocmp-handle{display:block;position:absolute;top:0;bottom:0;left:52%;width:40px;
+    margin-left:-20px;padding:0;border:0;background:none;cursor:ew-resize;touch-action:none;z-index:3}
+  .herocmp-grip{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;
+    border-radius:50%;background-color:#e5484d;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.4);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.5 7l-4 5 4 5M13.5 7l4 5-4 5'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:center;background-size:20px 20px}
+  .herocmp-handle:focus-visible{outline:none}
+  .herocmp-handle:focus-visible .herocmp-grip{outline:3px solid var(--accent);outline-offset:2px}
+  .herocmp-hint{display:block;margin-top:6px;font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+  .herocmp.js .herocmp-hint::after{content:" Or use the arrow keys."}
+
   .pre .c{color:#7d8593}
 
   footer{border-top:1px solid var(--line);color:var(--muted);font-size:.9rem;margin-top:40px}

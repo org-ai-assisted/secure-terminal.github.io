@@ -64,13 +64,25 @@
     <a class="btn ghost" href="#features">What makes it different</a>
     <a class="btn ghost" href="https://output-lies.github.io">See the problem it removes</a>
   </div>
-  <figure class="shot" style="max-width:620px;margin:30px auto 0">
-    <a href="/shots/hero.webp" target="_blank" rel="noopener"><img src="/shots/hero.webp" width="560" height="160" alt="A short secure-terminal session in Detail, the default display mode. An ls of ~/Downloads lists installer.sh, invoice.pdf, report.txt and notes.md, but two of the names carry a hidden character named inline in red: invoice contains U+0430 CYRILLIC SMALL LETTER A, a look-alike for ASCII a, and report contains U+202E RIGHT-TO-LEFT OVERRIDE. The following head -2 deploy.log output, deploy: starting and deploy: OK, is rendered as plain unremarkable text."></a>
-    <figcaption><b>Detail</b>, the default display mode. Ordinary output stays ordinary - a terminal that
-      mangled normal text would not be usable - while two of those filenames carry a hidden character each,
-      named inline so it cannot pretend otherwise. Three other modes trade verbosity for brevity:
-      <a href="#display-modes">see all four</a>. This is the text area, not a window capture: no title bar,
-      tabs or toolbar.</figcaption>
+  <figure class="shot herocmp" data-start="52">
+    <div class="herocmp-stage" style="aspect-ratio:642/340">
+      <img src="/comparison/shots/hero-traditional.webp" width="642" height="340"
+        alt="The same file rendered by GNOME Terminal. Its window title has been silently changed to 'example.com - verified secure session'. The text reads: acme-cli 3.2 release verification; 'Fetch the installer from the official mirror:' then https://example.com/install.sh; 'Signed release attachment:' then q3-report.exe.pdf; and 'All checks passed -- you are ready to deploy.' Everything looks legitimate: the domain appears to read example.com, the attachment appears to end in .pdf, and the title looks like a trusted session.">
+      <div class="herocmp-top">
+        <img src="/comparison/shots/hero-secure.webp" width="642" height="340"
+          alt="The same file rendered by secure-terminal in Show mode. Its own window title, 'secure-terminal', is untouched. In the mirror URL the letter a is highlighted red as a Cyrillic look-alike (U+0430), so the real domain is not example.com. In the attachment name the right-to-left-override control is marked in red, revealing the real name ends in .exe, not .pdf. A banner reports that an application's OSC clipboard-write escape was neutralized by the safe CLI mode.">
+      </div>
+      <button type="button" class="herocmp-handle" aria-label="Drag to compare secure-terminal with a traditional terminal"
+        role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="52"><span class="herocmp-grip"></span></button>
+    </div>
+    <figcaption>The <b>same file</b>, cat'd in two terminals. Left, <b>secure-terminal</b> in
+      <b>Show</b> mode; right, a traditional terminal (GNOME Terminal). Four still-applicable
+      display tricks ride in the bytes: a Cyrillic look-alike in the URL (U+0430), a right-to-left
+      override in the attachment name, a silent OSC-0 title hijack, and a silent OSC-52 clipboard
+      overwrite. The traditional terminal renders all four as a trustworthy session; secure-terminal
+      shows the same bytes and flags every one. Real screenshots, captured under a labwc compositor;
+      title-hijack behaviour varies by terminal (konsole, for instance, resets it).
+      <span class="herocmp-hint">Drag the red divider.</span></figcaption>
   </figure>
 </div></section>
 
@@ -495,6 +507,60 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
       if (md) md.addEventListener('click', function () {
         var text = '[' + document.title + '](' + location.href + ')';
         if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { flash('markdown copied'); });
+      });
+    })();
+  </script>
+  <script>
+    /* Progressive enhancement for the hero before/after slider. With JS off, the
+       overlay's CSS resize:horizontal corner remains the control (see style.css);
+       this adds a centred grip and pointer / touch / keyboard dragging. */
+    (function () {
+      var cmp = document.querySelector('.herocmp');
+      if (!cmp) return;
+      var stage = cmp.querySelector('.herocmp-stage');
+      var top = cmp.querySelector('.herocmp-top');
+      var handle = cmp.querySelector('.herocmp-handle');
+      if (!stage || !top || !handle) return;
+      cmp.classList.add('js');
+      var pct = parseFloat(cmp.getAttribute('data-start'));
+      if (isNaN(pct)) pct = 50;
+      function set(p) {
+        pct = Math.max(0, Math.min(100, p));
+        top.style.width = pct + '%';
+        handle.style.left = pct + '%';
+        handle.setAttribute('aria-valuenow', Math.round(pct));
+      }
+      set(pct);
+      var dragging = false;
+      function pctFrom(e) {
+        var r = stage.getBoundingClientRect();
+        if (r.width <= 0) return pct;
+        return ((e.clientX - r.left) / r.width) * 100;
+      }
+      stage.addEventListener('pointerdown', function (e) {
+        dragging = true;
+        if (stage.setPointerCapture) { try { stage.setPointerCapture(e.pointerId); } catch (_) {} }
+        set(pctFrom(e));
+        e.preventDefault();
+      });
+      stage.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        set(pctFrom(e));
+        e.preventDefault();
+      });
+      function end(e) {
+        if (!dragging) return;
+        dragging = false;
+        if (stage.releasePointerCapture) { try { stage.releasePointerCapture(e.pointerId); } catch (_) {} }
+      }
+      stage.addEventListener('pointerup', end);
+      stage.addEventListener('pointercancel', end);
+      handle.addEventListener('keydown', function (e) {
+        var step = e.shiftKey ? 10 : 2;
+        if (e.key === 'ArrowLeft') { set(pct - step); e.preventDefault(); }
+        else if (e.key === 'ArrowRight') { set(pct + step); e.preventDefault(); }
+        else if (e.key === 'Home') { set(0); e.preventDefault(); }
+        else if (e.key === 'End') { set(100); e.preventDefault(); }
       });
     })();
   </script>
