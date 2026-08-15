@@ -186,6 +186,54 @@
   </div>
 </div></section>
 
+<section class="cat" id="truecolour"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#truecolour">24-bit truecolour: it renders everything, in full colour</a></h2>
+  <p class="catdesc">Neutralising hostile bytes does not mean a plain display. secure-terminal renders full
+    24-bit truecolour. Below are two safe, display-only boards - a <code>cat art.payload</code>
+    sunset scene and a <code>cat gradient.payload</code> 24-bit gamut slice (hue across, lightness
+    down, plus a greyscale ramp). Both are built from SGR truecolour and the half-block glyph
+    (<code>U+2580</code>) only - no cursor moves, no screen clear, no OSC, no escapes to neutralise -
+    so both are safe to <code>cat</code>. Switch the view to see the honest per-mode outcome: <b>Show</b>
+    paints the colour field; <b>Box</b> and <b>Detail</b> are the strict CLI defaults, where the
+    half-block glyph is itself neutralised - shown as an inert risk-coloured box, or named inline as
+    <code>&lt;U+2580 UPPER HALF BLOCK&gt;</code> - so no colour field is drawn. That is the point:
+    colour renders where a program simply prints it, and even a wall of a single glyph is still
+    character-filtered.</p>
+  <!-- no-JS: this view switcher is CSS-only (hidden radios + :checked sibling combinator),
+       the same engine as the comparison page. The radios, their chip labels and the single
+       .panel are ALL direct children of fieldset.cmp-switch; .panel must follow the radios. -->
+  <fieldset class="cmp-switch">
+    <legend class="sr-only">Choose the secure-terminal view. Both boards switch together.</legend>
+    <span class="swlead" aria-hidden="true">secure-terminal view:</span>
+    <input class="tsel" type="radio" name="stmode" id="st-cli" checked>
+    <label class="mchip first" for="st-cli">CLI</label>
+    <input class="tsel" type="radio" name="stmode" id="st-tui">
+    <label class="mchip last" for="st-tui">TUI</label>
+    <input class="tsel" type="radio" name="stuni" id="st-box">
+    <label class="mchip first gap" for="st-box">Box</label>
+    <input class="tsel" type="radio" name="stuni" id="st-detail">
+    <label class="mchip mid" for="st-detail">Detail</label>
+    <input class="tsel" type="radio" name="stuni" id="st-show" checked>
+    <label class="mchip last" for="st-show">Show</label>
+
+    <div class="panel">
+      <div class="shotgrid board2" id="truecolour-boards">
+        <div class="sv m-cli u-box"><figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (CLI, Box) - the strict default: the sunset scene is neutralised, every <code>U+2580</code> half-block an inert risk-coloured box, so no colour field is drawn.</figcaption><a href="/comparison/shots/secure-terminal.art.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.art.webp" width="862" height="647" loading="lazy" alt="secure-terminal in CLI Box mode on the sunset art board: the truecolour fill is neutralised to a grid of inert risk-coloured boxes, one per half-block glyph."></a></figure></div>
+        <div class="sv m-cli u-detail"><figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (CLI, Detail) - each byte named inline as <code>&lt;U+2580 UPPER HALF BLOCK&gt;</code>: the half-block glyph is expanded to its Unicode name, not painted.</figcaption><a href="/comparison/shots/secure-terminal.art-detail.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.art-detail.webp" width="862" height="647" loading="lazy" alt="secure-terminal in CLI Detail mode on the sunset art board: every half-block byte expanded inline to the text U+2580 UPPER HALF BLOCK instead of a colour."></a></figure></div>
+        <div class="sv m-cli u-show"><figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (CLI, Show) - the colour board: full 24-bit truecolour, a display-only sunset scene rendered from a safe <code>cat</code> of half-block art.</figcaption><a href="/comparison/shots/secure-terminal.art-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.art-show.webp" width="862" height="647" loading="lazy" alt="secure-terminal in CLI Show mode rendering a smooth 24-bit-colour sunset-beach scene built from half-block glyphs."></a></figure></div>
+        <div class="sv m-tui u-box"><figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (TUI, Box) - opt-in full-screen layout, yet every half-block cell is still an inert risk-coloured box. Detail needs CLI mode, so TUI offers Box and Show.</figcaption><a href="/comparison/shots/secure-terminal.art-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.art-tui.webp" width="862" height="647" loading="lazy" alt="secure-terminal in TUI Box mode on the sunset art board: full-screen layout allowed, but the truecolour fill is still neutralised to inert risk-coloured boxes."></a></figure></div>
+        <div class="sv m-tui u-show"><figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (TUI, Show) - the same truecolour sunset scene in opt-in full-screen mode.</figcaption><a href="/comparison/shots/secure-terminal.art-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.art-tui-show.webp" width="862" height="647" loading="lazy" alt="secure-terminal in TUI Show mode rendering the same 24-bit-colour sunset-beach scene full-screen."></a></figure></div>
+        <div class="sv m-cli u-box"><figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (CLI, Box) - the strict default neutralises the 24-bit gamut slice: every <code>U+2580</code> half-block an inert risk-coloured box, no colour field drawn.</figcaption><a href="/comparison/shots/secure-terminal.gradient.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.gradient.webp" width="862" height="647" loading="lazy" alt="secure-terminal in CLI Box mode on the 24-bit gradient board: the colour gamut is neutralised to a grid of inert risk-coloured boxes."></a></figure></div>
+        <div class="sv m-cli u-detail"><figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (CLI, Detail) - each half-block byte named inline as <code>&lt;U+2580 UPPER HALF BLOCK&gt;</code>, the safe default view.</figcaption><a href="/comparison/shots/secure-terminal.gradient-detail.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.gradient-detail.webp" width="862" height="647" loading="lazy" alt="secure-terminal in CLI Detail mode on the 24-bit gradient board: every half-block byte expanded inline to the text U+2580 UPPER HALF BLOCK."></a></figure></div>
+        <div class="sv m-cli u-show"><figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (CLI, Show) - the colour board: a 24-bit gamut slice - hue across, lightness down, plus a greyscale ramp - smooth where a 256-colour terminal bands.</figcaption><a href="/comparison/shots/secure-terminal.gradient-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.gradient-show.webp" width="862" height="647" loading="lazy" alt="secure-terminal in CLI Show mode rendering a smooth 24-bit-colour gamut slice: hue varying across, lightness down, with a greyscale ramp along the bottom."></a></figure></div>
+        <div class="sv m-tui u-box"><figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (TUI, Box) - full-screen layout, every half-block cell still an inert risk-coloured box.</figcaption><a href="/comparison/shots/secure-terminal.gradient-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.gradient-tui.webp" width="862" height="647" loading="lazy" alt="secure-terminal in TUI Box mode on the 24-bit gradient board: full-screen layout allowed, but the colour gamut is still neutralised to inert risk-coloured boxes."></a></figure></div>
+        <div class="sv m-tui u-show"><figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (TUI, Show) - the same 24-bit gamut slice in opt-in full-screen mode.</figcaption><a href="/comparison/shots/secure-terminal.gradient-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.gradient-tui-show.webp" width="862" height="647" loading="lazy" alt="secure-terminal in TUI Show mode rendering the same smooth 24-bit-colour gamut slice full-screen."></a></figure></div>
+      </div>
+      <p class="shotsrc">Two safe, display-only boards (the harness <code>truecolor-art.py</code> sunset scene and <code>truecolor-gradient.py</code> gamut slice), each SGR truecolour plus the <code>U+2580</code> half-block glyph and newlines only. Click any shot for full size.</p>
+    </div>
+  </fieldset>
+</div></section>
+
 <section class="cat" id="terminfo"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#terminfo">A restricted terminfo that tells programs the truth</a></h2>
   <p class="catdesc">The mode itself decides what programs are told, over the ordinary terminfo
