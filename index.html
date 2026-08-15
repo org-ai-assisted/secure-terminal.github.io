@@ -65,11 +65,11 @@
     <a class="btn ghost" href="https://output-lies.github.io">See the problem it removes</a>
   </div>
   <figure class="shot herocmp" data-start="52">
-    <div class="herocmp-stage" style="aspect-ratio:690/392">
-      <img src="/comparison/shots/hero-traditional.webp" width="690" height="392"
-        alt="A GNOME Terminal window whose title bar has been silently changed to 'example.com' by the file it is displaying. The text is a pre-deploy verification checklist for acme-cli release v3.2.0 that reads as entirely trustworthy: it fetches from https://example.com, reports a good maintainer signature, an attachment named q3-report.exe.pdf 'reported document-only, safe', a deploy under the account administrator@corp.internal, and a support contact ops@example.com, ending 'All preflight checks passed -- ready to deploy'. Nothing looks wrong.">
+    <div class="herocmp-stage" style="aspect-ratio:702/379">
+      <img src="/comparison/shots/hero-traditional.webp" width="702" height="379"
+        alt="A GNOME Terminal window whose title bar has been silently changed by the file it is displaying to read 'gnome-terminal (window title injected)'. The text is a pre-deploy verification checklist for acme-cli release v3.2.0 that reads as entirely trustworthy: it fetches from https://example.com, reports a good maintainer signature, an attachment named q3-report.exe.pdf 'reported document-only, safe', a deploy under the account administrator@corp.internal, and a support contact ops@example.com, ending 'All preflight checks passed -- ready to deploy'. Only the injected title hints anything is off.">
       <div class="herocmp-top">
-        <img src="/comparison/shots/hero-secure.webp" width="690" height="392"
+        <img src="/comparison/shots/hero-secure.webp" width="702" height="379"
           alt="The same file shown by secure-terminal in Show mode, its own title bar unchanged. It flags every trap in the same bytes: both 'example.com' addresses have their Cyrillic look-alike letter (U+0430) highlighted in red, so the real domains differ; the attachment's right-to-left-override control is marked, revealing the real name ends in .exe not .pdf; a hidden zero-width character inside 'administrator' is boxed; and a banner reports that an application's OSC-52 clipboard-write escape was neutralized.">
       </div>
       <button type="button" class="herocmp-handle" aria-label="Drag to compare secure-terminal with a traditional terminal"
