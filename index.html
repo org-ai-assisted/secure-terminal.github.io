@@ -28,7 +28,7 @@
 <meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
 <meta name="theme-color" content="#f3f2ee">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/style.css?v=4">
+<link rel="stylesheet" href="/style.css?v=5">
 
 <header class="nav">
   <div class="wrap">
@@ -65,24 +65,27 @@
     <a class="btn ghost" href="https://output-lies.github.io">See the problem it removes</a>
   </div>
   <figure class="shot herocmp" data-start="52">
-    <div class="herocmp-stage" style="aspect-ratio:642/340">
-      <img src="/comparison/shots/hero-traditional.webp" width="642" height="340"
-        alt="The same file rendered by GNOME Terminal. Its window title has been silently changed to 'example.com - verified secure session'. The text reads: acme-cli 3.2 release verification; 'Fetch the installer from the official mirror:' then https://example.com/install.sh; 'Signed release attachment:' then q3-report.exe.pdf; and 'All checks passed -- you are ready to deploy.' Everything looks legitimate: the domain appears to read example.com, the attachment appears to end in .pdf, and the title looks like a trusted session.">
+    <div class="herocmp-stage" style="aspect-ratio:690/392">
+      <img src="/comparison/shots/hero-traditional.webp" width="690" height="392"
+        alt="A GNOME Terminal window whose title bar has been silently changed to 'example.com' by the file it is displaying. The text is a pre-deploy verification checklist for acme-cli release v3.2.0 that reads as entirely trustworthy: it fetches from https://example.com, reports a good maintainer signature, an attachment named q3-report.exe.pdf 'reported document-only, safe', a deploy under the account administrator@corp.internal, and a support contact ops@example.com, ending 'All preflight checks passed -- ready to deploy'. Nothing looks wrong.">
       <div class="herocmp-top">
-        <img src="/comparison/shots/hero-secure.webp" width="642" height="340"
-          alt="The same file rendered by secure-terminal in Show mode. Its own window title, 'secure-terminal', is untouched. In the mirror URL the letter a is highlighted red as a Cyrillic look-alike (U+0430), so the real domain is not example.com. In the attachment name the right-to-left-override control is marked in red, revealing the real name ends in .exe, not .pdf. A banner reports that an application's OSC clipboard-write escape was neutralized by the safe CLI mode.">
+        <img src="/comparison/shots/hero-secure.webp" width="690" height="392"
+          alt="The same file shown by secure-terminal in Show mode, its own title bar unchanged. It flags every trap in the same bytes: both 'example.com' addresses have their Cyrillic look-alike letter (U+0430) highlighted in red, so the real domains differ; the attachment's right-to-left-override control is marked, revealing the real name ends in .exe not .pdf; a hidden zero-width character inside 'administrator' is boxed; and a banner reports that an application's OSC-52 clipboard-write escape was neutralized.">
       </div>
       <button type="button" class="herocmp-handle" aria-label="Drag to compare secure-terminal with a traditional terminal"
         role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="52"><span class="herocmp-grip"></span></button>
     </div>
-    <figcaption>The <b>same file</b>, cat'd in two terminals. Left, <b>secure-terminal</b> in
-      <b>Show</b> mode; right, a traditional terminal (GNOME Terminal). Four still-applicable
-      display tricks ride in the bytes: a Cyrillic look-alike in the URL (U+0430), a right-to-left
-      override in the attachment name, a silent OSC-0 title hijack, and a silent OSC-52 clipboard
-      overwrite. The traditional terminal renders all four as a trustworthy session; secure-terminal
-      shows the same bytes and flags every one. Real screenshots, captured under a labwc compositor;
-      title-hijack behaviour varies by terminal (konsole, for instance, resets it).
-      <span class="herocmp-hint">Drag the red divider.</span></figcaption>
+    <figcaption>The <b>same file</b>, cat'd in two terminals with the same font. Left,
+      <b>secure-terminal</b> in <b>Show</b> mode; right, a traditional terminal (GNOME Terminal).
+      It is a routine "verify this release before you deploy" checklist -- and every reassuring
+      line hides a still-applicable trick, spread left to right: a Cyrillic look-alike in two
+      example.com addresses (U+0430), a right-to-left override that shows an .exe as a .pdf, a
+      zero-width character inside "administrator", a silently hijacked window title, and a silent
+      OSC-52 clipboard overwrite. The traditional terminal renders all of it as a trustworthy
+      session; secure-terminal shows the same bytes and flags every one. Real screenshots, captured
+      under a labwc compositor; title-hijack behaviour varies by terminal (konsole, for instance,
+      resets it).
+      <span class="herocmp-hint">Drag the red divider right to reveal each trap.</span></figcaption>
   </figure>
 </div></section>
 
