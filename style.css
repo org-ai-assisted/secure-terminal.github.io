@@ -175,7 +175,9 @@
      corner to wipe. Progressive enhancement (.js) adds a centred grip plus pointer,
      touch and keyboard control; with JS off the resize corner still works. */
   .herocmp{max-width:760px;margin:30px auto 0}
-  .herocmp-stage{position:relative;width:100%;line-height:0;background:#fff;overflow:hidden;touch-action:pan-y}
+  /* pan-y pinch-zoom: the browser keeps vertical scroll AND native two-finger pinch-zoom;
+     single-finger horizontal is routed to the slider JS. */
+  .herocmp-stage{position:relative;width:100%;line-height:0;background:#fff;overflow:hidden;touch-action:pan-y pinch-zoom}
   .herocmp-stage img{display:block;width:100%;height:auto;max-width:100%;background:#fff;-webkit-user-drag:none;user-select:none}
   .herocmp-top{position:absolute;top:0;left:0;bottom:0;width:52%;min-width:0;max-width:100%;
     overflow:hidden;resize:horizontal;border-right:3px solid #e5484d;box-sizing:border-box}

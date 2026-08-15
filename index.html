@@ -28,7 +28,7 @@
 <meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
 <meta name="theme-color" content="#f3f2ee">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/style.css?v=6">
+<link rel="stylesheet" href="/style.css?v=7">
 
 <header class="nav">
   <div class="wrap">
@@ -544,14 +544,23 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
         if (r.width <= 0) return pct;
         return ((e.clientX - r.left) / r.width) * 100;
       }
-      var TH = 5, active = null, sx = 0, sy = 0, dragging = false, moved = false;
+      var TH = 5, active = null, sx = 0, sy = 0, dragging = false, moved = false, down = 0;
+      function abortDrag() {
+        if (dragging && active !== null && stage.releasePointerCapture) {
+          try { stage.releasePointerCapture(active); } catch (_) {}
+        }
+        active = null; dragging = false;
+      }
       stage.addEventListener('pointerdown', function (e) {
-        if (e.button && e.button !== 0) return;   // primary button / touch only
+        down += 1;
+        if (down >= 2) { abortDrag(); return; }   // second finger: a pinch -- let the browser zoom
+        if (e.button && e.button !== 0) return;    // primary button / touch only
         active = e.pointerId; sx = e.clientX; sy = e.clientY;
         dragging = false; moved = false;
         /* No capture and no preventDefault yet: a pure click must still reach the <a>. */
       });
       stage.addEventListener('pointermove', function (e) {
+        if (down >= 2) return;                     // pinching -- ignore, the browser is zooming
         if (active === null || e.pointerId !== active) return;
         if (!dragging) {
           if (Math.abs(e.clientX - sx) < TH && Math.abs(e.clientY - sy) < TH) return;
@@ -562,6 +571,7 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
         e.preventDefault();
       });
       function end(e) {
+        if (down > 0) down -= 1;
         if (active === null || e.pointerId !== active) return;
         if (dragging && stage.releasePointerCapture) { try { stage.releasePointerCapture(e.pointerId); } catch (_) {} }
         active = null; dragging = false;
