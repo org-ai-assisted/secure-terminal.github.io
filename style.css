@@ -58,9 +58,10 @@
   .nav .navtoggle:checked ~ .navscrim{display:block;position:fixed;inset:0;z-index:1}
   @media(min-width:1000px){
     .nav .menubtn{display:none}
-    /* the 10-item nav is wider than the 1000px content column, so let it wrap to
-       a second row here (as it did before) rather than shrink the logo/overflow */
-    .nav > .wrap{flex-wrap:wrap;row-gap:6px}
+    /* the 10-item nav is wider than the 1000px content column, so it wraps to a
+       second row. Give both rows real vertical breathing room (row-gap + padding)
+       so the header reads as an airy two-tier bar, not a cramped stack. */
+    .nav > .wrap{flex-wrap:wrap;row-gap:12px;padding-top:11px;padding-bottom:11px}
     .nav nav{display:flex;gap:16px;align-items:center;position:static;margin-left:auto}
   }
 
@@ -87,7 +88,7 @@
 
   section.cat{padding:clamp(26px,6vw,52px) 0 8px}
   .catname{font-size:.82rem;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 4px}
-  .catdesc{margin:0 0 18px;color:var(--muted);max-width:72ch}
+  .catdesc{margin:0 0 18px;color:var(--muted);max-width:88ch}
   /* comparison intro: compact so the switcher + matrix are the focus near the top.
      .lede here is outside .hero, so it needs its own reading-measure + spacing. */
   #compare{padding-top:26px}
@@ -95,12 +96,12 @@
   #compare .lede{max-width:72ch;margin:0 0 12px;color:#2c2e33;font-size:1.05rem;line-height:1.5}
   .issue{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}
   .issue h3{margin:0 0 8px;font-size:1.2rem;letter-spacing:-.01em}
-  .issue p{margin:0 0 8px;color:#3a3c41;max-width:72ch}
+  .issue p{margin:0 0 8px;color:#3a3c41;max-width:88ch}
   .issue p:last-child{margin-bottom:0}
   /* A prose issue card hugs the reading measure (like .cmp-wrap) so its border
      does not trail empty space to the right of the text. Cards holding a wide
      table or terminal block stay full-width. Grid (.fg) columns still win. */
-  .issue:not(:has(table, .term, .pre)){max-width:calc(72ch + 44px)}
+  .issue:not(:has(table, .term, .pre)){max-width:calc(88ch + 44px)}
   .modenote{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
   .modenote b{color:var(--ink)}
   .no{color:var(--danger);font-weight:700}
