@@ -145,8 +145,8 @@
     the invariant harness runs 387 spec sequences, the property and fuzz tests run random and
     generated input. A separate artifact
     (<a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-tests/verify_formal.py" rel="noopener"><code>verify_formal.py</code></a>)
-    goes further and <b>proves</b> two of the sanitizer's core properties hold for <b>every possible
-    input</b>, with no sampling. It runs in CI on every change
+    goes further and <b>proves</b> the sanitizer's core safety properties - input <em>and</em> output -
+    hold for <b>every possible input</b>, with no sampling. It runs in CI on every change
     (<a href="https://github.com/secure-terminal/secure-terminal/blob/master/.github/workflows/local-formal-verification.yml" rel="noopener">local-formal-verification.yml</a>)
     using the <a href="https://github.com/Z3Prover/z3" rel="noopener">Z3</a> SMT solver together with
     exhaustive enumeration. It is deliberately scoped to the pure, Qt-free
@@ -171,15 +171,34 @@
       completed line, once shown, is never rewritten. The abstract model Z3 reasons over is validated
       against the real line editor on an exhaustive grid of states, so the proof binds to the actual
       code rather than a hand model.</p>
+    <p><b>Theorem 3 - input and clipboard safety.</b> The same technique proves the <em>input</em> side
+      over every input: a pasted string can never carry an escape, control, bidi or invisible character
+      to the shell and can never auto-execute - no trailing carriage return survives, so a single-line
+      paste waits for your Enter; nothing placed on the system clipboard carries a control, bidi or
+      invisible byte, and the ASCII clipboard drops every non-ASCII byte so a homoglyph cannot ride out;
+      a program-supplied window title is reduced to printable ASCII; and every full-screen (TUI) grid
+      cell is a single safe display unit, never an invisible or bidi character. The paste warning is
+      also proved to name a character the SAME class the on-screen colour does, so the two can never
+      disagree.</p>
+    <p><b>Theorem 4 - split escapes cannot leak.</b> Output arrives one read at a time, and an escape
+      can be cut across a read boundary. The wrapper holds the fragment so its tail cannot render as
+      text - proved by <em>bounded</em> exhaustion: every short stream over the escape alphabet, under
+      every possible chunking, renders identically to the whole-stream case, together with a bound that
+      a never-terminated sequence stays constant in memory. Stated honestly, this one is bounded (short
+      streams) rather than the unbounded induction of Theorem 2; the pathological over-length path stays
+      fuzz-tested.</p>
   </div>
   <p class="catdesc" style="margin-top:12px"><b>What it does and does not cover, plainly.</b> This
-    verifies the pure sanitizer functions - the neutralization and line-editing core. It does
-    <em>not</em> prove the Qt widget, the pseudo-terminal plumbing, or the "nothing is written back to
-    the pty" half of the closure (Theorem 1 is the output side; the no-write-back side remains covered
-    by the invariant harness in section 2, which drives the live widget). One data assumption - that
-    Unicode character names are ASCII - is not assumed but discharged, by exercising the real code on
-    every named code point. And, like the harness above, each proof is <b>self-checked</b>: a
-    deliberately broken model must make the proof fail, so a passing run means the checks have teeth.</p>
+    verifies the whole pure sanitizer - the neutralization, line-editing, paste, clipboard and cell
+    core, input and output. It does <em>not</em> prove the Qt widget itself, the
+    <a href="https://github.com/selectel/pyte" rel="noopener">pyte</a> full-screen emulator, the
+    pseudo-terminal plumbing, or the "nothing is written back to the pty" half of the closure
+    (Theorems 1-4 cover what the sanitizer produces; the no-write-back side and the emulator stay
+    covered by the invariant harness in section 2 and the fuzz / differential tests, which drive the
+    live widget and emulator). One data assumption - that Unicode character names are ASCII - is not
+    assumed but discharged, by exercising the real code on every named code point. And, like the
+    harness above, each proof is <b>self-checked</b>: twenty deliberately broken models must each make
+    a proof fail, so a passing run means the checks have teeth.</p>
 </div></section>
 
 <section class="cat" id="reference"><div class="wrap">
