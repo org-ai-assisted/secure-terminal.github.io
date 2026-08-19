@@ -250,6 +250,20 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
 .catname a.h-anchor::after,.issue h3 a.h-anchor::after{content:"#";margin-left:.3em;color:var(--muted);font-weight:400;opacity:0;transition:opacity .12s}
 .catname:hover a.h-anchor::after,.issue h3:hover a.h-anchor::after,a.h-anchor:focus::after{opacity:.5}
 
+/* inline "on this page" table of contents (matches output-lies) */
+.toc{margin:20px 0 6px;border:1px solid var(--line);border-radius:12px;
+  background:var(--card);padding:13px 16px}
+.toc .toch{margin:0 0 9px;font:600 .66rem/1 var(--mono);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted)}
+.toc ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 22px}
+.toc li{margin:0}
+.toc a{font-family:var(--mono);font-size:.82rem;color:var(--ink);text-decoration:none;
+  display:inline-flex;align-items:center;gap:7px}
+.toc a::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);
+  display:inline-block;flex:0 0 auto;opacity:.55}
+.toc a:hover{color:var(--accent)}
+.toc a:hover::before{opacity:1}
+
 /* install accordion boxes (native <details>, no JS; inline SVG icons) */
 .inst{border:1px solid var(--line);border-radius:12px;background:var(--card);margin:10px 0;overflow:hidden}
 .inst > summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:14px 16px}
