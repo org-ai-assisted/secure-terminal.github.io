@@ -263,6 +263,22 @@
         to use a feature you left off, a dismissible banner tells you <b>once per feature per tab</b> - visible but
         never nagging, and silenceable globally or per feature.</p>
     </article>
+    <article class="issue">
+      <h3 id="clipboard-sanitizer"><a class="h-anchor" href="#clipboard-sanitizer">Clipboard sanitizer for the whole desktop</a></h3>
+      <p>The same neutralization, for text you paste into <b>other</b> programs - an editor, a chat box, anything
+        that does not treat unicode as carefully. <code>sclip</code> is a tiny filter that reads text and writes it
+        back clipboard-safe: strictest by default (printable ASCII plus tab and newline, so an invisible, bidi or
+        homoglyph character cannot ride out), or <code>--unicode</code> to keep printable non-ASCII. It composes with
+        the system clipboard tools, and drop-in wrappers - <code>st-wl-paste</code>, <code>st-wl-copy</code>,
+        <code>st-xclip</code> - run the pipeline for you.</p>
+      <p>Or run it as a <b>tray watcher</b> (<code>secure-terminal --clipboard-watch</code>, no terminal window):
+        copy something deceptive and the same in-window <b>review bar</b> pops up and offers to replace it -
+        <b>flag-and-offer, never a silent rewrite</b>. You choose Keep original, Replace (ASCII), or Replace (keep
+        unicode). Honest limit: keeping unicode keeps printable look-alikes too (a homoglyph <em>is</em> printable
+        unicode); only the ASCII strip removes them, which is why the preview names every character so you can judge.
+        It sanitises the <b>local</b> clipboard; on Qubes the inter-VM global clipboard is untouched - run it after
+        pasting into the target VM.</p>
+    </article>
   </div>
   <figure class="shot" style="max-width:1000px;margin:28px auto 0">
     <figcaption class="shotname"><b>The paste review</b> - a <code>curl | bash</code> line hiding two Cyrillic
