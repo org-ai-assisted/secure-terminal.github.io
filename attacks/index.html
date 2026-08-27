@@ -37,7 +37,6 @@
     <nav>
       <a href="/#features">Features</a>
       <a href="/#install">Install</a>
-      <a href="/plugins/">Plugins</a>
       <a href="/comparison/">Comparison</a>
       <a href="/attacks/" class="active">Attacks</a>
       <a href="/ai-review/">AI Review</a>
@@ -106,8 +105,7 @@
     character is caught before it reaches your shell: secure-terminal names exactly what is hidden in it
     (<span class="yes">"1 invisible character"</span>) and lets you drop it to plain ASCII or cancel - so nothing
     rides along unseen and the text you are about to run is fully visible to read first. It cannot judge a visible
-    command for you - no terminal can, and a plain ASCII paste still submits; that is the opt-in
-    <a href="/plugins/">hook</a>'s job - but it guarantees there is nothing hidden inside the paste. The corpus's
+    command for you - no terminal can, and a plain ASCII paste still submits - but it guarantees there is nothing hidden inside the paste. The corpus's
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/harness/adversarial.py" rel="noopener">adversarial harness</a>
     feeds every one of these payloads to secure-terminal and asserts it neutralises each one.</p>
   <script src="/attacks/pastejack.js"></script>

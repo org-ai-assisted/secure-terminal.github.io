@@ -37,7 +37,6 @@
     <nav>
       <a href="/#features">Features</a>
       <a href="/#install">Install</a>
-      <a href="/plugins/">Plugins</a>
       <a href="/comparison/" class="active">Comparison</a>
       <a href="/attacks/">Attacks</a>
       <a href="/ai-review/">AI Review</a>
@@ -426,13 +425,13 @@
 
           <tr class="mrow" id="row-hook">
             <th scope="row"><a class="rowlink" href="#row-hook">Harmful command itself (<code>curl | sh</code>, a wrong <code>rm</code>)</a></th>
-            <td class="verdict"><span class="vd na"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7.2" width="10" height="1.6" fill="currentColor"/></svg>Opt-in handler (CLI)</span></td>
+            <td class="verdict"><span class="vd na"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7.2" width="10" height="1.6" fill="currentColor"/></svg>None</span></td>
             <td class="verdict"><span class="vd na"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7.2" width="10" height="1.6" fill="currentColor"/></svg>None</span></td>
           </tr>
           <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-hook"><label class="rowsum" for="ri-hook">The judgment call no parser can make<span class="ihint"><span class="ihint-show">Show</span><span class="ihint-hide">Hide</span></span></label><div class="ibody">
             <p><b>No terminal protects you from a harmful command itself.</b> Deciding that <code>curl x | sh</code>
               (<a href="https://www.kicksecure.com/wiki/Dev/curl_bash_pipe" rel="noopener">curl bash pipe</a>) or a
-              subtly wrong <code>rm</code> is dangerous is a judgment call, not a parsing rule, so no terminal can catch it by design. secure-terminal keeps that judgment out of the terminal but provides an opt-in <b><a href="/plugins/">hook</a></b>: before a command runs in CLI mode it can call an external handler you configure, which may warn, suggest a safer command, or ask you to confirm. The terminal ships no AI and no policy of its own; the logic lives in the handler.</p>
+              subtly wrong <code>rm</code> is dangerous is a judgment call, not a parsing rule, so no terminal can catch it by design. secure-terminal keeps that judgment out of the terminal; it ships no AI and no policy of its own.</p>
           </div></div></td></tr>
 
           <tr class="mrow" id="row-forms">
