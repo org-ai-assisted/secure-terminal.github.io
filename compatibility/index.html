@@ -119,8 +119,13 @@
     <code>git</code>, ...) renders under a contrast guard, so nothing can be painted the same
     colour as the background to hide it, and carriage-return progress bars
     (<code>git</code>/<code>curl</code>/<code>wget</code>/<code>rsync</code>) redraw in place.
-    All 16 below were run and their output confirmed. (Colour is on by default; turn it off
-    with the Colors toggle or <code>NO_COLOR</code>.)</p>
+    All 16 below were run and their output confirmed. The nine deterministic line tools are
+    <a href="#cli-shots">shown below in real screenshots</a>, each run against a fixed fixture
+    and captured exactly as secure-terminal renders it; the interactive, network and
+    clock-driven ones (<code>bash</code>, <code>ps</code>, <code>ssh</code>, <code>wget</code>,
+    <code>curl</code>, <code>gpg</code>, <code>rsync</code>) cannot be captured byte-for-byte, so
+    they were confirmed by hand. (Colour is on by default; turn it off with the Colors toggle
+    or <code>NO_COLOR</code>.)</p>
   <div class="cmp-wrap">
   <table class="cmp">
     <thead><tr><th>Program (package)</th><th>Popcon rank</th><th>CLI mode (default)</th></tr></thead>
@@ -143,6 +148,22 @@
       <tr><td>rsync</td><td>557</td><td><span class="yes">Works.</span> Progress redraws in place.</td></tr>
     </tbody>
   </table>
+  </div>
+  <h3 class="catname" id="cli-shots" style="margin-top:22px"><a class="h-anchor" href="#cli-shots">The line tools, run for real</a></h3>
+  <p class="catdesc">Each shot below is a deterministic program actually run against a fixed
+    fixture (no network, no clock), captured exactly as secure-terminal displays its output,
+    colour and all. The test suite regenerates them byte-for-byte, so what you see is what runs.
+    Click any shot for full size.</p>
+  <div class="shotgrid" id="cli-shot-grid">
+    <figure class="shot" id="shot-coreutils"><figcaption class="shotname"><b>ls, cat, cp (coreutils)</b> - <code>ls --color -F</code>: file-type colours intact - cyan symlink, green executable, blue directory.</figcaption><a href="/compatibility/shots/coreutils.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/coreutils.webp" width="1496" height="356" loading="lazy" alt="secure-terminal showing ls --color -F output: latest.txt@ in cyan (symlink), run.sh* in green (executable), subdir/ in blue (directory), plain files uncoloured."></a></figure>
+    <figure class="shot" id="shot-find"><figcaption class="shotname"><b>find (findutils)</b> - <code>find | sort</code>: pure line output, unchanged.</figcaption><a href="/compatibility/shots/find.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/find.webp" width="1496" height="284" loading="lazy" alt="secure-terminal showing find piped to sort: a plain list of file paths under the fixture tree, one per line."></a></figure>
+    <figure class="shot" id="shot-tar"><figcaption class="shotname"><b>tar</b> - <code>tar tf</code>: the archive listing renders intact.</figcaption><a href="/compatibility/shots/tar.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/tar.webp" width="1496" height="284" loading="lazy" alt="secure-terminal showing tar tf output: the member paths of a fixture archive listed one per line."></a></figure>
+    <figure class="shot" id="shot-grep"><figcaption class="shotname"><b>grep</b> - <code>grep --color -n</code>: line numbers in green, the matched text bold red - the match highlight is shown.</figcaption><a href="/compatibility/shots/grep.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/grep.webp" width="1496" height="248" loading="lazy" alt="secure-terminal showing grep --color -n output: green line numbers and the matched word TODO in bold red on each matching line."></a></figure>
+    <figure class="shot" id="shot-gzip"><figcaption class="shotname"><b>gzip, zcat</b> - <code>zcat</code>: a gzip stream round-trips cleanly to its text.</figcaption><a href="/compatibility/shots/gzip.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/gzip.webp" width="1496" height="248" loading="lazy" alt="secure-terminal showing zcat output: the decompressed text of a gzip file, rendered as ordinary lines."></a></figure>
+    <figure class="shot" id="shot-sed"><figcaption class="shotname"><b>sed</b> - a stream edit: the transformed output is intact.</figcaption><a href="/compatibility/shots/sed.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/sed.webp" width="1496" height="320" loading="lazy" alt="secure-terminal showing sed output: each input line prefixed by the substitution, rendered as ordinary lines."></a></figure>
+    <figure class="shot" id="shot-diff"><figcaption class="shotname"><b>diff, cmp (diffutils)</b> - <code>diff --color</code>: hunk headers cyan, removals red, additions green.</figcaption><a href="/compatibility/shots/diff.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/diff.webp" width="1496" height="392" loading="lazy" alt="secure-terminal showing diff --color output: cyan hunk headers, a red removed line, a green added line."></a></figure>
+    <figure class="shot" id="shot-awk"><figcaption class="shotname"><b>awk (mawk)</b> - a computed total: pure line output.</figcaption><a href="/compatibility/shots/awk.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/awk.webp" width="1496" height="212" loading="lazy" alt="secure-terminal showing awk output: a single computed total line."></a></figure>
+    <figure class="shot" id="shot-git"><figcaption class="shotname"><b>git</b> - <code>git log --oneline --decorate</code>: hashes and the HEAD / branch / tag decorations in colour.</figcaption><a href="/compatibility/shots/git.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/git.webp" width="1496" height="248" loading="lazy" alt="secure-terminal showing git log --oneline --decorate: yellow commit hashes with coloured HEAD, branch and tag decorations."></a></figure>
   </div>
   <p class="catdesc" style="margin-top:12px">The one thing CLI mode does not do is interpret
     cursor-<em>positioning</em> escapes, so a full-screen redraw (an editor, a live dashboard)
