@@ -290,20 +290,23 @@
   <figure class="shot" style="max-width:1000px;margin:28px auto 0">
     <figcaption class="shotname"><b>The paste review</b> - a <code>curl | bash</code> line hiding two Cyrillic
       homoglyphs (in <code>example</code> and <code>bash</code>), a zero-width space and a right-to-left override.</figcaption>
-    <a href="/shots/paste-warning.webp" target="_blank" rel="noopener"><img src="/shots/paste-warning.webp" width="2376" height="224" loading="lazy" alt="secure-terminal's in-window paste-review bar showing the hostile paste four ways: the Original pane, where the bidi override reorders the trailing comment; the Detail pane, naming each hidden character inline in its risk-class colour as U+0430 CYRILLIC SMALL LETTER A, U+200B ZERO WIDTH SPACE and U+202E RIGHT-TO-LEFT OVERRIDE; the Paste-stripped pane, where the homoglyph domain collapses to exmple.com and 'bash' to 'bsh'; and the Paste-with-unicode pane, which keeps the look-alike example.com (its Cyrillic a tinted) but drops the invisibles. Both send buttons are countdown-disabled; only Reject is available immediately."></a>
-    <figcaption>The four panes read left to right: the <b>Original</b> as it arrives, <b>Detail</b> naming every
-      hidden character inline (<code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code>), and the two send previews -
-      <b>Stripped</b> drops the look-alikes so the domain changes to <code>exmple.com</code>, while
-      <b>keeping unicode</b> preserves the deceptive <code>example.com</code> but still removes the bidi and
-      zero-width. Rendered headless from the real bar.</figcaption>
+    <a href="/shots/paste-warning.webp" target="_blank" rel="noopener"><img src="/shots/paste-warning.webp" width="2376" height="739" loading="lazy" alt="secure-terminal's in-window paste-review bar holding a hostile 'curl | bash' paste before any byte reaches the shell. A red dot and the summary 'This paste hides 1 bidirectional control, 1 invisible character, 2 non-ASCII characters.' head the bar; below is the editable held text, with the right-to-left override visibly reordering the trailing comment. A Structure section lists 1 line, a 'waits on the command line - press Enter to run' guarantee and a 65-character length, and a per-class Hidden-characters table names Bidirectional control 1, Invisible / zero-width 1 and Look-alike (homoglyph) 2 in their risk-class colours. A radio-first 'Deliver as: Strip to ASCII / Keep unicode' choice gates the single Paste button; only Reject is available immediately."></a>
+    <figcaption>The bar names what is hidden at the top, keeps the paste in an <b>editable</b> field so the risky
+      part can be trimmed before delivery, and breaks it down in a <b>Structure</b> section and a per-class
+      <b>Hidden characters</b> table. Delivery is radio-first: pick <b>Strip to ASCII</b> or <b>Keep unicode</b>
+      and the mirror below previews exactly what that choice sends - the domain collapses to
+      <code>exmple.com</code> when stripped, or keeps the deceptive <code>example.com</code> (its Cyrillic
+      <code>a</code> tinted) with the invisibles dropped - before the single Paste button un-gates. Only
+      <b>Reject</b> is available immediately. Rendered headless from the real bar.</figcaption>
   </figure>
   <figure class="shot" style="max-width:1000px;margin:28px auto 0">
     <figcaption class="shotname"><b>The same bar, for copy going the other way</b> - selecting and copying that
       same line in Show mode, before it reaches the system clipboard.</figcaption>
-    <a href="/shots/copy-warning.webp" target="_blank" rel="noopener"><img src="/shots/copy-warning.webp" width="2376" height="221" loading="lazy" alt="secure-terminal's review bar for a copy: the summary reads 'This copy would carry 1 bidirectional control, 1 invisible character, 2 non-ASCII characters onto the clipboard'; the four panes are Original, Detail (naming each hidden character in its risk-class colour), 'Copy stripped puts' (the homoglyph domain collapsed to exmple.com), and 'Copy with unicode puts' (the look-alike example.com kept, its Cyrillic a tinted). The buttons read Don't copy, Copy stripped, Copy with unicode, with no countdown since a copy is not executed."></a>
-    <figcaption>Copy is reviewed with the <b>same bar</b>, just relabelled for the other direction (<b>Don't copy</b> /
-      <b>Copy stripped</b> / <b>Copy with unicode</b>) and configured by its own setting. There is no countdown - a
-      copy is not executed, so the anti-fat-finger gate the paste needs does not apply.</figcaption>
+    <a href="/shots/copy-warning.webp" target="_blank" rel="noopener"><img src="/shots/copy-warning.webp" width="2376" height="707" loading="lazy" alt="secure-terminal's review bar reviewing a copy going out to the system clipboard. The summary reads 'This copy would carry 1 bidirectional control, 1 invisible character, 2 non-ASCII characters onto the clipboard.' It is the same single-pane layout as the paste bar - editable held text, a Structure section, and a per-class Hidden-characters table naming the bidirectional control, invisible / zero-width and look-alike (homoglyph) counts in their risk-class colours - with a radio-first 'Deliver as: Strip to ASCII / Keep unicode' choice. The reject button reads Don't copy; there is no countdown, since a copy is not executed."></a>
+    <figcaption>Copy is reviewed with the <b>same single-pane bar</b>, relabelled for the other direction (the reject
+      button reads <b>Don't copy</b>). Pick <b>Strip to ASCII</b> or <b>Keep unicode</b> and the mirror previews
+      exactly what would land on the clipboard. There is no countdown - a copy is not executed, so the
+      anti-fat-finger gate the paste needs does not apply.</figcaption>
   </figure>
 </div></section>
 
