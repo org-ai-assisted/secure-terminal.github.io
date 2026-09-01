@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  secure-terminal: the review bar - what a paste or copy carries, before it crosses. AI-Assisted.
+  Source: https://github.com/secure-terminal/secure-terminal.github.io
+-->
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ai-disclosure" content="ai-assisted">
+<title>secure-terminal: the review bar</title>
+<meta name="description" content="Before a paste reaches the shell or a copy reaches the clipboard, secure-terminal shows a review bar: a per-class breakdown of every hidden character, a structure summary, an editable preview, and a never-auto-run guarantee.">
+<link rel="canonical" href="https://secure-terminal.github.io/review/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="secure-terminal">
+<meta property="og:title" content="secure-terminal: the review bar">
+<meta property="og:description" content="A per-class breakdown of every hidden character, a structure summary, an editable preview, and a never-auto-run guarantee - before a paste or copy crosses.">
+<meta property="og:url" content="https://secure-terminal.github.io/review/">
+<meta property="og:image" content="https://secure-terminal.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="secure-terminal review bar">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="secure-terminal: the review bar">
+<meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
+<meta name="theme-color" content="#f3f2ee">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css?v=4">
+<style>
+  .rb-classes td.g{font-family:var(--mono);text-align:center;width:2.2em;font-size:1.1rem}
+  .rb-classes td.n{text-align:right;width:3.5em;font-variant-numeric:tabular-nums}
+  .rb-classes .hi td.g,.rb-classes .hi td.n{font-weight:700}
+  .rb-hi{color:#b3261e}.rb-med{color:#6d4000}.rb-low{color:var(--muted)}
+  .rb-struct{list-style:none;padding:0;margin:8px 0 0}
+  .rb-struct li{padding:4px 0;border-bottom:1px solid var(--line)}
+  .rb-struct b{font-family:var(--mono)}
+  .rb-ok{color:#0e6b3a;font-weight:700}
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
+    <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
+    <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
+    <label class="menubtn" for="navtoggle">Menu</label>
+    <nav>
+      <a href="/#features">Features</a>
+      <a href="/#install">Install</a>
+      <a href="/comparison/">Comparison</a>
+      <a href="/review/" class="active">Review Bar</a>
+      <a href="/attacks/">Attacks</a>
+      <a href="/ai-review/">AI Review</a>
+      <a href="/human-review/">Human Review</a>
+      <a href="/compatibility/">Compatibility</a>
+      <a href="/#faq">FAQ</a>
+      <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
+    </nav>
+    <label class="navscrim" for="navtoggle" aria-hidden="true"></label>
+  </div>
+</header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <p class="kicker">THE REVIEW BAR</p>
+  <h1>See exactly what a paste carries - before it reaches the shell.</h1>
+  <p class="lede">When text crossing the terminal boundary would carry unicode or control
+    characters - a paste coming in, or a selection copied out - secure-terminal holds it and
+    shows a review bar. No byte reaches the shell, or the clipboard, until you choose. It names
+    every hidden character by class, tells you what the text would do, lets you edit it, and
+    shows exactly what each choice would deliver.</p>
+</div></section>
+
+<div class="wrap"><nav class="toc" aria-label="On this page">
+  <p class="toch">On this page</p>
+  <ul>
+    <li><a href="#when">When it appears</a></li>
+    <li><a href="#breakdown">The hidden-character breakdown</a></li>
+    <li><a href="#structure">Structure, and never-auto-run</a></li>
+    <li><a href="#editable">Editable before delivery</a></li>
+    <li><a href="#directions">Paste and copy are not symmetric</a></li>
+  </ul>
+</nav></div>
+
+<section class="cat" id="when"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#when">When it appears</a></h2>
+  <p class="catdesc">The bar is not a modal you dismiss on every paste. It appears only when there
+    is something worth a second look.</p>
+  <div class="issue">
+    <p>By default (<code>paste_warn=unicode</code>, <code>copy_warn=unicode</code>) the bar appears
+      when the text carries any non-ASCII or control character - the case a
+      <a href="https://trojansource.codes/" rel="noopener">Trojan-Source</a> or
+      <a href="/attacks/">pastejacking</a> payload needs. A multi-line paste is held too, even when
+      it is pure ASCII, because a hidden second line could otherwise run the instant you paste. You
+      can set either direction to <code>always</code> (review every paste or copy) or
+      <code>never</code> (sanitize silently, no bar). While the bar is up, input to the child is
+      suspended: nothing crosses until you pick Reject, the ASCII form, or the unicode form.</p>
+  </div>
+</div></section>
+
+<section class="cat" id="breakdown"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#breakdown">The hidden-character breakdown</a></h2>
+  <p class="catdesc">A one-line summary tells you the headline; a table names every class present,
+    counts it, and shows what is <em>not</em> present too - so "nothing else is hiding" is explicit,
+    not assumed. Each class is tinted by the same risk colour the terminal draws it in.</p>
+  <div class="cmp-wrap">
+  <table class="cmp rb-classes">
+    <thead><tr><th>Class</th><th>What it is</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td class="g rb-hi">&#8596;</td><td>Bidirectional control</td><td>reorders the visible text (Trojan-Source)</td></tr>
+      <tr><td class="g rb-hi">&#9216;</td><td>Control character</td><td>C0 / DEL / C1 bytes</td></tr>
+      <tr class="hi"><td class="g rb-med">&#9251;</td><td>Invisible / zero-width</td><td>joins or hides characters you cannot see</td></tr>
+      <tr class="hi"><td class="g rb-med">&#8776;</td><td>Look-alike (homoglyph)</td><td>a Cyrillic letter posing as its ASCII twin</td></tr>
+      <tr><td class="g rb-med">&#9676;</td><td>Combining (Zalgo)</td><td>stacked accents piled on a base letter</td></tr>
+      <tr><td class="g rb-low">&#9532;</td><td>Box-drawing / blocks</td><td>honest line-drawing glyphs, low risk</td></tr>
+      <tr><td class="g rb-low">&#192;</td><td>Other non-ASCII</td><td>ordinary foreign or accented text</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="catdesc" style="margin-top:10px">The summary folds these into a short sentence
+    ("hides 1 bidirectional control, 1 invisible character"); the table is the full,
+    copyable detail. Alongside sits a mirror pane that renders exactly what each choice would
+    deliver - so a look-alike command is de-obfuscated to its real ASCII before you send it, and
+    cannot hide behind a button label.</p>
+</div></section>
+
+<section class="cat" id="structure"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#structure">Structure, and never-auto-run</a></h2>
+  <p class="catdesc">Beyond the characters, the bar summarises the shape of the paste - and
+    guarantees it cannot run on its own.</p>
+  <div class="issue">
+    <ul class="rb-struct">
+      <li><b>Lines</b> - how many commands it would be; a multi-line paste is flagged, because
+        each line is a command.</li>
+      <li><span class="rb-ok">&#10003;</span> <b>Runs on its own?</b> No. A paste never
+        auto-executes: at a shell prompt the trailing submit is removed, so the command waits at
+        the prompt for your own Enter. Under a full-screen program that has asked for bracketed
+        paste, the program receives the text as inert data instead.</li>
+      <li><b>Length</b> - characters and bytes (marked as a scanned prefix when a very large paste
+        is only partly scanned, so a capped count is never shown as a definite total).</li>
+    </ul>
+  </div>
+</div></section>
+
+<section class="cat" id="editable"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#editable">Editable before delivery</a></h2>
+  <p class="catdesc">If the paste is almost right, you do not have to reject it and start over.</p>
+  <div class="issue">
+    <p>The held text is editable in the bar. Trim the risky part, and the summary, the breakdown and
+      the mirror all update from what you typed. Delivery then sends exactly your edited buffer -
+      still run through the same sanitizer on the way out, so an edit can never bypass the
+      neutralization. What the bar shows is what crosses.</p>
+  </div>
+</div></section>
+
+<section class="cat" id="directions"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#directions">Paste and copy are not symmetric - by design</a></h2>
+  <p class="catdesc">You may notice a copy raise the bar while pasting the same text back does not.
+    That is correct, not a bug.</p>
+  <div class="issue">
+    <p>A <b>paste</b> is inspected as the raw clipboard bytes, in every display mode. A
+      <b>Ctrl+C copy</b> is inspected as the on-screen selection. In the box, reveal and detail
+      <a href="/#display-modes">display modes</a> the selection is already sanitized to ASCII, so nothing
+      risky can reach the clipboard and no review is needed; only in show mode, where real glyphs
+      are kept, does a copy raise the bar. A mouse selection (the X11 primary buffer) and
+      drag-and-drop are always hard-stripped to ASCII, so a middle-click paste of a selection is
+      safe without a review.</p>
+    <p>So when a copy raises the bar but pasting the same text back does not, it is because what
+      reached the clipboard was already safe - the terminal reviewed the risky direction and left
+      the harmless one alone.</p>
+  </div>
+  <div class="cta">
+    <a class="btn primary" href="/attacks/">See the attacks it stops</a>
+    <a class="btn ghost" href="/comparison/">Compare ten terminals</a>
+    <a class="btn ghost" href="/#install">Build it from source</a>
+  </div>
+</div></section>
+</main>
+<footer>
+  <div class="ftop">
+    <div class="fbrand">
+      <span class="ftag"><img src="/logo-wide.webp" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
+      <p>Paste in, read out. Every invisible, bidi, or look-alike byte arrives marked.</p>
+    </div>
+    <nav class="fcols">
+      <div class="fcol">
+        <h3>Project</h3>
+        <a href="https://github.com/secure-terminal">Organisation</a>
+        <a href="https://github.com/secure-terminal/secure-terminal.github.io">This page</a>
+      </div>
+      <div class="fcol">
+        <h3>Family</h3>
+        <a href="https://output-lies.github.io">output lies</a>
+        <a class="self" href="https://secure-terminal.github.io" aria-current="page">secure-terminal</a>
+        <a href="https://org-ai-assisted.github.io">org-ai-assisted</a>
+      </div>
+      <div class="fcol">
+        <h3>Safe text</h3>
+        <a href="https://github.com/Kicksecure/helper-scripts">helper-scripts</a>
+        <a href="https://www.kicksecure.com/wiki/Unicode-show">unicode-show</a>
+      </div>
+    </nav>
+  </div>
+  <div class="fshare">
+    <span class="fshare-l">Share:</span>
+    <noscript><style>.fshare a.sh,.fshare button.sh{display:none}</style><span class="sh-msg" style="color:var(--muted)">Sharing needs JavaScript, which is off - copy this page's address from your browser to share it.</span></noscript>
+    <a class="sh" data-net="x" rel="nofollow noopener">X</a>
+    <a class="sh" data-net="facebook" rel="nofollow noopener">Facebook</a>
+    <a class="sh" data-net="telegram" rel="nofollow noopener">Telegram</a>
+    <a class="sh" data-net="reddit" rel="nofollow noopener">Reddit</a>
+    <a class="sh" data-net="whatsapp" rel="nofollow noopener">WhatsApp</a>
+    <a class="sh" data-net="linkedin" rel="nofollow noopener">LinkedIn</a>
+    <a class="sh" data-net="hn" rel="nofollow noopener">Hacker News</a>
+    <a class="sh" data-net="mastodon" href="#" rel="nofollow noopener">Mastodon</a>
+    <a class="sh" data-net="email">Email</a>
+    <button class="sh" data-net="copy" type="button">Copy link</button>
+    <button class="sh" data-net="md" type="button">Copy as Markdown</button>
+    <span class="sh-msg" aria-live="polite"></span>
+  </div>
+  <script src="/share.js"></script>
+  <div class="ffree">
+    <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.webp" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
+    <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.webp" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>
+    <a class="freebadge" href="https://github.com/secure-terminal/secure-terminal.github.io/blob/master/LICENSE" rel="license">Licensed AGPL-3+</a>
+  </div>
+  <div class="fbot">
+    <span class="fcopy">&copy; 2026 <a href="https://www.encrypted-support.com">ENCRYPTED SUPPORT LLC</a></span>
+    <span class="fcopy sp"><a href="https://org-ai-assisted.github.io">Built with AI assistance</a></span>
+  </div>
+</footer>
+</html>
