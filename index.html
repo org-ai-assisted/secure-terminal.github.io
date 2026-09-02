@@ -290,25 +290,28 @@
   <figure class="shot" style="max-width:1000px;margin:28px auto 0">
     <figcaption class="shotname"><b>The paste review</b> - a <code>curl | bash</code> line hiding two Cyrillic
       homoglyphs (in <code>example</code> and <code>bash</code>), a zero-width space and a right-to-left override.</figcaption>
-    <a href="/shots/paste-warning.webp" target="_blank" rel="noopener"><img src="/shots/paste-warning.webp" width="2376" height="590" loading="lazy" alt="secure-terminal's in-window paste-review bar holding a hostile 'curl | bash' paste before any byte reaches the shell. A red dot and the summary 'This paste hides 2 non-ASCII characters.' head the bar, with a safe-green Reject button and a counting-down Paste (4) button top-right. Below is the ONE editable, revealed box that is the exact preview of what would cross: the paste is shown with its two Cyrillic look-alikes highlighted in their risk colour and named inline as U+0430 CYRILLIC SMALL LETTER A, while the zero-width and right-to-left-override characters have been dropped. A status line reads 'Keeping printable unicode - 2 hidden characters dropped', and three buttons offer Strip unicode, ASCII-fold and Restore original paste. A Structure section lists 1 line, a 'waits on the command line - press Enter to run' guarantee and a 63-character length, and a live per-class Hidden-characters table names Look-alike (homoglyph) 2 in bold, every other class 0."></a>
-    <figcaption>The bar names what is hidden at the top, then shows the paste in <b>one editable, revealed
-      box</b> that is the exact preview of what would cross - each look-alike tinted and named inline, the
-      invisibles dropped - and breaks it down in a <b>Structure</b> section and a live per-class
-      <b>Hidden characters</b> table. Three buttons transform the box in place: <b>Strip unicode</b> deletes
-      every non-ASCII character (the domain collapses to the visibly-broken <code>exmple.com</code>),
-      <b>ASCII-fold</b> folds each look-alike to the ASCII it imitates (revealing <code>example.com</code>),
-      and <b>Restore original paste</b> reverts. The <b>Paste</b> button delivers exactly the box and is
-      gated by an anti-fat-finger countdown; only <b>Reject</b> is available immediately. Rendered headless
-      from the real bar.</figcaption>
+    <a href="/shots/paste-warning.webp" target="_blank" rel="noopener"><img src="/shots/paste-warning.webp" width="2376" height="622" loading="lazy" alt="secure-terminal's in-window paste-review bar holding a hostile 'curl | bash' paste before any byte reaches the shell. A red dot and the summary 'This paste hides 1 bidirectional control, 1 invisible character, 2 non-ASCII characters.' head the bar, with a Restore original button, a safe-green Reject button and a red, disabled 'Paste blocked - 2 hidden' button top-right. Below is the ONE editable box that opens FULLY REVEALED: nothing is dropped, so the two Cyrillic look-alikes are highlighted and named inline as U+0430 CYRILLIC SMALL LETTER A, and the invisible and the reordering override are shown IN PLACE as named badges, U+200B ZERO WIDTH SPACE and U+202E RIGHT-TO-LEFT OVERRIDE. A status line reads 'Showing the full paste - 2 hidden characters (invisible / reordering / control) block sending; each is named in the box. Remove them (a Text transformation, or delete the badges) to continue.' Under a 'Text transformations:' heading three buttons offer Strip unicode, ASCII-fold and Keep printable unicode, each with a plain-language gloss. A Structure section lists 1 line, an 'If accepted: waits on the command line - press Enter to run' guarantee and a 65-character length, and a live per-class Hidden-characters table names Bidirectional control 1, Invisible / zero-width 1 and Look-alike (homoglyph) 2, every other class 0."></a>
+    <figcaption>The bar names what is hidden at the top, then shows the paste in <b>one editable box that opens
+      fully revealed</b> - nothing is silently pre-dropped, so a trap cannot hide by being cleaned away before
+      you see it: each look-alike is tinted and named inline, and every invisible or reordering character is
+      shown in place as a named badge. While any hidden character remains, the <b>Paste</b> button is disabled
+      and red (<b>blocked - N hidden</b>) so nothing unreviewed can cross. Three transforms clear it - <b>Strip
+      unicode</b> deletes every non-ASCII character (the domain collapses to the visibly-broken
+      <code>exmple.com</code>), <b>ASCII-fold</b> folds each look-alike to the ASCII it imitates (revealing
+      <code>example.com</code>), and <b>Keep printable unicode</b> drops only the invisible/reordering
+      characters - or you edit the box directly; <b>Restore original</b> re-reveals it. Paste then enables,
+      still gated by an anti-fat-finger countdown. Rendered headless from the real bar.</figcaption>
   </figure>
   <figure class="shot" style="max-width:1000px;margin:28px auto 0">
     <figcaption class="shotname"><b>The same bar, for copy going the other way</b> - selecting and copying that
       same line in Show mode, before it reaches the system clipboard.</figcaption>
-    <a href="/shots/copy-warning.webp" target="_blank" rel="noopener"><img src="/shots/copy-warning.webp" width="2376" height="564" loading="lazy" alt="secure-terminal's review bar reviewing a copy going out to the system clipboard. The summary reads 'This copy would carry 2 non-ASCII characters onto the clipboard.' It is the same single-box layout as the paste bar - one editable, revealed box that is the exact preview of what would cross (the two Cyrillic look-alikes highlighted and named inline, the invisibles dropped), a 'Keeping printable unicode - 2 hidden characters dropped' status line, Strip unicode / ASCII-fold / Restore original paste buttons, a Structure section, and a live per-class Hidden-characters table naming Look-alike (homoglyph) 2. The reject button reads Don't copy and the Copy button is available immediately; there is no countdown, since a copy is not executed."></a>
-    <figcaption>Copy is reviewed with the <b>same single-box bar</b>, relabelled for the other direction (the reject
-      button reads <b>Don't copy</b>). The box is the exact preview of what would land on the clipboard, and the
-      same Strip unicode / ASCII-fold / Restore buttons transform it in place. There is no countdown - a copy is
-      not executed, so the anti-fat-finger gate the paste needs does not apply.</figcaption>
+    <a href="/shots/copy-warning.webp" target="_blank" rel="noopener"><img src="/shots/copy-warning.webp" width="2376" height="622" loading="lazy" alt="secure-terminal's review bar reviewing a copy going out to the system clipboard. The summary reads 'This copy would carry 1 bidirectional control, 1 invisible character, 2 non-ASCII characters onto the clipboard.' It is the same fully-revealed single-box layout as the paste bar - the two Cyrillic look-alikes highlighted and named inline, the invisible and the reordering override shown in place as named badges - with a 'Showing the full copy - 2 hidden characters block sending' status line, Strip unicode / ASCII-fold / Keep printable unicode transforms, a Structure section whose 'If accepted' guarantee reads 'placed on the system clipboard (nothing runs)', and a live per-class Hidden-characters table naming Bidirectional control 1, Invisible / zero-width 1 and Look-alike (homoglyph) 2. The reject button reads Don't copy and the Copy button is disabled and red, 'Copy blocked - 2 hidden'; there is no countdown, since a copy is not executed."></a>
+    <figcaption>Copy is reviewed with the <b>same fully-revealed bar</b>, relabelled for the other direction (the
+      reject button reads <b>Don't copy</b>). The box is the exact preview of what would land on the clipboard,
+      and the same Strip unicode / ASCII-fold / Keep printable unicode transforms clear it. The <b>If accepted</b>
+      guarantee is shown here too - for a copy it reads <b>placed on the system clipboard (nothing runs)</b>, so
+      the row is consistent whichever direction you are in. There is no countdown - a copy is not executed, so
+      the anti-fat-finger gate the paste needs does not apply.</figcaption>
   </figure>
 </div></section>
 

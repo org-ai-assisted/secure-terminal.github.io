@@ -66,18 +66,32 @@
   <h1>See exactly what a paste carries - before it reaches the shell.</h1>
   <p class="lede">When text crossing the terminal boundary would carry unicode or control
     characters - a paste coming in, or a selection copied out - secure-terminal holds it and
-    shows a review bar. No byte reaches the shell, or the clipboard, until you choose. It names
-    every hidden character by class, tells you what the text would do, lets you edit it, and
-    shows exactly what each choice would deliver.</p>
+    shows a review bar. No byte reaches the shell, or the clipboard, until you choose. It opens the
+    text fully revealed - every hidden character named in place, nothing pre-dropped - names each one
+    by class, tells you what accepting it would do, and lets you clear it before it crosses.</p>
 </div></section>
+
+<div class="wrap">
+  <figure class="shot" style="max-width:1000px;margin:0 auto">
+    <figcaption class="shotname"><b>The paste review</b> - a <code>curl | bash</code> line hiding two Cyrillic
+      look-alikes (in <code>example</code> and <code>bash</code>), a zero-width space and a right-to-left override,
+      opened <b>fully revealed</b>.</figcaption>
+    <a href="/shots/paste-warning.webp" target="_blank" rel="noopener"><img src="/shots/paste-warning.webp" width="2376" height="622" loading="lazy" alt="secure-terminal's in-window paste-review bar holding a hostile 'curl | bash' paste before any byte reaches the shell. A red dot and the summary 'This paste hides 1 bidirectional control, 1 invisible character, 2 non-ASCII characters.' head the bar, with a Restore original button, a safe-green Reject button and a red, disabled 'Paste blocked - 2 hidden' button top-right. The ONE editable box opens fully revealed: nothing is dropped, so the two Cyrillic look-alikes are highlighted and named inline as U+0430 CYRILLIC SMALL LETTER A, and the invisible and the reordering override are shown in place as named badges, U+200B ZERO WIDTH SPACE and U+202E RIGHT-TO-LEFT OVERRIDE. A status line reads 'Showing the full paste - 2 hidden characters block sending; each is named in the box. Remove them to continue.' Under a 'Text transformations:' heading, Strip unicode, ASCII-fold and Keep printable unicode buttons each carry a plain-language gloss. A Structure section lists 1 line, an 'If accepted: waits on the command line - press Enter to run' guarantee and a 65-character length; a live per-class Hidden-characters table names Bidirectional control 1, Invisible / zero-width 1 and Look-alike (homoglyph) 2, every other class 0."></a>
+  </figure>
+  <figure class="shot" style="max-width:1000px;margin:24px auto 0">
+    <figcaption class="shotname"><b>The same bar for a copy</b> - the "If accepted" row is present here too, and
+      reads <code>placed on the system clipboard (nothing runs)</code>.</figcaption>
+    <a href="/shots/copy-warning.webp" target="_blank" rel="noopener"><img src="/shots/copy-warning.webp" width="2376" height="622" loading="lazy" alt="secure-terminal's review bar reviewing a copy going out to the system clipboard. The summary reads 'This copy would carry 1 bidirectional control, 1 invisible character, 2 non-ASCII characters onto the clipboard.' It is the same fully-revealed single-box layout as the paste bar, with Strip unicode / ASCII-fold / Keep printable unicode transforms and a Structure section whose 'If accepted' guarantee reads 'placed on the system clipboard (nothing runs)'. The reject button reads Don't copy and the Copy button is disabled and red, 'Copy blocked - 2 hidden'; there is no countdown, since a copy is not executed."></a>
+  </figure>
+</div>
 
 <div class="wrap"><nav class="toc" aria-label="On this page">
   <p class="toch">On this page</p>
   <ul>
     <li><a href="#when">When it appears</a></li>
     <li><a href="#breakdown">The hidden-character breakdown</a></li>
-    <li><a href="#structure">Structure, and never-auto-run</a></li>
-    <li><a href="#editable">Editable before delivery</a></li>
+    <li><a href="#structure">Structure, and the guarantee</a></li>
+    <li><a href="#editable">Revealed first, then editable</a></li>
     <li><a href="#directions">Paste and copy are not symmetric</a></li>
   </ul>
 </nav></div>
@@ -94,7 +108,7 @@
       it is pure ASCII, because a hidden second line could otherwise run the instant you paste. You
       can set either direction to <code>always</code> (review every paste or copy) or
       <code>never</code> (sanitize silently, no bar). While the bar is up, input to the child is
-      suspended: nothing crosses until you pick Reject, the ASCII form, or the unicode form.</p>
+      suspended: nothing crosses until you Reject or clear the hidden characters and deliver.</p>
   </div>
 </div></section>
 
@@ -119,24 +133,36 @@
   </div>
   <p class="catdesc" style="margin-top:10px">The summary folds these into a short sentence
     ("hides 1 bidirectional control, 1 invisible character"); the table is the full,
-    copyable detail, and it recomputes live from the box on every edit. The box itself renders
-    exactly what would be delivered - each look-alike tinted and named inline - so a look-alike
-    command cannot hide behind a plain-text field, and the ASCII-fold button de-obfuscates it to
-    its real ASCII before you send it.</p>
+    copyable detail, and it recomputes live from the box on every edit. The box itself renders the
+    text fully revealed - each look-alike tinted and named inline, every invisible or reordering
+    character shown in place as a named badge - so a look-alike command cannot hide behind a
+    plain-text field, and the ASCII-fold button de-obfuscates it to its real ASCII before you send it.</p>
 </div></section>
 
 <section class="cat" id="structure"><div class="wrap">
-  <h2 class="catname"><a class="h-anchor" href="#structure">Structure, and never-auto-run</a></h2>
-  <p class="catdesc">Beyond the characters, the bar summarises the shape of the paste - and
-    guarantees it cannot run on its own.</p>
+  <h2 class="catname"><a class="h-anchor" href="#structure">Structure, and the "If accepted" guarantee</a></h2>
+  <p class="catdesc">Beyond the characters, the bar summarises the shape of the text - and tells you,
+    on an <b>"If accepted"</b> row that is <b>always present</b>, exactly what accepting it would do.</p>
   <div class="issue">
     <ul class="rb-struct">
       <li><b>Lines</b> - how many commands it would be; a multi-line paste is flagged, because
         each line is a command.</li>
-      <li><span class="rb-ok">&#10003;</span> <b>Runs on its own?</b> No. A paste never
-        auto-executes: at a shell prompt the trailing submit is removed, so the command waits at
-        the prompt for your own Enter. Under a full-screen program that has asked for bracketed
-        paste, the program receives the text as inert data instead.</li>
+      <li><span class="rb-ok">&#10003;</span> <b>If accepted</b> - shown in <b>every direction</b>, so the
+        guarantee never appears and disappears as you switch between pasting and copying. What it says
+        depends on where the bytes would land:
+        <ul>
+          <li><b>Paste at a shell prompt</b> - the trailing submit byte is removed, so the command
+            <b>waits on the command line for your own Enter</b>. It never runs on its own.</li>
+          <li><b>Paste into a full-screen program that asked for bracketed paste</b> (DEC 2004) - the
+            program <b>receives the text as inert data</b>, not keystrokes.</li>
+          <li><b>Paste into a program running in raw mode with no bracketed paste</b> (an editor in
+            insert mode, a raw-key REPL) - there is no command line to wait at, so the row says, in
+            amber, that the program <b>receives it immediately as keystrokes</b>. It still never
+            auto-runs a shell command (the trailing submit is gone), but the row does not pretend an
+            Enter is waiting - it tells you the honest truth for that case.</li>
+          <li><b>Copy or clipboard</b> - the text is <b>placed as clipboard data, and nothing runs</b>.</li>
+        </ul>
+      </li>
       <li><b>Length</b> - characters and bytes (marked as a scanned prefix when a very large paste
         is only partly scanned, so a capped count is never shown as a definite total).</li>
     </ul>
@@ -144,14 +170,20 @@
 </div></section>
 
 <section class="cat" id="editable"><div class="wrap">
-  <h2 class="catname"><a class="h-anchor" href="#editable">Editable before delivery</a></h2>
-  <p class="catdesc">If the paste is almost right, you do not have to reject it and start over.</p>
+  <h2 class="catname"><a class="h-anchor" href="#editable">Revealed first, then editable</a></h2>
+  <p class="catdesc">The box opens <b>fully revealed</b> - nothing is silently pre-dropped, so a trap
+    cannot hide by being cleaned away before you preview it. You clear it deliberately.</p>
   <div class="issue">
-    <p>The one revealed box IS editable. Trim the risky part, and the summary, the breakdown and the
-      box all update from what you typed; three buttons also transform it in place - Strip unicode,
-      ASCII-fold, or Restore original paste. Delivery then sends exactly the box - still run through
-      the same sanitizer on the way out, so an edit can never bypass the neutralization. What the box
-      shows is what crosses.</p>
+    <p>Every hidden character stays in place, named and risk-coloured. While any invisible, reordering
+      or control character remains, the deliver button is <b>disabled and red</b> ("<b>blocked - N
+      hidden</b>"), so nothing unreviewed can cross. You clear it with one of three labelled transforms
+      - <b>Strip unicode</b> (delete every non-ASCII character), <b>ASCII-fold</b> (replace each
+      look-alike with the plain letter it imitates) or <b>Keep printable unicode</b> (drop the
+      invisible/reordering characters, keep the rest) - or by editing the box directly; the summary,
+      the breakdown and the box all recompute from what you typed. <b>Restore original</b> re-reveals
+      the untouched text at any time. Delivery then enables and sends exactly the box - still run
+      through the same sanitizer on the way out, so an edit can never bypass the neutralization. What
+      the box shows is what crosses.</p>
   </div>
 </div></section>
 
