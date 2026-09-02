@@ -119,9 +119,10 @@
   </div>
   <p class="catdesc" style="margin-top:10px">The summary folds these into a short sentence
     ("hides 1 bidirectional control, 1 invisible character"); the table is the full,
-    copyable detail. Alongside sits a mirror pane that renders exactly what each choice would
-    deliver - so a look-alike command is de-obfuscated to its real ASCII before you send it, and
-    cannot hide behind a button label.</p>
+    copyable detail, and it recomputes live from the box on every edit. The box itself renders
+    exactly what would be delivered - each look-alike tinted and named inline - so a look-alike
+    command cannot hide behind a plain-text field, and the ASCII-fold button de-obfuscates it to
+    its real ASCII before you send it.</p>
 </div></section>
 
 <section class="cat" id="structure"><div class="wrap">
@@ -146,10 +147,11 @@
   <h2 class="catname"><a class="h-anchor" href="#editable">Editable before delivery</a></h2>
   <p class="catdesc">If the paste is almost right, you do not have to reject it and start over.</p>
   <div class="issue">
-    <p>The held text is editable in the bar. Trim the risky part, and the summary, the breakdown and
-      the mirror all update from what you typed. Delivery then sends exactly your edited buffer -
-      still run through the same sanitizer on the way out, so an edit can never bypass the
-      neutralization. What the bar shows is what crosses.</p>
+    <p>The one revealed box IS editable. Trim the risky part, and the summary, the breakdown and the
+      box all update from what you typed; three buttons also transform it in place - Strip unicode,
+      ASCII-fold, or Restore original paste. Delivery then sends exactly the box - still run through
+      the same sanitizer on the way out, so an edit can never bypass the neutralization. What the box
+      shows is what crosses.</p>
   </div>
 </div></section>
 
