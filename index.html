@@ -321,8 +321,8 @@
   <p class="catdesc">When you need to run ssh, an editor like vim, or htop, opt in with your eyes open.</p>
   <article class="issue risk">
     <h3 id="tui-mode"><a class="h-anchor" href="#tui-mode"><span class="flag">Opt-in, clearly flagged</span> / ssh, vim, htop, tmux</a></h3>
-    <p>The strict default cannot run curses apps. TUI mode (per tab, off by default, marked with a yellow risk
-      indicator) interprets escapes inside an isolated in-memory screen model (<code>pyte</code>) that has no OS
+    <p>The strict default cannot run curses apps. TUI mode (per tab, off by default, clearly marked in the
+      toolbar and status bar) interprets escapes inside an isolated in-memory screen model (<code>pyte</code>) that has no OS
       reach: by default it <b>cannot set the window title or touch the clipboard</b>. Each such OSC side-effect is
       a separate opt-in toggle (off by default) that dims a security indicator when enabled, so those spoofing
       vectors stay closed unless you deliberately open one. Every character it places is <b>still
