@@ -15,7 +15,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="secure-terminal">
 <meta property="og:title" content="secure-terminal vs a normal terminal: hostile byte streams">
-<meta property="og:description" content="Hostile bytes, side by side: the same board fed to ten popular terminal emulators and to secure-terminal on shipped defaults. Normal terminals interpret the escape sequences; secure-terminal reduces them to inert printable ASCII.">
+<meta property="og:description" content="The same attack text, side by side: one board fed to ten popular terminal emulators and to secure-terminal on shipped defaults. Normal terminals interpret the escape sequences; secure-terminal reduces them to inert printable ASCII.">
 <meta property="og:url" content="https://secure-terminal.github.io/comparison/">
 <meta property="og:image" content="https://secure-terminal.github.io/og.png">
 <meta property="og:image:width" content="1200">
@@ -38,6 +38,7 @@
       <a href="/#features">Features</a>
       <a href="/#install">Install</a>
       <a href="/comparison/" class="active">Comparison</a>
+      <a href="/screenshots/">Screenshots</a>
       <a href="/review/">Review Bar</a>
       <a href="/attacks/">Attacks</a>
       <a href="/ai-review/">AI Review</a>
@@ -52,14 +53,14 @@
 
 <main>
 <section class="hero" id="compare"><div class="wrap">
-  <p class="kicker">Hostile bytes, side by side</p>
-  <h1>The same hostile board, ten terminals.</h1>
+  <p class="kicker">Comparison of terminal emulators</p>
+  <h1>The same attack text, ten terminals.</h1>
   <p class="lede">A normal terminal interprets untrusted bytes - random data, program output, a hostile log -
     as escape sequences: they can garble the screen, force colours, rewrite the window title, or overwrite the
     clipboard. secure-terminal reduces the identical bytes to inert printable ASCII.</p>
   <!-- no-JS: every switcher and info-row toggle here is CSS-only (hidden radio/checkbox +
        :checked sibling combinator). Keep it that way; do NOT advertise the no-JS behavior on the page. -->
-  <p class="catdesc">The same hostile board, fed to ten popular emulators and to secure-terminal on shipped
+  <p class="catdesc">The same attack text, fed to ten popular emulators and to secure-terminal on shipped
     defaults, each on an isolated headless display. Tested <b>2026-08-12</b>.</p>
 
   <nav class="toc" aria-label="On this page">
@@ -122,7 +123,7 @@
             <td class="verdict"><span class="vd ok"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6.3 11.4 3 8.1l1.2-1.2 2.1 2.1 5.5-5.5L13 4.7z"/></svg>Safe</span></td>
             <td class="verdict"><span class="vd bad"><svg class="vico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4.5 3.4 8 6.9l3.5-3.5 1.1 1.1L9.1 8l3.5 3.5-1.1 1.1L8 9.1l-3.5 3.5-1.1-1.1L6.9 8 3.4 4.5z"/></svg>Triggers tricks</span></td>
           </tr>
-          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-view" checked><label class="rowsum" for="ri-view">Why merely viewing a hostile file is the whole attack<span class="ihint"><span class="ihint-show">Show</span><span class="ihint-hide">Hide</span></span></label><div class="ibody">
+          <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-view"><label class="rowsum" for="ri-view">Why merely viewing a hostile file is the whole attack<span class="ihint"><span class="ihint-show">Show</span><span class="ihint-hide">Hide</span></span></label><div class="ibody">
             <p>Every escape trick on this page fires just by being <em>displayed</em> - viewing an attacker's log or diff is enough, no execution needed. The board below is one safe, display-only file shown in a normal terminal and in secure-terminal, side by side: the normal terminal interprets the escapes; secure-terminal reduces the identical bytes to inert, marked ASCII. Switch the compared terminal and the secure-terminal view with the controls above.</p>
             <div class="shotgrid board2" id="combined">
         <div class="sv m-cli u-box"><figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> (CLI, Box) - the whole board reduced to inert ASCII: title untouched, alt-screen stripped, line-drawing literal, the hidden <code>SECRET</code> forced readable, every hidden/look-alike byte an inert risk-coloured box.</figcaption><a href="shots/secure-terminal.tui-showcase.webp" target="_blank" rel="noopener"><img src="shots/secure-terminal.tui-showcase.webp" width="1722" height="1062" loading="lazy" alt="secure-terminal in CLI Box mode on the combined board: title still reads secure-terminal, the plaintext warning and scrollback intact, the DEC frame shown as literal characters, the SGR-hidden SECRET forced readable, each homoglyph, zero-width, bidi and foreign byte an inert box coloured by its risk class."></a></figure></div>
