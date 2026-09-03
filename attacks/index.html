@@ -38,6 +38,7 @@
       <a href="/#features">Features</a>
       <a href="/#install">Install</a>
       <a href="/comparison/">Comparison</a>
+      <a href="/screenshots/">Screenshots</a>
       <a href="/review/">Review Bar</a>
       <a href="/attacks/" class="active">Attacks</a>
       <a href="/ai-review/">AI Review</a>
@@ -57,8 +58,11 @@
   <p class="lede">The worst terminal attack needs no hostile file - only your habit of copying a command from a
     web page. Try it below, then read the deception and clipboard classes that still work on a stock,
     up-to-date terminal today. Every one links a proof in the
-    <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>.
-    For the side-by-side terminal verdicts, see the <a href="/comparison/">comparison</a>.</p>
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a> and an
+    explainer on <a href="https://output-lies.github.io/" rel="noopener">output lies</a> - the sister site
+    cataloguing how diffs, terminals and logs render bytes as instructions, whose
+    <a href="https://output-lies.github.io/paste/" rel="noopener">Paste</a> page is the fuller treatment of this
+    very attack. For the side-by-side terminal verdicts, see the <a href="/comparison/">comparison</a>.</p>
 </div></section>
 
 <div class="wrap"><nav class="toc" aria-label="On this page">
@@ -66,6 +70,9 @@
   <ul>
     <li><a href="#paste-demo">Live demo</a></li>
     <li><a href="#still">What still bites</a></li>
+    <li><a href="#cat-exec">The historical one</a></li>
+    <li><a href="#review-surface">Code review</a></li>
+    <li><a href="#test-yourself">Test yourself</a></li>
   </ul>
 </nav></div>
 
@@ -101,7 +108,7 @@
     <code>&amp;&amp;</code> seam - it draws nothing, so a normal terminal shows no sign it is there. Real classes,
     not hypotheticals: this is <b>pastejacking</b>, and the same paste channel carries
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/bracketed-paste-bypass-2021" rel="noopener">bracketed-paste bypass</a>
-    and <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener">Trojan Source</a> tricks.</p>
+    and <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener">Trojan Source</a> tricks. The same channel is behind the in-the-wild <a href="https://output-lies.github.io/paste/#clickfix" rel="noopener">ClickFix</a> campaigns and the <a href="https://output-lies.github.io/paste/#autorun" rel="noopener">newline auto-run</a> mechanism.</p>
   <p class="catdesc"><b>secure-terminal strips the smuggling.</b> A paste carrying any invisible, control or bidi
     character is caught before it reaches your shell: secure-terminal names exactly what is hidden in it
     (<span class="yes">"1 invisible character"</span>) and lets you drop it to plain ASCII or cancel - so nothing
@@ -115,26 +122,90 @@
 <section class="cat" id="still"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#still">And what still bites your terminal today</a></h2>
   <p class="catdesc">The paste above is one vector. These deception and clipboard classes still work on a
-    stock, up-to-date terminal today - each links a proof in the corpus, and the
-    <a href="/comparison/">comparison matrix</a> shows the per-terminal verdict.</p>
+    stock, up-to-date terminal today - each links a proof in the corpus, an
+    <a href="https://output-lies.github.io/terminal/#classes" rel="noopener">output-lies explainer</a>, and the
+    <a href="/comparison/">comparison matrix</a> for the per-terminal verdict, with the "how secure-terminal
+    handles it" note inline in each row.</p>
   <div class="cmp-wrap"><table class="cmp">
     <thead><tr><th>Still-applicable issue</th><th>What it does</th><th>Reach</th></tr></thead>
     <tbody>
-      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener"><b>Trojan Source</b> (bidi override)</a> - <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a></td><td>Bidirectional control characters reorder how a line renders, so the code you read is not the code that runs. Shown live in the <a href="/comparison/#combined">combined board</a>.</td><td>Any bidi-aware renderer - code hosts, editors, and terminals that implement bidi.</td></tr>
-      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/homoglyph-2021" rel="noopener"><b>Homoglyph</b> look-alikes</a></td><td>Non-ASCII characters identical in shape to ASCII (Cyrillic a, Greek o) make a fake command or URL read as legitimate.</td><td>Universal.</td></tr>
-      <tr><td><a href="#paste-demo"><b>Invisible / zero-width</b> characters</a></td><td>Zero-width and other invisibles draw nothing, so a command or a paste can carry hidden bytes you never see (the demo above), and boxed in the <a href="/comparison/#combined">combined board</a>.</td><td>Universal.</td></tr>
-      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/osc52-clipboard-write" rel="noopener"><b>Clipboard hijack</b> (OSC 52)</a></td><td>A viewed file or a program's output silently overwrites your clipboard, so your next paste inserts attacker text.</td><td>Terminal-dependent - <a href="/comparison/#clipboard">we measured it</a>: konsole, alacritty and kitty write it by default; xterm/urxvt/st and VTE (gnome/xfce4/mate) refuse; secure-terminal refuses too.</td></tr>
-      <tr><td><a href="/comparison/#row-title"><b>Title / tab hijack</b> (OSC 0/2)</a></td><td>Any output renames your window or tab to anything - a fake "production" label, a spoofed context.</td><td>Most terminals - shown live in the <a href="/comparison/#combined">combined board</a> (konsole and kitty are partial exceptions).</td></tr>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener"><b>Trojan Source</b> (bidi override)</a> - <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a></td><td>Bidirectional control characters reorder how a line renders, so the code you read is not the code that runs. Shown live in the <a href="/comparison/#combined">combined board</a>. <b>secure-terminal:</b> every bidi control renders as an inert, risk-coloured box or a named <code>&lt;U+202E&gt;</code> badge, so the reorder never happens (<a href="/comparison/#row-bidi">measured Safe</a>) - dissected on <a href="https://output-lies.github.io/git-diffs-lie/#bidi" rel="noopener">output lies</a>.</td><td>Any bidi-aware renderer - code hosts, editors, and terminals that implement bidi.</td></tr>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/homoglyph-2021" rel="noopener"><b>Homoglyph</b> look-alikes</a></td><td>Non-ASCII characters identical in shape to ASCII (Cyrillic a, Greek o) make a fake command or URL read as legitimate. <b>secure-terminal:</b> every non-ASCII byte is tinted by risk class and can be named inline as <code>&lt;U+XXXX&gt;</code>, so a look-alike cannot pose as ASCII (<a href="/comparison/#row-homoglyph">measured Safe</a>) - see it on <a href="https://output-lies.github.io/git-diffs-lie/#homoglyph" rel="noopener">output lies</a>.</td><td>Universal.</td></tr>
+      <tr><td><a href="#paste-demo"><b>Invisible / zero-width</b> characters</a></td><td>Zero-width and other invisibles draw nothing, so a command or a paste can carry hidden bytes you never see (the demo above), and boxed in the <a href="/comparison/#combined">combined board</a>. <b>secure-terminal:</b> each invisible byte is forced to a visible, inert box or named badge, in output and in a reviewed paste alike (<a href="/comparison/#row-zerowidth">measured Safe</a>) - x-ray any string on <a href="https://output-lies.github.io/analyze/" rel="noopener">output lies</a>.</td><td>Universal.</td></tr>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/osc52-clipboard-write" rel="noopener"><b>Clipboard hijack</b> (OSC 52)</a></td><td>A viewed file or a program's output silently overwrites your clipboard, so your next paste inserts attacker text. <b>secure-terminal:</b> output can never write the system clipboard (<a href="/comparison/#clipboard">measured Safe/off</a>).</td><td>Terminal-dependent - <a href="/comparison/#clipboard">we measured it</a>: konsole, alacritty and kitty write it by default; xterm/urxvt/st, qterminal and VTE (gnome/xfce4/mate) refuse; secure-terminal refuses too.</td></tr>
+      <tr><td><a href="/comparison/#row-title"><b>Title / tab hijack</b> (OSC 0/2)</a></td><td>Any output renames your window or tab to anything - a fake "production" label, a spoofed context. <b>secure-terminal:</b> the title is never touched by output (<a href="/comparison/#row-title">Never touched</a>).</td><td>Most terminals - shown live in the <a href="/comparison/#combined">combined board</a> (konsole and kitty are partial exceptions).</td></tr>
+      <tr><td><a href="https://output-lies.github.io/terminal/#osc8" rel="noopener"><b>Hyperlink spoof</b> (OSC 8)</a> - <a href="https://nvd.nist.gov/vuln/detail/CVE-2023-46322" rel="noopener">CVE-2023-46322</a></td><td>A terminal hyperlink whose visible label reads <code>example.com</code> but whose real target is set separately in the escape, so the text you click is not where you go. <b>secure-terminal:</b> ships OSC 8 <a href="/#escape-controls">off by default</a>, so the link is never made clickable and the raw target shows as inert text.</td><td>Any OSC 8-aware terminal - neutralized on <a href="https://output-lies.github.io/terminal/#osc8" rel="noopener">output lies</a>.</td></tr>
+      <tr><td><a href="https://output-lies.github.io/terminal/#stcat" rel="noopener"><b>Escape repaint / cursor hide-text</b></a></td><td>A cursor-up plus erase-line (or a stuck red-on-red colour) rewrites or conceals output already on screen, so a build log shows <code>PASS</code> over the real <code>FAIL</code>. <b>secure-terminal:</b> parses no escape sequences (<a href="/comparison/#row-escape">Not parsed</a>) and its <a href="/comparison/#row-contrast">contrast guard</a> forces any colour legible, so nothing a program prints can repaint the screen or reach a line already scrolled past.</td><td>Every ANSI terminal - measured in the <a href="/comparison/#row-escape">comparison</a>.</td></tr>
+      <tr><td><a href="https://output-lies.github.io/terminal/#altscreen" rel="noopener"><b>Alt-screen forge</b></a> (?1049h)</td><td>Output switches to the alternate screen, paints a fake "ALL GREEN" dashboard, then leaves - restoring your scrollback so no trace remains. <b>secure-terminal:</b> the default CLI line mode strips <code>?1049h</code> and shows the log as inert text with scrollback intact; real full-screen programs need <a href="/comparison/#row-fullscreen">opt-in TUI mode</a>.</td><td>Every terminal supports alt-screen; the deception is the forged paint.</td></tr>
+      <tr><td><a href="https://output-lies.github.io/terminal/#classes" rel="noopener"><b>Control bytes / NUL truncation</b></a></td><td>C0/C1 control bytes truncate a line at a NUL, inject escapes, or forge the prompt. <b>secure-terminal:</b> renders every control byte as an inert box named <code>&lt;U+XXXX&gt;</code> - nothing truncates, executes, or repaints (<a href="/comparison/#row-escape">Not parsed</a>).</td><td>Universal - a cheat-sheet class on <a href="https://output-lies.github.io/" rel="noopener">output lies</a>.</td></tr>
+      <tr><td><a href="https://output-lies.github.io/terminal/#board" rel="noopener"><b>Combining marks / Zalgo</b> &amp; <b>fullwidth forms</b></a></td><td>Stacked combining marks (U+0300-036F) overflow a cell and disguise letters; fullwidth forms (U+FF01-FF5E) are wide look-alikes of ASCII. <b>secure-terminal:</b> both are non-ASCII, so they show as inert risk-coloured boxes or named badges; heavy Zalgo collapses to boxes even in <a href="/comparison/#combined">Show mode</a>.</td><td>Universal.</td></tr>
+      <tr><td><a href="https://output-lies.github.io/terminal/#classes" rel="noopener"><b>Notification spoof</b> (OSC 9 / 99)</a> - <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-41322" rel="noopener">CVE-2022-41322</a></td><td>Program output raises a desktop notification carrying attacker text. <b>secure-terminal:</b> keeps notifications <a href="/comparison/#row-notify">off by default</a>, so output can never raise one silently.</td><td>Terminals that implement OSC 9/99.</td></tr>
+      <tr><td><a href="https://output-lies.github.io/terminal/#classes" rel="noopener"><b>Clipboard read / query reflection</b></a> (OSC 52 read, DA, answerback)</td><td>Output asks the terminal to read your clipboard, or reflects a query (title, cursor, DECRQSS) back onto your shell's input. <b>secure-terminal:</b> interprets no escapes, so nothing on the output path can read the clipboard or write to the pty (<a href="/comparison/#row-clipread">measured Safe/off</a>); clipboard read is off by default behind an ask-once-per-tab human gate.</td><td>Terminal-dependent - see the <a href="/comparison/#row-clipread">comparison</a>.</td></tr>
+      <tr><td><a href="https://output-lies.github.io/quiz/" rel="noopener"><b>ASCII look-alikes</b> (rn = m)</a></td><td>Pure ASCII, no Unicode at all: <code>exarnple.com</code> reads as <code>example.com</code> because <code>rn</code> looks like <code>m</code>. <b>Honest limit:</b> no terminal, secure-terminal included, can flag this - there is nothing hidden in the bytes to surface. The only defense is reading character by character; the <a href="https://output-lies.github.io/quiz/" rel="noopener">quiz</a> trains it.</td><td>Universal; unaffected by any byte-surfacing tool.</td></tr>
+      <tr><td><a href="https://output-lies.github.io/paste/#clickfix" rel="noopener"><b>ClickFix / paste-and-run</b></a> - <a href="https://attack.mitre.org/techniques/T1204/004/" rel="noopener">T1204.004</a></td><td>A fake CAPTCHA pre-loads a command onto your clipboard and tells you to paste it into a terminal. <b>Actively exploited</b> (Red Canary's #2 initial-access vector of 2025). <b>secure-terminal:</b> the <a href="/#paste-warning">paste review bar</a> holds every paste before a byte reaches the shell, names what is hidden, and gates the send button - a multi-line or invisible-laced paste cannot auto-run.</td><td>In the wild now - see <a href="https://output-lies.github.io/paste/#clickfix" rel="noopener">output lies: paste</a>.</td></tr>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/bracketed-paste-bypass-2021" rel="noopener"><b>Bracketed-paste bypass</b></a> - <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-31701" rel="noopener">CVE-2021-31701</a></td><td>An escape embedded in the paste closes the bracketed-paste guard early so the tail auto-runs. <b>secure-terminal:</b> sanitizes every paste to reviewed ASCII and strips the guard-breaking escape (<a href="/comparison/#row-paste">measured Safe</a>), so the bypass has nothing to break.</td><td>Terminals relying on bracketed paste - <a href="https://output-lies.github.io/paste/#autorun" rel="noopener">how it slips through</a>.</td></tr>
     </tbody>
   </table></div>
-  <p class="catdesc">secure-terminal closes all five by design: non-ASCII becomes an inert,
-    risk-coloured box (or a revealed <code>&lt;U+XXXX&gt;</code>), the clipboard is never written from
-    output, and the title is never touched - proven against each payload by the corpus's
-    <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/harness/adversarial.py" rel="noopener">adversarial harness</a>.</p>
+  <p class="catdesc">secure-terminal closes these classes by design: non-ASCII becomes an inert,
+    risk-coloured box (or a revealed <code>&lt;U+XXXX&gt;</code>), no escape sequence is parsed, the clipboard is
+    never written from output, and the title is never touched - proven against each payload by the corpus's
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/harness/adversarial.py" rel="noopener">adversarial harness</a>.
+    The one it cannot close is the pure-ASCII look-alike (<code>rn</code> = m): no byte tool can, so read carefully.</p>
   <div class="cta">
     <a class="btn primary" href="/comparison/">See the per-terminal comparison</a>
     <a class="btn ghost" href="/#install">Install secure-terminal</a>
   </div>
+</div></section>
+
+<section class="cat" id="cat-exec"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#cat-exec">The historical one: "a log file can run code"</a></h2>
+  <p class="catdesc">For 20 years, some escape sequences asked the terminal a question - report the title, a
+    DECRQSS status, the cursor - and the terminal answered by writing the reply into your shell's input.
+    Chained with a newline, merely <code>cat</code>-ing a poisoned file could inject keystrokes and run a command.
+    <b>This is not a live threat on a current, default terminal:</b> modern emulators mitigate it (empty or
+    one-shot answerback, no auto-execute of replies, bracketed paste). We do not claim otherwise - the
+    <a href="https://output-lies.github.io/terminal/#escape-rce" rel="noopener">full CVE trail and a safe demo are on
+    output lies</a> (iTerm2, xterm, Windows Terminal, and the 2024 Ghostty / iTerm2 recurrence). It is worth
+    naming only because the mechanism - output reflected onto the input wire - is the same one the
+    <a href="/comparison/#row-clipread">reflection</a> and <a href="/comparison/#row-inject">input-injection</a> rows
+    measure.</p>
+  <p class="catdesc"><b>How secure-terminal handles it:</b> it parses no escape sequences at all, so the class
+    cannot arise - there is nothing to reflect and nothing to auto-run (<a href="/comparison/#row-rce">comparison</a>).
+    Proofs in the <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>
+    are canary-token only, never a live command.</p>
+</div></section>
+
+<section class="cat" id="review-surface"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#review-surface">The same lie, one layer over: code review</a></h2>
+  <p class="catdesc">A terminal is not the only place untrusted bytes get rendered as something you trust. When
+    you review a diff, the bidi, homoglyph, zero-width and control-byte tricks above ride in filenames,
+    identifiers and branch names - and git adds its own: a submodule pointer bump, a retargeted symlink, an
+    executable-bit flip, a <code>.gitattributes</code> that hides a file, a NUL that flips a source file to
+    "binary". output-lies collects them as browsable, safe git branches:
+    <a href="https://output-lies.github.io/git-diffs-lie/" rel="noopener">git diffs lie</a>.</p>
+  <p class="catdesc"><b>What secure-terminal does and does not do here.</b> Viewing a hostile diff <em>in</em>
+    secure-terminal neutralizes the display-layer bytes - a
+    <a href="https://output-lies.github.io/git-diffs-lie/#bidi-filename" rel="noopener">bidi filename</a>, a
+    <a href="https://output-lies.github.io/git-diffs-lie/#homoglyph" rel="noopener">homoglyph identifier</a>, a
+    <a href="https://output-lies.github.io/git-diffs-lie/#zero-width" rel="noopener">zero-width split</a> or a
+    <a href="https://output-lies.github.io/git-diffs-lie/#refname" rel="noopener">spoofed ref name</a> arrives marked,
+    not rendered. But the <em>git-semantic</em> traps (a mode bit, a
+    <a href="https://output-lies.github.io/git-diffs-lie/#submodule" rel="noopener">submodule pointer</a>, a
+    <a href="https://output-lies.github.io/git-diffs-lie/#gitattributes" rel="noopener">.gitattributes</a>) are not a
+    display problem a terminal can judge - those need the safe git review drivers from Kicksecure's
+    <a href="https://github.com/Kicksecure/helper-scripts" rel="noopener">helper-scripts</a>, which neutralize,
+    surface, and fail closed. Same principle, different tool.</p>
+</div></section>
+
+<section class="cat" id="test-yourself"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#test-yourself">Test yourself, and test your own tools</a></h2>
+  <p class="catdesc">Every class above is caught the same way: surface the raw bytes instead of trusting what
+    they render to. Paste any URL, filename or command into output-lies'
+    <a href="https://output-lies.github.io/analyze/" rel="noopener">x-ray tool</a> to see every hidden codepoint
+    named, build a trap and fire it at the tools you already trust, or take the
+    <a href="https://output-lies.github.io/quiz/" rel="noopener">spot-the-lie quiz</a>. secure-terminal is the same
+    defense made the default for a whole session: paste in, read out, every invisible, bidi or look-alike byte
+    arrives marked.</p>
 </div></section>
 </main>
 <footer>
