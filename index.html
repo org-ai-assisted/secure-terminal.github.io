@@ -191,6 +191,19 @@
       substitute some other font that could reintroduce the confusable glyphs or ligatures it exists
       to avoid.</p>
   </article>
+
+  <article class="issue">
+    <h3 id="tab-isolation"><a class="h-anchor" href="#tab-isolation">A runaway tab stays in its tab</a></h3>
+    <p>Each tab's shell runs in its own Linux control group with a process-count ceiling and a memory
+      cap. A fork bomb hits its own PID limit while the other tabs keep their share; a program that runs
+      away on memory is stopped inside its own cgroup, so the runaway is killed instead of the whole
+      terminal or a sibling tab. The memory cap is sized from what is actually free at the time, so it
+      trips before the system does. This is <b>resource containment, not a sandbox</b> - the programs you
+      launch are your own commands and run with your own privileges; it bounds an accidental or crude
+      runaway, it is not an escape boundary (isolating the terminal from the rest of the system is your
+      OS's job). Best-effort by design: where the OS does not delegate cgroup&nbsp;v2, a tab simply falls
+      back to the session's own limits, no worse than any other terminal, never a blocked shell.</p>
+  </article>
   </div>
 </div></section>
 
