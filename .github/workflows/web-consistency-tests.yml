@@ -2,10 +2,13 @@
 # Runs the dist-ai website-tests suite against this site: every internal link
 # resolves, the footer carries the uniform family links, prose capitalizes
 # "Open Source"/"Free Software", and the review-status banner never claims a
-# green "working" state. The suite lives in org-ai-assisted/dist-ai (too
-# high-volume for human review); here we check out both repos as siblings and
-# point SECURE_TERMINAL_SITE_REPO at this checkout. debian:trixie-slim matches
-# the dist-ai CI runtime.
+# green "working" state. Also runs the shot-inventory guard: every committed
+# shot is a page-referenced generator artifact and every gallery reference
+# resolves (no hand-rolled/orphan shot, no dangling reference) -- cheap, no Qt,
+# so it gates every push. Both live in org-ai-assisted/dist-ai (too high-volume
+# for human review); here we check out both repos as siblings and point
+# SECURE_TERMINAL_SITE_REPO at this checkout. debian:trixie-slim matches the
+# dist-ai CI runtime.
 name: web-consistency-tests
 
 on:
@@ -21,6 +24,13 @@ on:
     paths:
       - '**/*.html'
       - 'style.css'
+      ## A shot added/removed/renamed can orphan a file or dangle a reference, so the
+      ## inventory guard must run when the galleries change too, not only on HTML edits.
+      - '**/*.webp'
+      - '**/*.png'
+      - '**/*.jpg'
+      - '**/*.svg'
+      - '**/*.gif'
       - '.github/workflows/web-consistency-tests.yml'
   pull_request:
     ## CI runs only where we enabled it. Unset variable -> the job is
@@ -32,6 +42,13 @@ on:
     paths:
       - '**/*.html'
       - 'style.css'
+      ## A shot added/removed/renamed can orphan a file or dangle a reference, so the
+      ## inventory guard must run when the galleries change too, not only on HTML edits.
+      - '**/*.webp'
+      - '**/*.png'
+      - '**/*.jpg'
+      - '**/*.svg'
+      - '**/*.gif'
       - '.github/workflows/web-consistency-tests.yml'
 
 permissions:
@@ -74,3 +91,8 @@ jobs:
 
       - name: Run website-tests
         run: SECURE_TERMINAL_SITE_REPO="${GITHUB_WORKSPACE}/secure-terminal-site" bash dist-ai/usr/bin/website-tests
+
+      - name: Run shot inventory guard
+        ## Fails if a committed shot is unreferenced (hand-rolled/orphan) or a gallery
+        ## reference dangles. Cheap file+HTML scan, no Qt or regeneration.
+        run: python3 dist-ai/usr/bin/secure-terminal-shots-inventory "${GITHUB_WORKSPACE}/secure-terminal-site"
