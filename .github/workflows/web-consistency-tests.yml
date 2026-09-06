@@ -90,9 +90,6 @@ jobs:
           persist-credentials: false
 
       - name: Run website-tests
+        ## website-tests also runs the shot-inventory guard for this site (every committed
+        ## shot is a page-referenced generator artifact; no orphan/dangling reference).
         run: SECURE_TERMINAL_SITE_REPO="${GITHUB_WORKSPACE}/secure-terminal-site" bash dist-ai/usr/bin/website-tests
-
-      - name: Run shot inventory guard
-        ## Fails if a committed shot is unreferenced (hand-rolled/orphan) or a gallery
-        ## reference dangles. Cheap file+HTML scan, no Qt or regeneration.
-        run: python3 dist-ai/usr/bin/secure-terminal-shots-inventory "${GITHUB_WORKSPACE}/secure-terminal-site"
