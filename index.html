@@ -147,14 +147,15 @@
 
   <article class="issue">
     <h3 id="current-line"><a class="h-anchor" href="#current-line">What a program can still do to its own line</a></h3>
-    <p>One honest caveat, stated narrowly. CLI mode honours the four line-local edits a shell's line editor emits
-      (cursor forward/back, cursor-to-column, erase-in-line), all clamped to <b>the line currently being
-      written</b> - so a program can overwrite what it itself just printed on that line, exactly as a
-      <code>\r</code> progress bar does, but nothing can reach a line you have already scrolled past. Transcript
-      integrity is <b>per-line</b>: everything above is append-only, and the overwritten text is gone (capture it
-      with <a href="https://output-lies.github.io/terminal/" rel="noopener"><code>stcat</code></a> if you need a
-      byte-exact record). You can drop even this with <b>View -&gt; Line editing</b> (<code>line_edits</code>,
-      default on). <a href="/compatibility/#line-edits">Full detail on the compatibility page.</a></p>
+    <p>One honest caveat, stated narrowly. <b>By default</b>, CLI mode honours the four line-local edits a
+      shell's line editor emits (cursor forward/back, cursor-to-column, erase-in-line), all clamped to <b>the
+      line currently being written</b> - so a program can overwrite what it itself just printed on that line,
+      exactly as a <code>\r</code> progress bar does, but nothing can reach a line you have already scrolled
+      past. Transcript integrity is <b>per-line</b>: everything above is append-only, and the overwritten text
+      is gone (capture it with <a href="https://output-lies.github.io/terminal/" rel="noopener"><code>stcat</code></a>
+      if you need a byte-exact record). And it is <b>configurable</b>: drop even this line-local editing with
+      <b>View -&gt; Line editing</b> (<code>line_edits</code>, on by default), and a program can then no longer
+      alter even its own current line. <a href="/compatibility/#line-edits">Full detail on the compatibility page.</a></p>
   </article>
 
   <article class="issue">
@@ -213,21 +214,6 @@
   <p class="catdesc">Safety you can live with day to day, not a museum piece.</p>
   <div class="fg">
     <article class="issue">
-      <h3 id="paste-warning"><a class="h-anchor" href="#paste-warning">Paste warning</a></h3>
-      <p>Paste anything with unicode or control characters and a review bar opens <b>inside the window</b>,
-        holding the paste before a byte reaches the shell. It shows the paste <b>four ways</b> - as it looks, each
-        hidden character named inline as a <code>&lt;U+XXXX&gt;</code> badge, and exactly what each send button
-        would deliver (stripped to ASCII, or with printable unicode kept) - all risk-coloured by the terminal's own
-        pipeline. Input is suspended and both send buttons are countdown-gated while it is held, so a stray key
-        reaches nothing. When to warn is configurable (always / only on unicode-or-control, the default / never);
-        <b>never</b> turns off the prompt, not the safety - a paste is always sanitised to ASCII, there is no
-        pass-through mode. A multi-line paste is held too, so a hidden second command cannot run the instant you
-        paste.</p>
-      <p><b>Copy is reviewed the same way, in the other direction</b> - the same bar guards text <em>leaving</em>
-        via copy, configured separately because copy and paste are opposite trust directions. The two screenshots
-        below show both bars.</p>
-    </article>
-    <article class="issue">
       <h3 id="display-modes"><a class="h-anchor" href="#display-modes">Four unicode display modes</a></h3>
       <p>Per tab: <b>Box</b> (every non-ASCII character becomes an inert box, coloured by risk class),
         <b>Reveal</b> (each as a <code>&lt;U+XXXX&gt;</code> badge, to inspect exactly what is there), <b>Detail</b>
@@ -256,6 +242,21 @@
           hidden. What holds in every mode is narrower and more useful: no invisible, bidi or control character
           reaches you unmarked.</figcaption>
       </figure>
+    </article>
+    <article class="issue">
+      <h3 id="paste-warning"><a class="h-anchor" href="#paste-warning">Paste warning</a></h3>
+      <p>Paste anything with unicode or control characters and a review bar opens <b>inside the window</b>,
+        holding the paste before a byte reaches the shell. It shows the paste <b>four ways</b> - as it looks, each
+        hidden character named inline as a <code>&lt;U+XXXX&gt;</code> badge, and exactly what each send button
+        would deliver (stripped to ASCII, or with printable unicode kept) - all risk-coloured by the terminal's own
+        pipeline. Input is suspended and both send buttons are countdown-gated while it is held, so a stray key
+        reaches nothing. When to warn is configurable (always / only on unicode-or-control, the default / never);
+        <b>never</b> turns off the prompt, not the safety - a paste is always sanitised to ASCII, there is no
+        pass-through mode. A multi-line paste is held too, so a hidden second command cannot run the instant you
+        paste.</p>
+      <p><b>Copy is reviewed the same way, in the other direction</b> - the same bar guards text <em>leaving</em>
+        via copy, configured separately because copy and paste are opposite trust directions. The two screenshots
+        below show both bars, and the <a href="/review/">review bar</a> page walks through every part.</p>
     </article>
     <article class="issue">
       <h3 id="transcripts"><a class="h-anchor" href="#transcripts">Transcripts safe to open anywhere</a></h3>
