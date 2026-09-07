@@ -175,10 +175,12 @@
 
 <section class="cat" id="line-edits"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#line-edits">What a program can still do to its own line</a></h2>
-  <p class="catdesc">Being precise about the one thing CLI mode does <b>not</b> prevent, because a
-    guarantee you have to guess at is worth less than a narrow one you can rely on.</p>
+  <p class="catdesc">CLI mode keeps a program inside the one line it is writing now: on that line it can
+    overwrite what it just printed, but nothing it emits reaches a line you have scrolled past. That single
+    carve-out is what this section pins down - a guarantee you have to guess at is worth less than a narrow one
+    you can rely on.</p>
   <div class="issue">
-    <p><b>Why they are honoured at all.</b> These are the escapes a shell's line editor emits to redraw the
+    <p><b>Why a shell's line edits are honoured at all.</b> These are the escapes a shell's line editor emits to redraw the
       line you are typing. Without them, <b>tab completion</b> prints a mangled duplicate instead of updating the
       line, <code>Ctrl+R</code> history search and <code>Ctrl+A</code>/<code>Ctrl+E</code> editing leave debris,
       and a <code>\r</code> progress bar stacks one line per update. They are the price of a usable shell, kept as
