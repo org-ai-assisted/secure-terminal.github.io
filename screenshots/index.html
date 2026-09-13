@@ -70,6 +70,7 @@
     <li><a href="#showcase">Review bar &amp; modes</a></li>
     <li><a href="#render-modes">Every display mode</a></li>
     <li><a href="#compatibility">Real-tool compatibility</a></li>
+    <li><a href="#zoom-verify">Zoom levels, scanned for artifacts</a></li>
   </ul>
 </nav></div>
 
@@ -277,6 +278,7 @@ cat random.payload</code><button class="copybtn" type="button" hidden>Copy</butt
         <figure class="shot"><figcaption class="shotname"><b>CLI Detail, 1280x800, 100%</b></figcaption><a href="/screenshots/zoom/zoom-verify-tui-showcase-cli-detail-1280x800-z100.webp" target="_blank" rel="noopener"><img src="/screenshots/zoom/zoom-verify-tui-showcase-cli-detail-1280x800-z100.webp" width="1280" height="800" loading="lazy" alt="secure-terminal zoom check: combined showcase board, CLI Detail, 1280x800, 100%"></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>CLI Detail, 1280x800, 200%</b></figcaption><a href="/screenshots/zoom/zoom-verify-tui-showcase-cli-detail-1280x800-z200.webp" target="_blank" rel="noopener"><img src="/screenshots/zoom/zoom-verify-tui-showcase-cli-detail-1280x800-z200.webp" width="1280" height="800" loading="lazy" alt="secure-terminal zoom check: combined showcase board, CLI Detail, 1280x800, 200%"></a></figure>
   </div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; a display-only board, safe to cat anywhere &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/zoom-tui-showcase-safe-to-cat.txt" rel="noopener">view the board &rarr;</a></span></div><div class="copybox"><code class="cmd">cat demos/zoom-tui-showcase-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   <h3 id="zoom-colorgrad"><a class="h-anchor" href="#zoom-colorgrad">Dense truecolour gradient</a></h3>
   <p class="catdesc">every cell a distinct 24-bit colour - the payload most prone to reflow striping when the grid narrows under zoom.</p>
   <div class="shotgrid">
@@ -284,6 +286,7 @@ cat random.payload</code><button class="copybtn" type="button" hidden>Copy</butt
         <figure class="shot"><figcaption class="shotname"><b>CLI Show, 1280x800, 100%</b></figcaption><a href="/screenshots/zoom/zoom-verify-colorgrad-cli-show-1280x800-z100.webp" target="_blank" rel="noopener"><img src="/screenshots/zoom/zoom-verify-colorgrad-cli-show-1280x800-z100.webp" width="1280" height="800" loading="lazy" alt="secure-terminal zoom check: dense truecolour gradient, CLI Show, 1280x800, 100%"></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>CLI Show, 1280x800, 200%</b></figcaption><a href="/screenshots/zoom/zoom-verify-colorgrad-cli-show-1280x800-z200.webp" target="_blank" rel="noopener"><img src="/screenshots/zoom/zoom-verify-colorgrad-cli-show-1280x800-z200.webp" width="1280" height="800" loading="lazy" alt="secure-terminal zoom check: dense truecolour gradient, CLI Show, 1280x800, 200%"></a></figure>
   </div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; a display-only board, safe to cat anywhere &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/zoom-colorgrad-safe-to-cat.txt" rel="noopener">view the board &rarr;</a></span></div><div class="copybox"><code class="cmd">cat demos/zoom-colorgrad-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   <h3 id="zoom-longline-box"><a class="h-anchor" href="#zoom-longline-box">Box frame with over-long lines</a></h3>
   <p class="catdesc">a box frame plus unbroken lines longer than any grid here, to watch wrapping and the right edge across zoom.</p>
   <div class="shotgrid">
@@ -291,12 +294,14 @@ cat random.payload</code><button class="copybtn" type="button" hidden>Copy</butt
         <figure class="shot"><figcaption class="shotname"><b>CLI Show, 860x620, 110%</b></figcaption><a href="/screenshots/zoom/zoom-verify-longline-box-cli-show-860x620-z110.webp" target="_blank" rel="noopener"><img src="/screenshots/zoom/zoom-verify-longline-box-cli-show-860x620-z110.webp" width="860" height="620" loading="lazy" alt="secure-terminal zoom check: box frame with over-long lines, CLI Show, 860x620, 110%"></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>CLI Show, 860x620, 300%</b></figcaption><a href="/screenshots/zoom/zoom-verify-longline-box-cli-show-860x620-z300.webp" target="_blank" rel="noopener"><img src="/screenshots/zoom/zoom-verify-longline-box-cli-show-860x620-z300.webp" width="860" height="620" loading="lazy" alt="secure-terminal zoom check: box frame with over-long lines, CLI Show, 860x620, 300%"></a></figure>
   </div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; a display-only board, safe to cat anywhere &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/zoom-longline-box-safe-to-cat.txt" rel="noopener">view the board &rarr;</a></span></div><div class="copybox"><code class="cmd">cat demos/zoom-longline-box-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   <h3 id="zoom-exact-grid"><a class="h-anchor" href="#zoom-exact-grid">Exact grid-width lines</a></h3>
   <p class="catdesc">lines at a spread of exact widths, each ended by a bare newline - probes the last-column double-advance that once left a spurious blank row.</p>
   <div class="shotgrid">
         <figure class="shot"><figcaption class="shotname"><b>CLI Show, 1366x768, 100%</b></figcaption><a href="/screenshots/zoom/zoom-verify-exact-grid-cli-show-1366x768-z100.webp" target="_blank" rel="noopener"><img src="/screenshots/zoom/zoom-verify-exact-grid-cli-show-1366x768-z100.webp" width="1366" height="768" loading="lazy" alt="secure-terminal zoom check: exact grid-width lines, CLI Show, 1366x768, 100%"></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>CLI Show, 1366x768, 150%</b></figcaption><a href="/screenshots/zoom/zoom-verify-exact-grid-cli-show-1366x768-z150.webp" target="_blank" rel="noopener"><img src="/screenshots/zoom/zoom-verify-exact-grid-cli-show-1366x768-z150.webp" width="1366" height="768" loading="lazy" alt="secure-terminal zoom check: exact grid-width lines, CLI Show, 1366x768, 150%"></a></figure>
   </div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; a display-only board, safe to cat anywhere &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/zoom-exact-grid-safe-to-cat.txt" rel="noopener">view the board &rarr;</a></span></div><div class="copybox"><code class="cmd">cat demos/zoom-exact-grid-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   <h3 id="zoom-altscreen-short"><a class="h-anchor" href="#zoom-altscreen-short">Short alt-screen frame</a></h3>
   <p class="catdesc">a two-line alternate-screen frame; it must stay pinned to the TOP at every zoom (never scroll off), the rest of the grid legitimately blank.</p>
   <div class="shotgrid">
@@ -309,12 +314,14 @@ cat random.payload</code><button class="copybtn" type="button" hidden>Copy</butt
         <figure class="shot"><figcaption class="shotname"><b>CLI Show, 1280x800, 100%</b></figcaption><a href="/screenshots/zoom/zoom-verify-wide-cjk-cli-show-1280x800-z100.webp" target="_blank" rel="noopener"><img src="/screenshots/zoom/zoom-verify-wide-cjk-cli-show-1280x800-z100.webp" width="1280" height="800" loading="lazy" alt="secure-terminal zoom check: wide cjk and emoji, CLI Show, 1280x800, 100%"></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>CLI Show, 1280x800, 250%</b></figcaption><a href="/screenshots/zoom/zoom-verify-wide-cjk-cli-show-1280x800-z250.webp" target="_blank" rel="noopener"><img src="/screenshots/zoom/zoom-verify-wide-cjk-cli-show-1280x800-z250.webp" width="1280" height="800" loading="lazy" alt="secure-terminal zoom check: wide cjk and emoji, CLI Show, 1280x800, 250%"></a></figure>
   </div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; a display-only board, safe to cat anywhere &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/zoom-wide-cjk-safe-to-cat.txt" rel="noopener">view the board &rarr;</a></span></div><div class="copybox"><code class="cmd">cat demos/zoom-wide-cjk-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   <h3 id="zoom-art"><a class="h-anchor" href="#zoom-art">Wide ASCII art</a></h3>
   <p class="catdesc">wide ASCII art that legitimately WRAPS at high zoom (a wrapped space row is expected wrapping, not a defect).</p>
   <div class="shotgrid">
         <figure class="shot"><figcaption class="shotname"><b>CLI Show, 860x620, 100%</b></figcaption><a href="/screenshots/zoom/zoom-verify-art-cli-show-860x620-z100.webp" target="_blank" rel="noopener"><img src="/screenshots/zoom/zoom-verify-art-cli-show-860x620-z100.webp" width="860" height="620" loading="lazy" alt="secure-terminal zoom check: wide ascii art, CLI Show, 860x620, 100%"></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>CLI Show, 860x620, 300%</b></figcaption><a href="/screenshots/zoom/zoom-verify-art-cli-show-860x620-z300.webp" target="_blank" rel="noopener"><img src="/screenshots/zoom/zoom-verify-art-cli-show-860x620-z300.webp" width="860" height="620" loading="lazy" alt="secure-terminal zoom check: wide ascii art, CLI Show, 860x620, 300%"></a></figure>
   </div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; a display-only board, safe to cat anywhere &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/zoom-art-safe-to-cat.txt" rel="noopener">view the board &rarr;</a></span></div><div class="copybox"><code class="cmd">cat demos/zoom-art-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 </div></section>
 </main>
 <footer>
