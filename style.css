@@ -73,6 +73,7 @@
   .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
   .hero h1{font-size:clamp(2rem,6vw,3.6rem);line-height:1.05;letter-spacing:-.03em;margin:0 0 18px;font-weight:800;text-wrap:balance}
   .hero h1 .u{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:6px}
+  .hero .kicker .u{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
   .hero p.sub,.hero p.lede{font-size:clamp(1.05rem,2.4vw,1.3rem);color:#2c2e33;margin:0}
   .hero p.sub{max-width:60ch}
   .hero p.lede{max-width:72ch}
@@ -228,7 +229,7 @@
   footer .fcopy{color:var(--muted);font-size:.84rem}
   @media(max-width:640px){ footer .fcols{display:grid;grid-template-columns:1fr 1fr;gap:20px 22px} }
 
-footer .fshare{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;max-width:1080px;margin:0 auto;padding:6px 20px 12px;font-size:.85rem;color:var(--muted)}
+footer .fshare{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;max-width:1000px;margin:0 auto;padding:6px 20px 12px;font-size:.85rem;color:var(--muted)}
 footer .fshare .fshare-l{color:var(--muted)}
 footer .fshare .sh{color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:7px;padding:4px 10px;background:transparent;cursor:pointer;font:inherit}
 footer .fshare .sh:hover{border-color:var(--accent);color:var(--accent)}
