@@ -95,6 +95,19 @@
   <p class="catdesc">one <code>ls</code> listing as Box, Show, Reveal and Detail (the default).</p>
   <div class="shotgrid"><figure class="shot"><a href="/shots/display-modes.webp" target="_blank" rel="noopener"><img src="/shots/display-modes.webp" width="1584" height="1212" loading="lazy" alt="One ls listing rendered by secure-terminal in all four display modes."></a></figure></div>
   <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; run any command, then cycle Box / Show / Reveal / Detail</span></div><div class="copybox"><code class="cmd">ls -la</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+
+  <h3 id="shot-nonewline"><a class="h-anchor" href="#shot-nonewline">No trailing newline</a></h3>
+  <p class="catdesc">a file whose last line has no final newline - the shell prompt returns mid-line, and secure-terminal marks that line in the left gutter so it is never mistaken for a complete line. Shown in CLI and TUI.</p>
+  <div class="shotgrid">
+        <figure class="shot"><figcaption class="shotname"><b>CLI</b></figcaption><a href="/shots/nonewline-cli.webp" target="_blank" rel="noopener"><img src="/shots/nonewline-cli.webp" width="1724" height="1296" loading="lazy" alt="secure-terminal marking a line with no trailing newline in the left gutter, CLI mode."></a></figure>
+        <figure class="shot"><figcaption class="shotname"><b>TUI</b></figcaption><a href="/shots/nonewline-tui.webp" target="_blank" rel="noopener"><img src="/shots/nonewline-tui.webp" width="1724" height="1296" loading="lazy" alt="secure-terminal marking a line with no trailing newline in the left gutter, TUI mode."></a></figure>
+  </div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; a display-only file, safe to cat</span> &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/nonewline-safe-to-cat.txt" rel="noopener">view the file on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">cat demos/nonewline-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+
+  <h3 id="shot-whitespace"><a class="h-anchor" href="#shot-whitespace">Whitespace anomalies</a></h3>
+  <p class="catdesc">leading, trailing and doubled spaces - invisible padding that can hide a command from shell history or fake column alignment - marked with a faint dot. The text still selects and copies as ordinary spaces; only the on-screen look changes.</p>
+  <div class="shotgrid"><figure class="shot"><a href="/shots/whitespace-cli.webp" target="_blank" rel="noopener"><img src="/shots/whitespace-cli.webp" width="1724" height="1296" loading="lazy" alt="secure-terminal marking leading, trailing and doubled spaces with a faint dot, CLI mode."></a></figure></div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; print lines with leading, trailing and doubled spaces</span></div><div class="copybox"><code class="cmd">printf '  leading indent line\ntrailing spaces line   \ntwo  and  three   spaces\n'</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 </div></section>
 
 <section class="cat" id="render-modes"><div class="wrap">
