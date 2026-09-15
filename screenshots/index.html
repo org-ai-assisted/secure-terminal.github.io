@@ -67,7 +67,17 @@
 <div class="wrap"><nav class="toc" aria-label="On this page">
   <p class="toch">On this page</p>
   <ul>
-    <li><a href="#showcase">Review bar &amp; modes</a></li>
+    <li><a href="#showcase">Review bar &amp; modes</a>
+      <ul>
+        <li><a href="#shot-paste-review">Paste review bar</a></li>
+        <li><a href="#shot-copy-review">Copy review bar</a></li>
+        <li><a href="#shot-modes">Four display modes</a></li>
+        <li><a href="#shot-nonewline">No trailing newline</a></li>
+        <li><a href="#shot-whitespace">Whitespace anomalies</a></li>
+        <li><a href="#shot-programs">Running programs</a></li>
+        <li><a href="#shot-terminate">Terminate button</a></li>
+      </ul>
+    </li>
     <li><a href="#render-modes">Every display mode</a></li>
     <li><a href="#compatibility">Real-tool compatibility</a></li>
     <li><a href="#zoom-verify">Zoom levels, scanned for artifacts</a></li>
@@ -116,6 +126,16 @@
         <figure class="shot"><figcaption class="shotname"><b>nano (TUI)</b></figcaption><a href="/shots/nano-gui.webp" target="_blank" rel="noopener"><img src="/shots/nano-gui.webp" width="1724" height="1296" loading="lazy" alt="secure-terminal running the nano editor full-screen in TUI mode."></a></figure>
   </div>
   <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; a foreground command, then a full-screen editor (switch to TUI mode to see it draw)</span></div><div class="copybox"><code class="cmd">sleep 100</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd">nano</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+
+  <h3 id="shot-terminate"><a class="h-anchor" href="#shot-terminate">Terminate button</a></h3>
+  <p class="catdesc">the red Terminate button - or <kbd>Ctrl+Shift+K</kbd> - sends SIGTERM then, two seconds later, an uncatchable SIGKILL to the foreground program: a guaranteed escape from a stuck or runaway command, even a full-screen one that has the keyboard. Here it stops a blocked <code>sleep</code> (<code>Terminated</code>), the <code>nano</code> editor (which catches the signal and exits), and <code>secure-terminal-sigreport</code>, which prints each signal as it lands - <code>received SIGTERM (15)</code> then <code>Killed</code>. (sigreport's own PID reads <code>[redacted]</code> here only because these screenshots normalize it for reproducibility; a real run shows the live PID.)</p>
+  <div class="shotgrid">
+        <figure class="shot"><figcaption class="shotname"><b>sleep (CLI)</b></figcaption><a href="/shots/terminate-sleep-cli.webp" target="_blank" rel="noopener"><img src="/shots/terminate-sleep-cli.webp" width="1724" height="1296" loading="lazy" alt="secure-terminal Terminate button stopping a blocked sleep command, CLI mode."></a></figure>
+        <figure class="shot"><figcaption class="shotname"><b>sigreport (CLI)</b></figcaption><a href="/shots/terminate-sigreport-cli.webp" target="_blank" rel="noopener"><img src="/shots/terminate-sigreport-cli.webp" width="1724" height="1296" loading="lazy" alt="secure-terminal Terminate button making secure-terminal-sigreport print received SIGTERM then Killed, CLI mode."></a></figure>
+        <figure class="shot"><figcaption class="shotname"><b>nano (TUI)</b></figcaption><a href="/shots/terminate-nano-tui.webp" target="_blank" rel="noopener"><img src="/shots/terminate-nano-tui.webp" width="1724" height="1296" loading="lazy" alt="secure-terminal Terminate button stopping the full-screen nano editor, TUI mode."></a></figure>
+        <figure class="shot"><figcaption class="shotname"><b>sigreport (TUI)</b></figcaption><a href="/shots/terminate-sigreport-tui.webp" target="_blank" rel="noopener"><img src="/shots/terminate-sigreport-tui.webp" width="1724" height="1296" loading="lazy" alt="secure-terminal Terminate button stopping secure-terminal-sigreport, TUI mode."></a></figure>
+  </div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; run a program, then click Terminate (or press Ctrl+Shift+K)</span></div><div class="copybox"><code class="cmd">secure-terminal-sigreport</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 </div></section>
 
 <section class="cat" id="render-modes"><div class="wrap">
