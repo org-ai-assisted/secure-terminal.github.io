@@ -147,7 +147,7 @@
       <tr><td>wget</td><td>130</td><td><span class="yes">Works.</span> Carriage-return progress bar redraws in place.</td></tr>
       <tr><td>gpg (gnupg)</td><td>239</td><td><span class="yes">Works.</span> Output intact.</td></tr>
       <tr><td>curl</td><td>304</td><td><span class="yes">Works.</span> Progress meter redraws in place.</td></tr>
-      <tr><td>git</td><td>398</td><td><span class="yes">Works.</span> Colour and progress render; pager runs (<code>PAGER=cat</code>).</td></tr>
+      <tr><td>git</td><td>398</td><td><span class="yes">Works.</span> Colour and progress render; the pager (<code>less</code>) runs normally.</td></tr>
       <tr><td>rsync</td><td>557</td><td><span class="yes">Works.</span> Progress redraws in place.</td></tr>
     </tbody>
   </table>
@@ -534,7 +534,7 @@
     <tbody>
       <tr><td>TERM</td><td>Set to <code>xterm-256color</code>, or the opt-in custom <code>secure-terminal</code> terminfo that advertises exactly the supported subset. The <code>secure-terminal-cli</code> wrapper uses <code>dumb</code>.</td><td>Programs look up their terminfo (what escapes the terminal understands) by TERM. A program then only emits what we render; anything else is stripped anyway.</td></tr>
       <tr><td>COLORTERM</td><td>Forced to <code>truecolor</code> - a fixed value, never inherited, so it cannot be a fingerprint.</td><td>Programs check it to decide whether to emit 24-bit colour; with it set they do, and the contrast guard renders it safely. Nothing breaks if a program ignores it.</td></tr>
-      <tr><td>PAGER</td><td>Defaulted to <code>cat</code>.</td><td>Programs pipe long output through <code>$PAGER</code>; <code>cat</code> means the pager adds no escapes of its own. Set your own to use <code>less</code>, etc.</td></tr>
+      <tr><td>PAGER</td><td>Not overridden.</td><td>Your <code>$PAGER</code> (default <code>less</code>) is passed through unchanged, so long output pages as usual. Escape sequences the pager emits are neutralized like any other program's.</td></tr>
       <tr><td>NO_COLOR</td><td>Honoured (per no-color.org): if set to any value, colour is disabled.</td><td>The standard opt-out; a program that honours it emits no colour.</td></tr>
       <tr><td>LINES, COLUMNS</td><td>Removed.</td><td>Programs read the terminal size; the true size comes from the kernel (<code>TIOCSWINSZ</code>), so a stale env value cannot make an app mis-wrap.</td></tr>
       <tr><td>TERM_PROGRAM, TERM_PROGRAM_VERSION</td><td>Scrubbed (anti-fingerprint).</td><td>Apps/scripts sniff these to detect the host emulator; scrubbed so a child (or an SSH host) cannot learn which terminal you use. A rare app that keys behaviour off the emulator falls back to defaults.</td></tr>
