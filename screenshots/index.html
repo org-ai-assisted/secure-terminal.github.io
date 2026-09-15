@@ -108,6 +108,14 @@
   <p class="catdesc">leading, trailing and doubled spaces - invisible padding that can hide a command from shell history or fake column alignment - marked with a faint dot. The text still selects and copies as ordinary spaces; only the on-screen look changes.</p>
   <div class="shotgrid"><figure class="shot"><a href="/shots/whitespace-cli.webp" target="_blank" rel="noopener"><img src="/shots/whitespace-cli.webp" width="1724" height="1296" loading="lazy" alt="secure-terminal marking leading, trailing and doubled spaces with a faint dot, CLI mode."></a></figure></div>
   <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; print lines with leading, trailing and doubled spaces</span></div><div class="copybox"><code class="cmd">printf '  leading indent line\ntrailing spaces line   \ntwo  and  three   spaces\n'</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+
+  <h3 id="shot-programs"><a class="h-anchor" href="#shot-programs">Running programs</a></h3>
+  <p class="catdesc">secure-terminal runs your programs unchanged - a foreground command that holds the prompt, and a full-screen editor drawn in TUI mode. The red Terminate button in the toolbar stops whatever is running.</p>
+  <div class="shotgrid">
+        <figure class="shot"><figcaption class="shotname"><b>sleep (CLI)</b></figcaption><a href="/shots/sleep-cli.webp" target="_blank" rel="noopener"><img src="/shots/sleep-cli.webp" width="1724" height="1296" loading="lazy" alt="secure-terminal running sleep 100 as a foreground command, CLI mode."></a></figure>
+        <figure class="shot"><figcaption class="shotname"><b>nano (TUI)</b></figcaption><a href="/shots/nano-gui.webp" target="_blank" rel="noopener"><img src="/shots/nano-gui.webp" width="1724" height="1296" loading="lazy" alt="secure-terminal running the nano editor full-screen in TUI mode."></a></figure>
+  </div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; a foreground command, then a full-screen editor (switch to TUI mode to see it draw)</span></div><div class="copybox"><code class="cmd">sleep 100</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd">nano</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 </div></section>
 
 <section class="cat" id="render-modes"><div class="wrap">
