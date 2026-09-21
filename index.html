@@ -347,16 +347,18 @@
     <h3 id="tui-mode"><a class="h-anchor" href="#tui-mode"><span class="flag">Opt-in, clearly flagged</span> / ssh, vim, htop, tmux</a></h3>
     <p>The strict default cannot run curses apps. TUI mode (per tab, off by default, clearly marked in the
       toolbar and status bar) interprets escapes inside an isolated in-memory screen model (<code>pyte</code>) that has no OS
-      reach: by default it <b>cannot set the window title or touch the clipboard</b>. Each such OSC side-effect is
-      a separate opt-in toggle (off by default) that dims a security indicator when enabled, so those spoofing
-      vectors stay closed unless you deliberately open one. Every character it places is <b>still
-      ASCII/unicode-filtered</b>, and colours use a <a href="/compatibility/#contrast-guard">contrast guard</a> so nothing can be painted invisibly.</p>
+      reach: it <b>never sets the OS window title from output and cannot touch the clipboard</b>. A program-set
+      window/tab title <em>is</em> shown, but <b>quarantined</b> on a separate, visibly-untrusted line of the tab
+      (plain ASCII, never reported back), so it can never pose as the trusted, app-set label. The clipboard,
+      hyperlink and notification side-effects are separate opt-in toggles (off by default) that dim a security
+      indicator when enabled, so those exfiltration/phishing vectors stay closed unless you deliberately open one.
+      Every character it places is <b>still ASCII/unicode-filtered</b>, and colours use a <a href="/compatibility/#contrast-guard">contrast guard</a> so nothing can be painted invisibly.</p>
     <p>What you give up: a program can draw a <em>misleading interface</em> within its own screen, so only run
       programs you trust. This is "restricted-emulator safe," not "safe by design." The default CLI mode,
       and everything the guarantee rests on, is unchanged.</p>
     <div class="term" style="margin-top:10px"><span class="d"># in TUI mode, verified end to end:</span>
 <span class="y">ssh</span>, <span class="y">vim</span>, <span class="y">htop</span>, <span class="y">tmux</span> and apt's progress bar all render correctly,
-with every cell still filtered and the title/clipboard still off-limits.</div>
+with every cell still filtered, the clipboard off-limits, and any program-set title quarantined.</div>
   </article>
 </div></section>
 

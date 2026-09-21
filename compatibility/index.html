@@ -443,8 +443,8 @@
     like), each tinted by risk class so a homoglyph confusable with ASCII stands out - while the
     invisible, bidi and control classes, which have no visible glyph, stay neutralised in every
     mode. Either way, layout and
-    text are faithful, and the terminal still answers no query and cannot set the title or touch
-    the clipboard.</p>
+    text are faithful, and the terminal still answers no query and cannot touch the clipboard; a
+    program-set title is shown only on the quarantined, untrusted tab line, never as the trusted label.</p>
   <div class="cmp-wrap">
   <table class="cmp">
     <thead><tr><th>Program (package)</th><th>Popcon rank</th><th>TUI mode (opt-in)</th></tr></thead>
@@ -475,9 +475,10 @@
     or overwrite a line you already read - so only run programs you trust in it. A good habit,
     since the mode is per tab: keep a <b>dedicated TUI tab</b> (or a few) for the trusted
     full-screen programs you run, and read untrusted output in a separate CLI-mode tab, so the
-    two never share a screen. What TUI mode still cannot do is set the window title, read or
-    write the clipboard, open a hyperlink escape, or smuggle an invisible character onto the
-    screen: those stay closed in both modes.</p>
+    two never share a screen. What TUI mode still cannot do is read or write the clipboard, open a
+    hyperlink escape, or smuggle an invisible character onto the screen: those stay closed in both
+    modes. A program-set title is shown by default, but only on the quarantined, untrusted tab line
+    (plain ASCII, never reported back), so it cannot pose as the trusted label.</p>
 </div></section>
 
 <section class="cat" id="conformance"><div class="wrap">
@@ -684,15 +685,18 @@
   <h2 class="catname"><a class="h-anchor" href="#osc">OSC sequences</a></h2>
   <p class="catdesc"><a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Operating_System_Command_sequences" rel="noopener">Operating System Command</a> (OSC) escapes are the ones that act beyond the
     text on screen - setting the window title, the system clipboard, a desktop notification, or
-    a hyperlink. Every one is a registered feature, <b>off by default</b> (neutralised); each
-    can be individually turned on at your own risk, and even then its value is validated and
-    sanitised to plain ASCII first. Left off, this closes clipboard exfiltration, hyperlink
-    phishing, notification spoofing and title spoofing by default.</p>
+    a hyperlink. Every one is a registered feature; all are <b>off by default</b> (neutralised)
+    EXCEPT the window/tab title, which is <b>shown by default but quarantined</b> - surfaced only on
+    a separate, visibly-untrusted tab line (plain ASCII, never reported back) so it can never pose
+    as the trusted, app-set label. Each other feature can be individually turned on at your own
+    risk, and even then its value is validated and sanitised to plain ASCII first. This closes
+    clipboard exfiltration, hyperlink phishing and notification spoofing by default, and contains
+    title spoofing by quarantine.</p>
   <div class="cmp-wrap">
   <table class="cmp">
     <thead><tr><th>OSC code</th><th>Feature</th><th>Default</th><th>Opt-in?</th><th>Risk</th><th>When you opt in</th></tr></thead>
     <tbody>
-      <tr><td>0, 2</td><td>Window / tab title</td><td><span class="yes">Off</span></td><td>Yes</td><td>medium</td><td>Sanitised to plain ASCII; the title is still never reported back.</td></tr>
+      <tr><td>0, 2</td><td>Window / tab title</td><td><span class="yes">On (quarantined)</span></td><td>Yes</td><td>medium</td><td>Shown only on a separate, visibly-untrusted tab line - plain ASCII, never reported back - so it cannot pose as the trusted (app-set) label. Never sets the OS window title.</td></tr>
       <tr><td>7</td><td>Working-directory report</td><td><span class="yes">Off</span></td><td>Yes</td><td>low</td><td>Path validated and sanitised.</td></tr>
       <tr><td>8</td><td>Hyperlinks</td><td><span class="yes">Off</span></td><td>Yes</td><td>medium</td><td>The true target is surfaced next to the visible text, so a phishing mismatch is visible.</td></tr>
       <tr><td>9</td><td>Desktop notifications</td><td><span class="yes">Off</span></td><td>Yes</td><td>medium</td><td>Text sanitised to plain ASCII.</td></tr>
