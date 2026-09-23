@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<title>secure-terminal chat view mockup</title>
+<style>
+/*
+  STATIC, NON-FUNCTIONAL MOCKUP of a proposed "terminal chat" redesign of
+  secure-terminal. Optics only. No real terminal, no shell, no features.
+  ASCII-only source; all icons are inline SVG (no emoji / unicode glyphs).
+*/
+:root{
+  --bg:#ffffff; --panel:#f7f7f8; --sidebar:#f9f9f9; --header:#ffffff;
+  --border:#e5e5e5; --border-strong:#d7d7d9;
+  --text:#1f2328; --muted:#5f6570; --faint:#656b75;
+  --primary:#0b7a5e; --primary-ink:#ffffff;
+  --ok:#1a7a34; --neutral:#9aa0aa; --warn:#d9a441; --danger:#c62828; --conf:#8a5a12;
+  --accent1:#3b82f6; --accent2:#a855f7; --accent3:#ef7e2b; --accent4:#14b8a6;
+  --term-bg:#ffffff; --term-fg:#111418; --term-panel:#f4f5f6;
+  --quarantine:#fff4e5; --quarantine-ink:#8a5a12; --quarantine-bd:#f0d9b0;
+  --shadow:0 10px 30px rgba(20,22,27,.10);
+  --mono:"DejaVu Sans Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --radius:12px;
+}
+:root[data-theme="dark"]{
+  --bg:#14161b; --panel:#1b1e24; --sidebar:#16181d; --header:#171a20;
+  --border:#2a2e37; --border-strong:#333844;
+  --text:#e6e6e6; --muted:#9aa0aa; --faint:#6b7280;
+  --primary:#10a37f; --primary-ink:#04140f;
+  --ok:#3fb950; --neutral:#6b7280; --warn:#e3b341; --danger:#f2555a; --conf:#e3b341;
+  --accent1:#5a9bff; --accent2:#c07cf5; --accent3:#ff9a52; --accent4:#2dd4bf;
+  --term-bg:#14161b; --term-fg:#e6e6e6; --term-panel:#1b1e24;
+  --quarantine:#33260f; --quarantine-ink:#e3b341; --quarantine-bd:#5a4415;
+  --shadow:0 10px 30px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--panel);color:var(--text);font-family:var(--ui);
+  font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;padding:20px 16px 48px}
+h1,h2,h3{margin:0;font-weight:650}
+a{color:var(--primary)}
+svg{display:block}
+.wrap{max-width:1180px;margin:0 auto}
+
+/* ---- page heading + mockup controls ---- */
+.pagehead{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;
+  justify-content:space-between;margin-bottom:14px}
+.pagehead .title{display:flex;align-items:center;gap:12px}
+.pagehead h1{font-size:19px;letter-spacing:.2px}
+.pagehead .sub{color:var(--muted);font-size:12.5px;margin-top:3px}
+.ribbon{display:inline-flex;align-items:center;gap:7px;background:var(--warn);
+  color:#3a2a00;font-weight:700;font-size:11px;letter-spacing:.6px;
+  padding:5px 10px;border-radius:999px;text-transform:uppercase}
+:root[data-theme="dark"] .ribbon{color:#241a00}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:3px;gap:2px}
+.seg > span{font-size:11px;color:var(--muted);align-self:center;padding:0 8px 0 6px;
+  border-right:1px solid var(--border);margin-right:2px}
+.seg button{appearance:none;border:0;background:transparent;color:var(--text);
+  font:inherit;font-size:12.5px;padding:6px 11px;border-radius:7px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px}
+.seg button:hover{background:var(--panel)}
+.seg button[aria-pressed="true"]{background:var(--primary);color:var(--primary-ink)}
+
+/* ---- the app window stub ---- */
+.app{background:var(--bg);border:1px solid var(--border-strong);border-radius:14px;
+  box-shadow:var(--shadow);overflow:hidden;display:grid;grid-template-columns:300px 1fr;
+  grid-template-rows:1fr;height:640px;min-height:640px}
+
+/* ---- sidebar ---- */
+.sidebar{background:var(--sidebar);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;min-width:0;min-height:0}
+.sbhead{display:flex;align-items:center;gap:9px;padding:13px 13px 10px}
+.brandmark{width:26px;height:26px;flex:0 0 auto;border-radius:7px;
+  background:linear-gradient(150deg,var(--primary),#0c7f63);
+  display:grid;place-items:center}
+.brandmark svg{width:16px;height:16px}
+.brandname{font-weight:700;font-size:13.5px;letter-spacing:.2px}
+.brandname small{display:block;font-weight:500;color:var(--muted);font-size:10.5px;
+  letter-spacing:.3px}
+.newbtn{margin:2px 12px 8px;display:flex;align-items:center;gap:8px;
+  border:1px solid var(--border-strong);background:var(--bg);color:var(--text);
+  font:inherit;font-size:13px;font-weight:600;padding:9px 11px;border-radius:9px;cursor:pointer}
+.newbtn:hover{border-color:var(--primary);color:var(--primary)}
+.newbtn .split{margin-left:auto;color:var(--muted);font-size:11px;font-weight:500;
+  display:flex;align-items:center;gap:5px}
+.newbtn .split b{color:var(--text);font-weight:600}
+.sbsearch{margin:0 12px 8px;position:relative}
+.sbsearch svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;color:var(--faint)}
+.sbsearch input{width:100%;border:1px solid var(--border);background:var(--bg);
+  color:var(--text);font:inherit;font-size:12.5px;padding:7px 9px 7px 29px;border-radius:8px}
+.sblabel{font-size:10.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--faint);
+  padding:4px 16px 4px}
+.sessions{flex:1;overflow:auto;padding:2px 8px 8px;min-height:0}
+
+.srow{position:relative;display:flex;gap:9px;padding:8px 9px 8px 11px;border-radius:9px;
+  cursor:pointer;margin-bottom:3px;align-items:flex-start}
+.srow:hover{background:var(--panel)}
+.srow.active{background:var(--panel);box-shadow:inset 0 0 0 1px var(--border-strong)}
+.srow .accent{position:absolute;left:3px;top:9px;bottom:9px;width:3px;border-radius:3px}
+.srow .sicon{width:20px;height:20px;flex:0 0 auto;margin-top:1px;color:var(--muted)}
+.srow .sbody{min-width:0;flex:1}
+.srow .l1{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srow .l1 .num{color:var(--faint);font-weight:600;font-size:11.5px}
+.srow .l1 .path{color:var(--muted);font-weight:500;font-size:11.5px;overflow:hidden;
+  text-overflow:ellipsis}
+/* path on its own line, LEFT-elided so the directory tail is always kept */
+.srow .l2{font-size:11.5px;color:var(--muted);margin-top:1px;
+  direction:rtl;text-align:left;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srow .l2::before{content:"\200e"}  /* LRM: keep path LTR while eliding on the left */
+.quarantine{margin-top:3px;display:flex;align-items:center;gap:5px;font-size:11px;
+  background:var(--quarantine);color:var(--quarantine-ink);border:1px solid var(--quarantine-bd);
+  border-radius:5px;padding:2px 6px;white-space:nowrap;overflow:hidden}
+.quarantine svg{width:11px;height:11px;flex:0 0 auto}
+.quarantine .q{overflow:hidden;text-overflow:ellipsis}
+.smarks{display:flex;align-items:center;gap:5px;margin-top:2px;flex:0 0 auto}
+.smarks svg{width:14px;height:14px}
+.mk-bell{color:var(--warn)}
+.mk-lock{color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.dot.act{background:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 25%,transparent)}
+.sbfoot{border-top:1px solid var(--border);padding:9px 13px;display:flex;
+  align-items:center;gap:8px;color:var(--muted);font-size:11px}
+.sbfoot .grow{flex:1}
+.iconbtn{appearance:none;border:0;background:transparent;color:var(--muted);
+  cursor:pointer;padding:5px;border-radius:7px;display:inline-flex}
+.iconbtn:hover{background:var(--panel);color:var(--text)}
+.iconbtn svg{width:16px;height:16px}
+
+/* ---- main pane ---- */
+.main{display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg)}
+.mhead{display:flex;align-items:center;gap:10px;padding:10px 14px;
+  border-bottom:1px solid var(--border);background:var(--header)}
+.mhead .titlewrap{min-width:0}
+.mhead .mtitle{font-size:13.5px;font-weight:650;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.mhead .mpath{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;direction:rtl;text-align:left}
+.mhead .mpath::before{content:"\200e"}  /* LRM */
+.mhead .spacer{flex:1}
+.chips{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;
+  border:1px solid var(--border);border-radius:999px;padding:4px 9px;color:var(--muted);
+  background:var(--bg);white-space:nowrap}
+.chip b{color:var(--text);font-weight:650}
+.chip.good{border-color:color-mix(in srgb,var(--ok) 45%,var(--border));color:var(--ok)}
+
+/* chat scroll */
+.chat{flex:1;overflow:auto;padding:16px 18px 6px;min-height:0}
+.blocks{display:flex;flex-direction:column;gap:14px;max-width:900px}
+
+/* a command+reply block */
+.blk{position:relative}
+.cmd{display:flex;align-items:baseline;gap:10px;padding:8px 10px;border-radius:9px;
+  background:var(--term-panel)}
+.cmd .prompt{color:var(--primary);font-family:var(--mono);font-weight:700;font-size:13px;
+  flex:0 0 auto}
+.cmd .ct{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text);
+  white-space:pre-wrap;word-break:break-word;flex:1}
+.cmd .cwd{color:var(--muted);font-family:var(--mono);font-size:11.5px}
+.cmd .meta{display:flex;align-items:center;gap:8px;flex:0 0 auto;align-self:center}
+.status{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;
+  padding:2px 8px;border-radius:999px}
+.status.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.status.bad{background:color-mix(in srgb,var(--danger) 16%,transparent);color:var(--danger)}
+.time{color:var(--faint);font-size:11px;font-family:var(--mono)}
+.acts{display:flex;gap:2px;opacity:0;transition:opacity .12s}
+.blk:hover .acts{opacity:1}
+.acts button{appearance:none;border:0;background:transparent;color:var(--muted);
+  cursor:pointer;padding:4px;border-radius:6px;display:inline-flex}
+.acts button:hover{background:var(--bg);color:var(--text)}
+.acts svg{width:14px;height:14px}
+.reply{display:grid;grid-template-columns:20px 1fr;margin-top:4px;padding:2px 10px 2px 0}
+.gutter{color:var(--faint);font-family:var(--mono);font-size:12px;display:flex;
+  flex-direction:column;align-items:center;padding-top:2px}
+.gutter svg{width:13px;height:13px;color:var(--warn)}
+.out{font-family:var(--mono);font-size:12.5px;line-height:1.55;white-space:pre-wrap;
+  word-break:break-word;color:var(--term-fg);margin:0}
+.out .dim{color:var(--muted)}
+.out .err{color:var(--danger)}
+.out .b{color:var(--accent1);font-weight:600}
+.notice{display:inline-flex;align-items:center;gap:7px;margin-top:6px;font-size:11.5px;
+  background:var(--quarantine);color:var(--quarantine-ink);border:1px solid var(--quarantine-bd);
+  border-radius:7px;padding:4px 9px;font-family:var(--ui)}
+.notice svg{width:13px;height:13px;flex:0 0 auto}
+.notice code{font-family:var(--mono);font-size:11px}
+.notice.info{background:color-mix(in srgb,var(--accent1) 12%,var(--bg));color:var(--muted);
+  border-color:color-mix(in srgb,var(--accent1) 32%,var(--border))}
+.notice.info svg{color:var(--accent1)}
+
+/* block-style variants (toggled by data-blockstyle on .chat) */
+.chat[data-blockstyle="rail"] .blk{padding-left:12px;border-left:3px solid var(--rail,var(--accent1));
+  margin-left:1px}
+.chat[data-blockstyle="card"] .blk{border:1px solid var(--border);border-radius:11px;
+  padding:8px;background:var(--bg)}
+.chat[data-blockstyle="card"] .cmd{background:transparent;border-bottom:1px solid var(--border);
+  border-radius:0;padding-bottom:9px}
+.chat[data-blockstyle="minimal"] .cmd{background:transparent;padding:2px 0}
+.chat[data-blockstyle="minimal"] .blk + .blk{border-top:1px dashed var(--border);padding-top:14px}
+.chat[data-blockstyle="minimal"] .reply{padding-left:0}
+/* bubble = ChatGPT-web-like: command = right user bubble, reply = left assistant bubble */
+.chat[data-blockstyle="bubble"] .blocks{gap:16px}
+.chat[data-blockstyle="bubble"] .blk{display:flex;flex-direction:column;gap:7px}
+.chat[data-blockstyle="bubble"] .cmd{align-self:flex-end;max-width:82%;background:var(--primary);
+  border-radius:15px 15px 4px 15px;padding:9px 14px}
+.chat[data-blockstyle="bubble"] .cmd .prompt{color:rgba(255,255,255,.72)}
+.chat[data-blockstyle="bubble"] .cmd .ct{color:#fff}
+.chat[data-blockstyle="bubble"] .cmd .meta{display:none}
+.chat[data-blockstyle="bubble"] .reply{align-self:flex-start;max-width:88%;
+  grid-template-columns:28px 1fr;gap:9px;background:var(--term-panel);border:1px solid var(--border);
+  border-radius:4px 15px 15px 15px;padding:10px 13px;margin-top:0}
+.chat[data-blockstyle="bubble"] .reply .gutter{width:28px;height:28px;border-radius:50%;
+  align-self:start;flex:0 0 auto;
+  background:var(--panel) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230b7a5e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 6l5 6-5 6'/><path d='M13 18h7'/></svg>") no-repeat center/15px}
+.chat[data-blockstyle="bubble"] .reply .gutter svg{display:none}
+.chat[data-blockstyle="bubble"] .notice{align-self:flex-start;margin-top:0}
+/* exit chip on the assistant bubble (bubble style only; other styles show it in the header) */
+.bexit{display:none}
+.chat[data-blockstyle="bubble"] .reply{position:relative}
+.chat[data-blockstyle="bubble"] .bexit{display:inline-flex;position:absolute;top:8px;right:12px}
+/* inline unicode display-mode demo: only the active mode's variant shows */
+.umv{display:none;white-space:pre-wrap;word-break:break-word}
+.chat[data-umode="box"] .um-box,
+.chat[data-umode="show"] .um-show,
+.chat[data-umode="reveal"] .um-reveal,
+.chat[data-umode="detail"] .um-detail{display:block}
+
+/* input zone */
+.inputzone{border-top:1px solid var(--border);padding:10px 14px 8px;background:var(--header);
+  position:relative}
+.izlabel{position:absolute;top:-9px;left:14px;font-size:10px;letter-spacing:.4px;
+  text-transform:uppercase;color:var(--faint);background:var(--header);padding:0 6px}
+.izrow{display:flex;align-items:center;gap:10px;border:1px solid var(--border-strong);
+  border-radius:11px;background:var(--bg);padding:9px 11px}
+.izrow:focus-within{border-color:var(--primary)}
+.izrow .prompt{color:var(--primary);font-family:var(--mono);font-weight:700;font-size:13px}
+.izline{flex:1;font-family:var(--mono);font-size:13px;color:var(--text);white-space:pre}
+.izline .ph{color:var(--faint)}
+.caret{display:inline-block;width:8px;height:16px;background:var(--primary);
+  vertical-align:-3px;margin-left:1px;animation:blink 1.1s step-end infinite;border-radius:1px}
+@keyframes blink{50%{opacity:0}}
+.keys{display:flex;gap:5px;flex:0 0 auto}
+.kbtn{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--border);
+  border-radius:6px;padding:3px 7px;background:var(--bg)}
+.izhint{margin-top:6px;font-size:11px;color:var(--faint);display:flex;gap:6px;align-items:center}
+.izhint svg{width:12px;height:12px}
+
+/* completion dropdown */
+.complete{position:absolute;left:14px;right:14px;bottom:calc(100% - 2px);
+  background:var(--bg);border:1px solid var(--border-strong);border-radius:11px;
+  box-shadow:var(--shadow);overflow:hidden;max-width:520px;display:none}
+.app[data-state="completion"] .complete{display:block}
+.chead{display:flex;align-items:center;justify-content:space-between;padding:7px 11px;
+  border-bottom:1px solid var(--border);font-size:11px;color:var(--muted)}
+.citem{display:flex;gap:12px;align-items:baseline;padding:7px 12px;font-size:12.5px;cursor:pointer}
+.citem:hover{background:var(--panel)}
+.citem.sel{background:color-mix(in srgb,var(--primary) 14%,transparent)}
+.citem .flag{font-family:var(--mono);font-weight:700;color:var(--text);min-width:74px}
+.citem.sel .flag{color:var(--primary)}
+.citem .desc{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cfoot{padding:6px 12px;border-top:1px solid var(--border);font-size:11px;color:var(--faint);
+  display:flex;gap:14px;font-family:var(--mono)}
+
+/* status bar */
+.statusbar{display:flex;align-items:center;gap:14px;border-top:1px solid var(--border);
+  padding:6px 14px;background:var(--header);font-size:11.5px;color:var(--muted)}
+.lamp{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.lamp .b{width:9px;height:9px;border-radius:50%}
+.lamp.g .b{background:var(--ok)} .lamp.n .b{background:var(--neutral)}
+.lamp.y .b{background:var(--warn)} .lamp.r .b{background:var(--danger)}
+.statusbar .grow{flex:1}
+.statusbar .r{display:flex;gap:12px}
+.statusbar b{color:var(--text)}
+
+/* ---- full-screen TUI state ---- */
+.chatview{display:flex;flex-direction:column;flex:1;min-height:0}
+.tuiview{display:none;flex:1;min-height:0;flex-direction:column}
+.viewstack{flex:1;min-height:0;display:flex;flex-direction:column}
+.app[data-state="tui"] .chatview{display:none}
+.app[data-state="tui"] .tuiview{display:flex}
+/* header + status bar stay in TUI for consistency; content adapts by state */
+.only-tui{display:none}
+.app[data-state="tui"] .only-tui{display:inline-flex}
+.app[data-state="tui"] .titlewrap.only-tui{display:block}
+.app[data-state="tui"] .only-chat{display:none}
+.tuistate{align-items:center;gap:6px;font-size:11.5px;color:var(--muted)}
+.tuistate svg{width:14px;height:14px;flex:0 0 auto}
+.tuibanner{display:flex;align-items:center;gap:9px;padding:7px 14px;font-size:12px;
+  background:color-mix(in srgb,var(--warn) 16%,var(--header));color:var(--text);
+  border-bottom:1px solid var(--border)}
+.tuibanner svg{width:14px;height:14px;color:var(--warn)}
+.tuibanner .g{flex:1}
+.tuibanner .hint{color:var(--muted);font-size:11.5px}
+.grid{flex:1;overflow:hidden;min-height:0;background:var(--term-bg);color:var(--term-fg);
+  font-family:var(--mono);font-size:13px;line-height:1.5;padding:8px 12px;white-space:pre}
+.grid .bar{background:var(--term-fg);color:var(--term-bg);padding:0 4px}
+.grid .inv{background:var(--primary);color:var(--primary-ink)}
+.grid .keys{color:var(--term-bg);background:var(--term-fg);padding:1px 3px;border-radius:0}
+.tuikeybar{display:flex;flex-wrap:wrap;gap:2px 14px;background:var(--term-bg);
+  color:var(--term-fg);font-family:var(--mono);font-size:12px;padding:6px 12px 10px;
+  border-top:1px solid var(--border)}
+.tuikeybar span b{background:var(--term-fg);color:var(--term-bg);padding:0 3px;margin-right:4px}
+
+/* ---- annotations ---- */
+.notes{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px}
+.card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.card h3{font-size:14px;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.card h3 svg{width:16px;height:16px;color:var(--primary)}
+.card ul{margin:0;padding-left:18px}
+.card li{margin:5px 0;color:var(--text)}
+.card li b{font-weight:650}
+.card .m{color:var(--muted);font-size:13px}
+.map{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:12.5px}
+.map .k{font-weight:650}
+.map .v{color:var(--muted)}
+kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--border-strong);
+  border-bottom-width:2px;border-radius:5px;padding:1px 5px;background:var(--panel)}
+.foot{margin-top:22px;color:var(--faint);font-size:12px;text-align:center}
+
+/* header setting-chips read as clickable controls (vs read-only lamps) */
+.chip.set{cursor:pointer}
+.chip.set:hover{border-color:var(--primary);color:var(--primary)}
+.chip .cd{width:10px;height:10px;opacity:.5;margin-left:2px;flex:0 0 auto}
+/* status bar = read-only security posture */
+.seclabel{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--faint)}
+.sechint{color:var(--faint);font-size:11px}
+
+/* sidebar collapse to an icon rail */
+.collapsebtn{margin-left:auto}
+.app.collapsed{grid-template-columns:56px 1fr}
+.app.collapsed .sbhead .brandmark,
+.app.collapsed .brandname,
+.app.collapsed .nblabel,
+.app.collapsed .newbtn .split,
+.app.collapsed .sbsearch,
+.app.collapsed .sblabel,
+.app.collapsed .srow .sbody,
+.app.collapsed .srow .smarks,
+.app.collapsed .sbfoot span{display:none}
+.app.collapsed .sbhead{justify-content:center;padding:13px 0 10px}
+.app.collapsed .collapsebtn{margin-left:0}
+.app.collapsed .collapsebtn svg{transform:rotate(180deg)}
+.app.collapsed .newbtn{justify-content:center;padding:9px 0;margin:2px 8px 8px}
+.app.collapsed .srow{justify-content:center;padding:8px 0}
+.app.collapsed .sbfoot{justify-content:center;padding:9px 0}
+
+/* unicode display-mode preview */
+.uni{margin-top:22px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:18px}
+.uni h2{font-size:15px;margin-bottom:6px}
+.uni .m{color:var(--muted);font-size:12.5px;margin:0 0 14px;max-width:860px}
+.uni .m code{font-family:var(--mono);font-size:11.5px;color:var(--text)}
+.unigrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.unicard{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--term-bg)}
+.unihd{display:flex;align-items:center;gap:9px;padding:8px 11px;background:var(--header);
+  border-bottom:1px solid var(--border);font-size:11.5px;color:var(--muted)}
+.modechip{font-weight:700;font-size:11px;border-radius:999px;padding:2px 9px;color:#fff;flex:0 0 auto}
+.modechip.box{background:#64748b}.modechip.show{background:var(--primary)}
+.modechip.reveal{background:#8250df}.modechip.detail{background:#c2410c}
+.uni-out{margin:0;padding:11px 12px;font-family:var(--mono);font-size:12.5px;line-height:1.9;
+  white-space:pre-wrap;word-break:break-word;color:var(--term-fg)}
+.boxg{display:inline-block;width:8px;height:13px;background:currentColor;opacity:.5;
+  border-radius:2px;vertical-align:-2px;margin:0 1px}
+.u{font-family:var(--mono);font-size:11px;border-radius:4px;padding:0 4px;white-space:nowrap}
+.c-conf{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--conf)}
+.c-inv{background:color-mix(in srgb,#e05fb0 26%,transparent);color:#c23e93}
+:root[data-theme="dark"] .c-inv{color:#f19bd0}
+.c-ctrl{background:color-mix(in srgb,var(--danger) 20%,transparent);color:var(--danger)}
+.c-plain{background:var(--panel);color:var(--muted)}
+.g-conf{color:var(--conf)} .g-inv{color:#c23e93}
+:root[data-theme="dark"] .g-inv{color:#f19bd0}
+.g-none{color:#6d28d9} :root[data-theme="dark"] .g-none{color:#a78bfa}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px;font-size:11.5px;color:var(--muted);
+  align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:20px;height:12px;border-radius:3px;display:inline-block;flex:0 0 auto}
+
+/* ---- responsive (~390px) ---- */
+@media (max-width:820px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto;height:auto;min-height:0}
+  .sidebar{border-right:0;border-bottom:1px solid var(--border)}
+  .sessions{max-height:200px}
+  .main{min-height:460px}
+  .chat{max-height:none}
+}
+@media (max-width:520px){
+  body{padding:14px 10px 40px}
+  .pagehead{align-items:flex-start}
+  .mhead .chips .chip.hidemob{display:none}
+  .cmd{flex-wrap:wrap}
+  .cmd .meta{width:100%;justify-content:flex-start;margin-top:2px}
+  .newbtn .split{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="pagehead">
+    <div class="title">
+      <div class="brandmark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+      </div>
+      <div>
+        <h1>secure-terminal - chat view</h1>
+        <div class="sub">Proposed "terminal chat" redesign. Static mockup, optics only.</div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="seg"><span>Theme</span>
+        <button data-theme-btn="light" aria-pressed="true">Light</button>
+        <button data-theme-btn="dark" aria-pressed="false">Dark</button>
+      </div>
+      <div class="seg"><span>State</span>
+        <button data-state-btn="chat" aria-pressed="true">Chat</button>
+        <button data-state-btn="completion" aria-pressed="false">Tab menu</button>
+        <button data-state-btn="tui" aria-pressed="false">Full-screen TUI</button>
+      </div>
+      <div class="seg"><span>Blocks</span>
+        <button data-bs-btn="rail" aria-pressed="false">Rail</button>
+        <button data-bs-btn="card" aria-pressed="true">Card</button>
+        <button data-bs-btn="minimal" aria-pressed="false">Minimal</button>
+        <button data-bs-btn="bubble" aria-pressed="false">Bubbles</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:12px">
+    <span class="ribbon">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
+        stroke-width="2.4" stroke-linecap="round"><path d="M12 8v5"/><path d="M12 16.5h.01"/><circle cx="12" cy="12" r="9"/></svg>
+      Static mockup &middot; non-functional &middot; not the real app
+    </span>
+  </div>
+
+  <!-- ================= APP WINDOW STUB ================= -->
+  <div class="app" data-state="chat" id="app">
+
+    <!-- ---------- SIDEBAR (replaces the tab bar) ---------- -->
+    <aside class="sidebar">
+      <div class="sbhead">
+        <div class="brandmark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l5 6-5 6"/><path d="M13 18h7"/></svg>
+        </div>
+        <div class="brandname">secure-terminal<small>chat view</small></div>
+        <button class="iconbtn collapsebtn" id="collapsebtn" title="Collapse sidebar"
+          aria-label="Collapse sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round"><path d="M15 6l-6 6 6 6"/><path d="M9 4v16"/></svg>
+        </button>
+      </div>
+
+      <button class="newbtn" title="New session">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="nblabel">New session</span>
+        <span class="split"><b>CLI</b> / TUI</span>
+      </button>
+
+      <div class="sbsearch">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input type="text" placeholder="Search sessions..." aria-label="Search sessions">
+      </div>
+
+      <div class="sblabel">Sessions</div>
+      <div class="sessions" id="sessions">
+
+        <div class="srow active" data-accent="var(--accent1)">
+          <span class="accent" style="background:var(--accent1)"></span>
+          <svg class="sicon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round"><path d="M4 6l5 6-5 6"/><path d="M13 18h7"/></svg>
+          <div class="sbody">
+            <div class="l1"><span class="num">1</span> zsh</div>
+            <div class="l2" title="~/private-sources/secure-terminal">~/private-sources/secure-terminal</div>
+          </div>
+          <div class="smarks"><span class="dot act" title="activity"></span></div>
+        </div>
+
+        <div class="srow" data-accent="var(--accent3)">
+          <span class="accent" style="background:var(--accent3)"></span>
+          <svg class="sicon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg>
+          <div class="sbody">
+            <div class="l1"><span class="num">2</span> bash</div>
+            <div class="l2" title="~/logs">~/logs</div>
+            <div class="quarantine" title="Untrusted program-set title (OSC), quarantined">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+              <span class="q">prog title: "System Monitor 100%!!!"</span>
+            </div>
+          </div>
+          <div class="smarks">
+            <svg class="mk-bell" viewBox="0 0 24 24" fill="currentColor" title="bell"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5l-2 2v1h16v-1z"/></svg>
+          </div>
+        </div>
+
+        <div class="srow" data-accent="var(--accent2)">
+          <span class="accent" style="background:var(--accent2)"></span>
+          <svg class="sicon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round"><path d="M4 6l5 6-5 6"/><path d="M13 18h7"/></svg>
+          <div class="sbody">
+            <div class="l1"><span class="num">3</span> nano</div>
+            <div class="l2" title="notes.txt">notes.txt</div>
+          </div>
+          <div class="smarks">
+            <svg class="mk-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" title="program running (foreground)"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+          </div>
+        </div>
+
+        <div class="srow" data-accent="var(--accent4)">
+          <span class="accent" style="background:var(--accent4)"></span>
+          <svg class="sicon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round"><path d="M4 6l5 6-5 6"/><path d="M13 18h7"/></svg>
+          <div class="sbody">
+            <div class="l1"><span class="num">4</span> ssh</div>
+            <div class="l2" title="build-host">build-host</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="sbfoot">
+        <span>4 sessions</span>
+        <span class="grow"></span>
+        <button class="iconbtn" title="Global settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.3 1a7 7 0 0 0-1.7-1L14.5 3h-5l-.4 2.6a7 7 0 0 0-1.7 1l-2.3-1-2 3.4L3 11a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 1.7 1l.4 2.6h5l.4-2.6a7 7 0 0 0 1.7-1l2.3 1 2-3.4-2-1.5a7 7 0 0 0 .1-1z"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ---------- MAIN PANE ---------- -->
+    <section class="main">
+      <div class="mhead">
+        <div class="titlewrap only-chat">
+          <div class="mtitle">zsh</div>
+          <div class="mpath">~/private-sources/secure-terminal</div>
+        </div>
+        <div class="titlewrap only-tui">
+          <div class="mtitle">nano notes.txt</div>
+          <div class="mpath">zsh &middot; ~/private-sources/secure-terminal</div>
+        </div>
+        <span class="spacer"></span>
+        <span class="tuistate only-tui" title="A full-screen program owns the grid">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+          running &middot; Esc / exit returns to chat</span>
+        <div class="chips">
+          <span class="chip set only-chat" title="Mode (CLI / TUI) - click to change">mode <b>CLI</b><svg class="cd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          <span class="chip set only-tui" title="Mode (CLI / TUI) - click to change">mode <b>TUI</b><svg class="cd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          <span class="chip set hidemob" title="Unicode display mode - click to change">unicode <b>Show</b><svg class="cd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          <span class="chip set hidemob" title="Colours - click to change">colours <b>On</b><svg class="cd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          <span class="chip set hidemob" title="Zoom - click to change">zoom <b>100%</b><svg class="cd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          <button class="iconbtn" title="Find (Ctrl+Shift+F)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+          </button>
+          <button class="iconbtn" title="Global settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.3 1a7 7 0 0 0-1.7-1L14.5 3h-5l-.4 2.6a7 7 0 0 0-1.7 1l-2.3-1-2 3.4L3 11a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 1.7 1l.4 2.6h5l.4-2.6a7 7 0 0 0 1.7-1l2.3 1 2-3.4-2-1.5a7 7 0 0 0 .1-1z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="viewstack">
+
+      <!-- CHAT VIEW -->
+      <div class="chatview">
+        <div class="chat" data-blockstyle="card" data-umode="show" id="chat">
+          <div class="blocks">
+
+            <!-- block: ls -la (ok) -->
+            <div class="blk" style="--rail:var(--accent1)">
+              <div class="cmd">
+                <span class="prompt">$</span>
+                <span class="ct">ls -la</span>
+                <span class="meta">
+                  <span class="status ok">exit 0</span>
+                  <span class="time">10:02</span>
+                  <span class="acts">
+                    <button title="Copy command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+                    <button title="Re-run"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></button>
+                  </span>
+                </span>
+              </div>
+              <div class="reply">
+                <span class="bexit status ok">exit 0</span>
+                <div class="gutter"></div>
+                <pre class="out">total 84
+drwxr-xr-x  8 user user  4096 Sep 22 10:01 <span class="b">.</span>
+drwxr-xr-x 31 user user  4096 Sep 20 18:44 <span class="b">..</span>
+drwxr-xr-x  8 user user  4096 Sep 22 09:58 <span class="b">.git</span>
+-rw-r--r--  1 user user  1120 Sep 22 09:47 debian
+-rw-r--r--  1 user user  2048 Sep 22 09:47 README.md
+drwxr-xr-x  4 user user  4096 Sep 22 09:47 <span class="b">usr</span></pre>
+              </div>
+            </div>
+
+            <!-- block: git status (ok) -->
+            <div class="blk" style="--rail:var(--accent1)">
+              <div class="cmd">
+                <span class="prompt">$</span>
+                <span class="ct">git status</span>
+                <span class="meta">
+                  <span class="status ok">exit 0</span>
+                  <span class="time">10:03</span>
+                  <span class="acts">
+                    <button title="Copy command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+                    <button title="Re-run"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></button>
+                  </span>
+                </span>
+              </div>
+              <div class="reply">
+                <span class="bexit status ok">exit 0</span>
+                <div class="gutter"></div>
+                <pre class="out">On branch <span class="b">ai</span>
+Changes not staged for commit:
+  <span class="err">modified:   usr/lib/python3/dist-packages/secure_terminal/main.py</span>
+
+no changes added to commit (use "git add")</pre>
+              </div>
+            </div>
+
+            <!-- block: failing command + neutralized-escape notice -->
+            <div class="blk" style="--rail:var(--danger)">
+              <div class="cmd">
+                <span class="prompt">$</span>
+                <span class="ct">cat report.log</span>
+                <span class="meta">
+                  <span class="status bad">exit 1</span>
+                  <span class="time">10:05</span>
+                  <span class="acts">
+                    <button title="Copy command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+                    <button title="Re-run"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></button>
+                  </span>
+                </span>
+              </div>
+              <div class="reply">
+                <span class="bexit status bad">exit 1</span>
+                <div class="gutter"></div>
+                <pre class="out"><span class="err">cat: report.log: No such file or directory</span></pre>
+              </div>
+              <div class="notice" title="secure-terminal neutralized untrusted escape sequences in this output">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+                notice: 2 escape sequences neutralized; 1 OSC title ignored
+              </div>
+            </div>
+
+            <!-- block: no-trailing-newline (gutter marker) -->
+            <div class="blk" style="--rail:var(--accent1)">
+              <div class="cmd">
+                <span class="prompt">$</span>
+                <span class="ct">printf 'building...'</span>
+                <span class="meta">
+                  <span class="status ok">exit 0</span>
+                  <span class="time">10:06</span>
+                </span>
+              </div>
+              <div class="reply">
+                <span class="bexit status ok">exit 0</span>
+                <div class="gutter" title="output ended without a trailing newline">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round"><path d="M9 10L5 14l4 4"/><path d="M5 14h10a4 4 0 0 0 4-4V6"/></svg>
+                </div>
+                <pre class="out">building...</pre>
+              </div>
+            </div>
+
+            <!-- inline unicode display-mode demo (switch with the unicode chip) -->
+            <div class="blk" style="--rail:var(--warn)">
+              <div class="cmd">
+                <span class="prompt">$</span>
+                <span class="ct">cat welcome.txt   # from an untrusted archive</span>
+                <span class="meta">
+                  <span class="status ok">exit 0</span>
+                  <span class="time">10:07</span>
+                </span>
+              </div>
+              <div class="reply">
+                <span class="bexit status ok">exit 0</span>
+                <div class="gutter"></div>
+                <div class="out"><span class="umv um-box">Verify your account at http://g<span class="boxg"></span><span class="boxg"></span>gle.com<span class="boxg"></span> before Friday</span><span class="umv um-show">Verify your account at http://g<span class="g-conf" title="U+043E CYRILLIC SMALL LETTER O (confusable)">&#x043E;</span><span class="g-conf" title="U+043E CYRILLIC SMALL LETTER O (confusable)">&#x043E;</span>gle.com<span class="boxg g-inv" title="U+200B ZERO WIDTH SPACE (invisible, tinted)"></span> before Friday</span><span class="umv um-reveal">Verify your account at http://g<span class="u c-conf">&lt;U+043E&gt;</span><span class="u c-conf">&lt;U+043E&gt;</span>gle.com<span class="u c-inv">&lt;U+200B&gt;</span> before Friday</span><span class="umv um-detail">Verify your account at http://g<span class="u c-conf">&lt;U+043E CYRILLIC SMALL LETTER O&gt;</span><span class="u c-conf">&lt;U+043E CYRILLIC SMALL LETTER O&gt;</span>gle.com<span class="u c-inv">&lt;U+200B ZERO WIDTH SPACE&gt;</span> before Friday</span></div>
+              </div>
+              <div class="notice">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+                unicode display: <b id="umcap">Show</b> - click the <b>unicode</b> chip above to switch (Box / Show / Reveal / Detail). This line hides a confusable domain (Cyrillic o's) and an invisible zero-width space.
+              </div>
+            </div>
+
+            <!-- CLI line-edits-only: allowed (in-place CR) vs neutralized (vertical moves) -->
+            <div class="blk" style="--rail:var(--accent1)">
+              <div class="cmd">
+                <span class="prompt">$</span>
+                <span class="ct">./fetch-release.sh</span>
+                <span class="meta">
+                  <span class="status ok">exit 0</span>
+                  <span class="time">10:08</span>
+                </span>
+              </div>
+              <div class="reply">
+                <span class="bexit status ok">exit 0</span>
+                <div class="gutter"></div>
+                <pre class="out">Downloading secure-terminal_1.0.iso
+[==========================] 100%   512 MB / 512 MB   1m03s</pre>
+              </div>
+              <div class="notice info">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v4h1"/></svg>
+                line edits allowed: the progress bar rewrote this line in place with carriage return. Append-only keeps only the final frame - the update stayed contained to the line, nothing scrolled or moved.
+              </div>
+            </div>
+
+            <div class="blk" style="--rail:var(--warn)">
+              <div class="cmd">
+                <span class="prompt">$</span>
+                <span class="ct">./tui-installer</span>
+                <span class="meta">
+                  <span class="status ok">exit 0</span>
+                  <span class="time">10:09</span>
+                </span>
+              </div>
+              <div class="reply">
+                <span class="bexit status ok">exit 0</span>
+                <div class="gutter"></div>
+                <pre class="out">Preparing packages
+Installing base system
+Configuring services</pre>
+              </div>
+              <div class="notice">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+                9 escape sequences neutralized: vertical cursor moves and screen clears are stripped in CLI mode, so this printed flat instead of redrawing in place. For a full-screen UI, run it in TUI mode.
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- INPUT ZONE (inline live prompt, styled as a composer) -->
+        <div class="inputzone">
+          <span class="izlabel">Live input &middot; inline (keystrokes go straight to the shell)</span>
+          <!-- completion dropdown (shown only in the "Tab menu" state) -->
+          <div class="complete" role="listbox" aria-label="completions">
+            <div class="chead"><span>ls - complete option</span><span>6 matches</span></div>
+            <div class="citem sel"><span class="flag">-a</span><span class="desc">do not ignore entries starting with .</span></div>
+            <div class="citem"><span class="flag">-l</span><span class="desc">use a long listing format</span></div>
+            <div class="citem"><span class="flag">-h</span><span class="desc">with -l, print human readable sizes</span></div>
+            <div class="citem"><span class="flag">-t</span><span class="desc">sort by modification time, newest first</span></div>
+            <div class="citem"><span class="flag">--all</span><span class="desc">same as -a</span></div>
+            <div class="citem"><span class="flag">--color</span><span class="desc">colorize the output (WHEN)</span></div>
+            <div class="cfoot"><span>up/down navigate</span><span>Tab/Enter accept</span><span>Esc dismiss</span></div>
+          </div>
+          <div class="izrow">
+            <span class="prompt">$</span>
+            <span class="izline" id="izline">git push or<span class="caret"></span>igin ai</span>
+            <span class="keys">
+              <span class="kbtn" title="send interrupt">^C</span>
+              <span class="kbtn" title="send EOF">^D</span>
+              <span class="kbtn" title="completion">Tab</span>
+            </span>
+          </div>
+          <div class="izhint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v4h1"/></svg>
+            Native line editing (Tab completion, Ctrl+R history) works because this is the live shell line, not a send-box.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FULL-SCREEN TUI VIEW -->
+      <div class="tuiview">
+        <pre class="grid">  <span class="bar">GNU nano 7.2</span>                       notes.txt
+
+secure-terminal chat-view redesign -- notes
+
+- sidebar replaces the tab bar (one row per shell session)
+- CLI output shown as command / reply blocks
+- alt-screen programs take the whole pane, then return here
+- input stays inline so tab-completion keeps working
+
+The quick brown fox jumps over the lazy dog.<span class="inv"> </span>
+
+
+
+<span class="dim">                          [ Read 9 lines ]</span>
+</pre>
+        <div class="tuikeybar">
+          <span><b>^G</b>Help</span><span><b>^O</b>Write Out</span><span><b>^W</b>Where Is</span>
+          <span><b>^K</b>Cut</span><span><b>^X</b>Exit</span><span><b>^C</b>Location</span>
+        </div>
+      </div>
+
+      </div><!-- /viewstack -->
+
+      <!-- SHARED STATUS BAR (kept in chat + TUI; content adapts) -->
+      <div class="statusbar">
+        <span class="seclabel">security</span>
+        <span class="lamp g" title="Display: safe rendering"><span class="b"></span>Display</span>
+        <span class="lamp g only-chat" title="Mode: CLI (append-only, safest)"><span class="b"></span>Mode</span>
+        <span class="lamp y only-tui" title="Mode: TUI (full escape interpreter active)"><span class="b"></span>Mode</span>
+        <span class="lamp n" title="OSC: none seen"><span class="b"></span>OSC</span>
+        <span class="lamp g" title="Review: nothing pending"><span class="b"></span>Review</span>
+        <span class="grow"></span>
+        <span class="sechint">click a lamp for details</span>
+      </div>
+    </section>
+  </div>
+  <!-- ================= /APP WINDOW STUB ================= -->
+
+
+  <!-- ================= ANNOTATIONS ================= -->
+  <div class="notes">
+    <div class="card">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l5 6-5 6"/><path d="M13 18h7"/></svg> The idea in one line</h3>
+      <p class="m">A block-based "terminal chat" (like Warp): the tab bar becomes a left session
+      sidebar, each completed command and its output become a command/reply block, and
+      full-screen programs take over the pane and hand it back. The live prompt is an inline
+      input zone at the bottom -- styled like a composer, but it is the real shell line, so
+      native completion and history keep working.</p>
+    </div>
+
+    <div class="card">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Try the states</h3>
+      <ul>
+        <li><b>Chat</b> -- the default block view with the inline input zone.</li>
+        <li><b>Tab menu</b> -- how a navigable completion menu could look: an IDE-style
+          dropdown above the input (not an in-document grid).</li>
+        <li><b>Full-screen TUI</b> -- nano takes the whole pane; the banner shows it returns
+          to chat on exit.</li>
+        <li><b>Blocks: Rail / Card / Minimal</b> -- three block-styling options to choose from.</li>
+        <li>Toggle <b>Light / Dark</b> as well.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg> Where today's security chrome lands</h3>
+      <div class="map">
+        <span class="k">Trust-tiered tab title</span><span class="v">two-line session row: trusted line + amber "quarantine" band for the program-set title</span>
+        <span class="k">Security lamps</span><span class="v">Display / Mode / OSC / Review, in the main-pane status bar (bottom)</span>
+        <span class="k">Bell / activity / running</span><span class="v">per-row markers in the sidebar (bell icon, activity dot, foreground-program lock)</span>
+        <span class="k">No-newline gutter glyph</span><span class="v">left gutter of a reply block (return-arrow, as today)</span>
+        <span class="k">Neutralized-escape / OSC notice</span><span class="v">amber notice chip attached under the affected reply</span>
+        <span class="k">Per-tab accent colour</span><span class="v">left accent bar on the session row and the block rail</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg> What is faked / deferred</h3>
+      <ul>
+        <li>No real terminal, shell, or features -- pure HTML/CSS. Sample output is fixed text.</li>
+        <li>The <b>completion-menu driver</b> (native popup vs. a live mini-terminal input zone
+          vs. shell-driven) is an architecture/security question, deferred until the look is chosen.</li>
+        <li>Reliable block boundaries + exit codes would come from a gated OSC-133 handler or a
+          heuristic -- also deferred.</li>
+        <li>The append-only CLI pipeline, sanitizer, and OSC stripping are unchanged in the real
+          plan; blocks are drawn as out-of-document chrome.</li>
+        <li><b>Identity trust:</b> a trusted cwd/program in the header must come from the kernel
+          (<code>/proc/&lt;pid&gt;/cwd</code>, foreground pgid + <code>/proc/&lt;pid&gt;/comm</code>).
+          <b>OSC 7 is program-asserted and out of trust</b> -- a hostile program can forge it, so
+          it is treated like the quarantined title, not shown as trusted.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot">secure-terminal chat-view redesign &middot; static HTML mockup &middot; non-functional</div>
+</div>
+
+<script src="mockup.js"></script>
+</body>
+</html>
