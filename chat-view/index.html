@@ -313,8 +313,8 @@ svg{display:block}
 .notes{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
   gap:16px}
 .card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
-.card h3{font-size:14px;margin-bottom:9px;display:flex;align-items:center;gap:8px}
-.card h3 svg{width:16px;height:16px;color:var(--primary)}
+.card h2{font-size:14px;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.card h2 svg{width:16px;height:16px;color:var(--primary)}
 .card ul{margin:0;padding-left:18px}
 .card li{margin:5px 0;color:var(--text)}
 .card li b{font-weight:650}
@@ -558,7 +558,7 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--border-strong)
             </div>
           </div>
           <div class="smarks">
-            <svg class="mk-bell" viewBox="0 0 24 24" fill="currentColor" title="bell"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5l-2 2v1h16v-1z"/></svg>
+            <svg class="mk-bell" viewBox="0 0 24 24" fill="currentColor"><title>bell</title><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5l-2 2v1h16v-1z"/></svg>
           </div>
         </div>
 
@@ -572,7 +572,7 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--border-strong)
           </div>
           <div class="smarks">
             <svg class="mk-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" title="program running (foreground)"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+              stroke-width="2"><title>program running (foreground)</title><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
           </div>
         </div>
 
@@ -881,7 +881,7 @@ The quick brown fox jumps over the lazy dog.<span class="inv"> </span>
   <!-- ================= ANNOTATIONS ================= -->
   <div class="notes">
     <div class="card">
-      <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l5 6-5 6"/><path d="M13 18h7"/></svg> The idea in one line</h3>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l5 6-5 6"/><path d="M13 18h7"/></svg> The idea in one line</h2>
       <p class="m">A block-based "terminal chat" (like Warp): the tab bar becomes a left session
       sidebar, each completed command and its output become a command/reply block, and
       full-screen programs take over the pane and hand it back. The live prompt is an inline
@@ -890,7 +890,7 @@ The quick brown fox jumps over the lazy dog.<span class="inv"> </span>
     </div>
 
     <div class="card">
-      <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Try the states</h3>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Try the states</h2>
       <ul>
         <li><b>Chat</b> -- the default block view with the inline input zone.</li>
         <li><b>Tab menu</b> -- how a navigable completion menu could look: an IDE-style
@@ -903,7 +903,7 @@ The quick brown fox jumps over the lazy dog.<span class="inv"> </span>
     </div>
 
     <div class="card">
-      <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg> Where today's security chrome lands</h3>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg> Where today's security chrome lands</h2>
       <div class="map">
         <span class="k">Trust-tiered tab title</span><span class="v">two-line session row: trusted line + amber "quarantine" band for the program-set title</span>
         <span class="k">Security lamps</span><span class="v">Display / Mode / OSC / Review, in the main-pane status bar (bottom)</span>
@@ -915,7 +915,7 @@ The quick brown fox jumps over the lazy dog.<span class="inv"> </span>
     </div>
 
     <div class="card">
-      <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg> What is faked / deferred</h3>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg> What is faked / deferred</h2>
       <ul>
         <li>No real terminal, shell, or features -- pure HTML/CSS. Sample output is fixed text.</li>
         <li>The <b>completion-menu driver</b> (native popup vs. a live mini-terminal input zone

@@ -166,8 +166,8 @@
   .shot > a{display:block;line-height:0}
   .shot img{display:block;width:100%;height:auto;background:#000}
   /* name-on-top caption: identifies the terminal above its screenshot */
-  .shot figcaption.shotname{padding:10px 12px;font-size:.9rem;color:var(--muted);border-bottom:1px solid var(--line);order:-1}
-  .shot figcaption.shotname b{color:var(--ink)}
+  .shot .shotname{padding:10px 12px;font-size:.9rem;color:var(--muted);border-bottom:1px solid var(--line);order:-1}
+  .shot .shotname b{color:var(--ink)}
   .shot figcaption{padding:10px 12px;font-size:.9rem;color:var(--muted)}
 
   /* Homepage hero before/after slider. Two identical-size screenshots of the SAME
@@ -350,7 +350,7 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
 .trybox .lead{color:var(--ink);max-width:70ch;margin:0 0 6px}
 .trycols{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px}
 .trycols>div{flex:1 1 320px;min-width:0}
-.trycols h4{margin:0 0 2px;font-size:.98rem}
+.trycols h3{margin:0 0 2px;font-size:.98rem}
 .trycols .sub{font-size:.82rem;color:var(--muted);margin:0 0 8px}
 
   /* jump-to-anchor highlight: a red ring around the element you navigated to
