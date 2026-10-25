@@ -16,7 +16,7 @@
   --border:#e5e5e5; --border-strong:#d7d7d9;
   --text:#1f2328; --muted:#5f6570; --faint:#656b75;
   --primary:#0b7a5e; --primary-ink:#ffffff;
-  --ok:#1a7a34; --neutral:#9aa0aa; --warn:#d9a441; --danger:#c62828; --conf:#8a5a12;
+  --ok:#146f2c; --neutral:#9aa0aa; --warn:#d9a441; --danger:#c62828; --conf:#8a5a12;
   --accent1:#3b82f6; --accent2:#a855f7; --accent3:#ef7e2b; --accent4:#14b8a6;
   --term-bg:#ffffff; --term-fg:#111418; --term-panel:#f4f5f6;
   --quarantine:#fff4e5; --quarantine-ink:#8a5a12; --quarantine-bd:#f0d9b0;
@@ -458,6 +458,7 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--border-strong)
 </style>
 </head>
 <body>
+<main>
 <div class="wrap">
 
   <div class="pagehead">
@@ -653,7 +654,7 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--border-strong)
               <div class="reply">
                 <span class="bexit status ok">exit 0</span>
                 <div class="gutter"></div>
-                <pre class="out">total 84
+                <pre class="out" tabindex="0">total 84
 drwxr-xr-x  8 user user  4096 Sep 22 10:01 <span class="b">.</span>
 drwxr-xr-x 31 user user  4096 Sep 20 18:44 <span class="b">..</span>
 drwxr-xr-x  8 user user  4096 Sep 22 09:58 <span class="b">.git</span>
@@ -680,7 +681,7 @@ drwxr-xr-x  4 user user  4096 Sep 22 09:47 <span class="b">usr</span></pre>
               <div class="reply">
                 <span class="bexit status ok">exit 0</span>
                 <div class="gutter"></div>
-                <pre class="out">On branch <span class="b">ai</span>
+                <pre class="out" tabindex="0">On branch <span class="b">ai</span>
 Changes not staged for commit:
   <span class="err">modified:   usr/lib/python3/dist-packages/secure_terminal/main.py</span>
 
@@ -705,7 +706,7 @@ no changes added to commit (use "git add")</pre>
               <div class="reply">
                 <span class="bexit status bad">exit 1</span>
                 <div class="gutter"></div>
-                <pre class="out"><span class="err">cat: report.log: No such file or directory</span></pre>
+                <pre class="out" tabindex="0"><span class="err">cat: report.log: No such file or directory</span></pre>
               </div>
               <div class="notice" title="secure-terminal neutralized untrusted escape sequences in this output">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -730,7 +731,7 @@ no changes added to commit (use "git add")</pre>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
                     stroke-linecap="round" stroke-linejoin="round"><path d="M9 10L5 14l4 4"/><path d="M5 14h10a4 4 0 0 0 4-4V6"/></svg>
                 </div>
-                <pre class="out">building...</pre>
+                <pre class="out" tabindex="0">building...</pre>
               </div>
             </div>
 
@@ -769,7 +770,7 @@ no changes added to commit (use "git add")</pre>
               <div class="reply">
                 <span class="bexit status ok">exit 0</span>
                 <div class="gutter"></div>
-                <pre class="out">Downloading secure-terminal_1.0.iso
+                <pre class="out" tabindex="0">Downloading secure-terminal_1.0.iso
 [==========================] 100%   512 MB / 512 MB   1m03s</pre>
               </div>
               <div class="notice info">
@@ -791,7 +792,7 @@ no changes added to commit (use "git add")</pre>
               <div class="reply">
                 <span class="bexit status ok">exit 0</span>
                 <div class="gutter"></div>
-                <pre class="out">Preparing packages
+                <pre class="out" tabindex="0">Preparing packages
 Installing base system
 Configuring services</pre>
               </div>
@@ -839,7 +840,7 @@ Configuring services</pre>
 
       <!-- FULL-SCREEN TUI VIEW -->
       <div class="tuiview">
-        <pre class="grid">  <span class="bar">GNU nano 7.2</span>                       notes.txt
+        <pre class="grid" tabindex="0">  <span class="bar">GNU nano 7.2</span>                       notes.txt
 
 secure-terminal chat-view redesign -- notes
 
@@ -934,6 +935,7 @@ The quick brown fox jumps over the lazy dog.<span class="inv"> </span>
 
   <div class="foot">secure-terminal chat-view redesign &middot; static HTML mockup &middot; non-functional</div>
 </div>
+</main>
 
 <script src="mockup.js"></script>
 </body>

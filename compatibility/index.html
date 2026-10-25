@@ -34,7 +34,7 @@
     <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
     <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
     <label class="menubtn" for="navtoggle">Menu</label>
-    <nav>
+    <nav aria-label="Primary">
       <a href="/#features">Features</a>
       <a href="/#install">Install</a>
       <a href="/comparison/">Comparison</a>
@@ -226,7 +226,7 @@
     <code>tqdm</code> is carriage-return-only and so renders <em>identically</em> in full and read-safe (its
     read-safe figure is omitted rather than duplicated). append-only stacks every frame with the redraw-attempt
     marker.</p>
-  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; byte-stable demos, display-only, safe to cat</span> &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/tree/master/demos" rel="noopener">view the demos on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">cat progress-crbar-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd">cat progress-tqdm-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; byte-stable demos, display-only, safe to cat</span> &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/tree/master/demos" rel="noopener">view the demos on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">cat progress-crbar-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd" tabindex="0">cat progress-tqdm-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   <p class="catdesc">Both render exactly what is shown above. Switch modes under <b>Settings -&gt; Text rendering -&gt; Line editing</b>.</p>
   <div class="shotgrid" id="line-edit-shot-grid">
     <figure class="shot" id="shot-progress-crbar-full"><figcaption class="shotname"><b>CR bar - full</b> - the bar redraws in place; the completion message erases it cleanly.</figcaption><a href="/compatibility/shots/progress-crbar-full.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/progress-crbar-full.webp" width="1724" height="403" loading="lazy" alt="secure-terminal in full line-editing mode: a carriage-return progress bar redrawn in place, ending on a single clean completion line."></a></figure>
@@ -454,7 +454,7 @@
     against the <em>strong</em> vector - a program actively interrogating the terminal -
     secure-terminal is the LEAST fingerprintable of the three, not the most. Re-run the probe
     yourself with <code>secure-terminal-fingerprint</code>.</p>
-  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; fires every query probe at each terminal under a nested Xvfb and records the reply</span> &middot; <a href="https://github.com/org-ai-assisted/dist-ai/tree/master/usr/share/secure-terminal-fingerprint" rel="noopener">view the probe on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git clone https://github.com/org-ai-assisted/dist-ai &amp;&amp; dist-ai/usr/bin/secure-terminal-fingerprint</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; fires every query probe at each terminal under a nested Xvfb and records the reply</span> &middot; <a href="https://github.com/org-ai-assisted/dist-ai/tree/master/usr/share/secure-terminal-fingerprint" rel="noopener">view the probe on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git clone https://github.com/org-ai-assisted/dist-ai &amp;&amp; dist-ai/usr/bin/secure-terminal-fingerprint</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 </div></section>
 
 <section class="cat" id="tui"><div class="wrap">
@@ -546,7 +546,7 @@
     conformance suites above only confirm ordinary programs still render. For the full picture of
     every automated check - the corpus, the spec-surface invariant, the unit, GUI, property and
     fuzz suites, AppArmor and the resilience test - see the <a href="/ai-review/">AI Review</a> page.</p>
-  <div class="repro sandbox"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">view the corpus on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/terminal-poc-corpus &amp;&amp; cd terminal-poc-corpus &amp;&amp; POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+  <div class="repro sandbox"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">view the corpus on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git clone https://github.com/secure-terminal/terminal-poc-corpus &amp;&amp; cd terminal-poc-corpus &amp;&amp; POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 </div></section>
 
 <section class="cat" id="env"><div class="wrap">
@@ -798,7 +798,7 @@
       <span class="ftag"><img src="/logo-wide.webp" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
       <p>Paste in, read out. Every invisible, bidi, or look-alike byte arrives marked.</p>
     </div>
-    <nav class="fcols">
+    <nav class="fcols" aria-label="Footer">
       <div class="fcol">
         <h3>Project</h3>
         <a href="https://github.com/secure-terminal">Organisation</a>

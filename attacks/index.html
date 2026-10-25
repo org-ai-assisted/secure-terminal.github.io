@@ -34,7 +34,7 @@
     <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
     <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
     <label class="menubtn" for="navtoggle">Menu</label>
-    <nav>
+    <nav aria-label="Primary">
       <a href="/#features">Features</a>
       <a href="/#install">Install</a>
       <a href="/comparison/">Comparison</a>
@@ -86,17 +86,17 @@
     every part is just <code>echo</code>.</p>
   <div class="pastedemo">
     <div class="cmdrow">
-      <code class="cmd" id="pd-cmd">echo "test"</code>
+      <code class="cmd" id="pd-cmd" tabindex="0">echo "test"</code>
       <button type="button" class="btn ghost pd-btn" id="pd-copy">Copy</button>
       <button type="button" class="btn ghost pd-btn" id="pd-reveal">Reveal what you copied</button>
       <span class="pd-status" id="pd-status" aria-live="polite"></span>
     </div>
-    <pre class="pd-out" id="pd-out" hidden></pre>
+    <pre class="pd-out" id="pd-out" tabindex="0" hidden></pre>
     <noscript>
       <p class="pd-status">JavaScript is off, so the live Copy and Reveal buttons are inactive - but here is
         exactly what the innocent-looking "<code>echo "test"</code>" button would place on your clipboard
         (<code>&lt;U+200B&gt;</code> marks a zero-width character that normally draws nothing):</p>
-      <pre class="pd-out">echo "test"&lt;U+200B&gt;&amp;&amp; echo "you did not expect this additional echo: unexpected code execution"&lt;U+200B&gt;</pre>
+      <pre class="pd-out" tabindex="0">echo "test"&lt;U+200B&gt;&amp;&amp; echo "you did not expect this additional echo: unexpected code execution"&lt;U+200B&gt;</pre>
     </noscript>
   </div>
   <p class="catdesc">You saw <code>echo "test"</code>. Your clipboard held a whole second command chained on with
@@ -216,7 +216,7 @@
       <span class="ftag"><img src="/logo-wide.webp" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
       <p>Paste in, read out. Every invisible, bidi, or look-alike byte arrives marked.</p>
     </div>
-    <nav class="fcols">
+    <nav class="fcols" aria-label="Footer">
       <div class="fcol">
         <h3>Project</h3>
         <a href="https://github.com/secure-terminal">Organisation</a>
